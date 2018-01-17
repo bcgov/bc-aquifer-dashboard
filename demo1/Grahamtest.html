@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<html lang="en" ng-app="awc">
+
+<head>
+<title>Test Application Layout</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Load Leaflet from CDN-->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+<!-- Load Esri Leaflet from CDN -->
+<script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
+<!-- Load turf from CDN -->
+<script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
+<!-- Load proj4js from CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.4.3/proj4.js"></script>
+<!-- Load jquery from CDN -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+
+<link rel="stylesheet" type="text/css" href="./src/Grahamtest.css"/>
+<script src="./src/Grahamtest.js"></script>
+<style>
+</style>
+</head>
+
+
+
+<body>
+<table class="main" height="100%">
+<tr class="header bg-default hide-in-print">
+<td>
+  <table width="100%" height="100%" border="0" cellpadding="0">
+  <tr>
+  <td valign="middle">
+  <span class="h1" style="padding-left: 5px"></span>
+  </td>
+  <td>
+    <form class="navbar-form navbar-left pull-right" role="search" ng-controller="SearchCtrl as searchCtrl" ng-submit="searchCtrl.search()">
+      <div class="form-group">
+      <input type="text" ng-model="searchText" class="form-control" placeholder="Place, address or 9-digit PID" style="min-width: 220px">
+      </div>
+      <button type="submit" class="btn btn-default">Search</button>
+    </form>
+  </td>
+  </tr>
+  </table>
+
+
+</body>
+</html>
