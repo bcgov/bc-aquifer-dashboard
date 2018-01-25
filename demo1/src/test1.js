@@ -9,6 +9,7 @@ var options = {};
 var aquiferJSON = {};
 var wellJSON = {};
 var summaryData = [];
+
 function test (){
   console.log("Start test");
   var wellData = [];
