@@ -51,6 +51,7 @@ function makeWellMap(geoJSONlist){
   mapdiv.id = 'map';
   var h = parentElement.offsetHeight - 20;
   mapdiv.style.height = h.toString() + "px";
+  mapdiv.style.width = h.toString() + "px";
   parentElement.appendChild(mapdiv);
   var cntr = turf.centroid(geoJSONlist[0]);
 

@@ -2,7 +2,7 @@
 <html>
 <head>
 
-	<title>This is a test</title>
+	<title>Groundwater dashboard</title>
 
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,9 +18,11 @@
 	<!-- Load jquery from CDN -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://www.gstatic.com/charts/loader.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="./testing/makeamap.js"></script>
+	<script src="./testing/makeagraph.js"></script>
+	<script src="./testing/dashboarding.js"></script>
 	<link rel="stylesheet" type="text/css" href="./src/dashboard.css"/>
-
-  <script src="./src/dashboard_data.js"></script>
 
 	<style>
 
@@ -30,8 +32,15 @@
 </head>
 <body>
 
-<div>
-</div>
-
+	<div class ='topbar'>BC Aquifer Dashboard
+		<div id=filter>Filter Value</div>
+	</div>
+	<section id='dashboard'>
+		<div id='map'></div>
+		<div class = 'widget'>This is just a demonstration of a test dashboard layout</div>
+		<div class = 'widget'>To add more information about specific aquifers zoom in and click on one</div>
+		<div class = 'widget'>As more features are added this opening screen will have a <BR>summary of aquifers for the Province of BC</div>
+	</section>
+	<div class='bottombar'></div>
 </body>
 </html>

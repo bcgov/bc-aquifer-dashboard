@@ -1,0 +1,143 @@
+
+body {
+  background: white;
+  width: 100%
+}
+div {
+  display: block;
+  line-height: 1.3em;
+  vertical-align: top;
+  margin-bottom: 0em;
+}
+div.topbar{
+  display: block;
+  padding: 10px;
+  height: auto;
+  width: 100%;
+  font-size: 3em;
+  color: white;
+  background-color: rgb(25, 78, 149);
+  position: relative;
+  text-align: left;
+  vertical-align: middle;
+  line-height: 90px;
+}
+section{
+  width: 100%;
+  background:white;
+  padding: 1em;
+  min-width: 15em;
+  max-width: 100%;
+  overflow: auto;
+  margin: 0em;
+  border: black;
+}
+.widget{
+  display: inline-block;
+  border-radius: 0.5em;
+  width: auto;
+  height: auto;
+  background: #dddddd;
+  float: left;
+  margin: 2px;
+  padding: 1em;
+}
+.backupwidget{
+  display: inline-block;
+  border-radius: 0.5em;
+  width: auto;
+  height: auto;
+  background: #dddddd;
+  font-size: 18px;
+  float: left;
+  margin: 2px;
+  padding: 1em;
+}
+#map{
+  display: inline-block;
+  border-radius: 0.5em;
+  width: 400px;
+  height: 400px;
+  background: #dddddd;
+  font-size: 18px;
+  float: left;
+  margin: 2px;
+  padding: 2em;
+}
+#well-map{
+  display: inline-block;
+  border-radius: 0.5em;
+  width: 300px;
+  height: 300px;
+  background: #dddddd;
+  /*font-size: 18px;*/
+  margin: 1px;
+  padding: 2em;
+}
+#filter{
+  display: inline-block;
+  float: right;
+  padding-right: 2em;
+  font-size: 18px;
+  position: relative;
+  text-align: right;
+  vertical-align: middle;
+  line-height: 90px;
+}
+div.bottombar{
+  display: inline-block;
+  border-radius: 0em;
+  height: 40px;
+  width: 100%;
+  font-size: 3em;
+  color: white;
+  vertical-align: middle;
+  background-color: rgb(25, 78, 149);
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  line-height: 90px;
+}
+.roundedTable
+{
+  border-radius: 6px 6px 6px 6px;
+  border: 1px solid #000;
+  border-spacing: 0;
+  width: 300px;
+}
+
+.roundedTable tr:first-child td:first-child
+{
+  border-top-left-radius: 5px;
+}
+
+.roundedTable tr:first-child td:last-child
+{
+  border-top-right-radius: 5px;
+}
+
+.roundedTable tr:last-child td:first-child
+{
+  border-bottom-left-radius: 5px;
+}
+
+.roundedTable tr:last-child td:last-child
+{
+  border-bottom-right-radius: 5px;
+}
+/* optional setting to pad the table cells */
+.roundedTable th, td
+{
+  padding: 10px 10px 10px 10px;
+}
+/* optional setting to set the background color and font color of the first row - behave like a header */
+.roundedTable tr:first-child td:first-child
+{
+  background-color: rgb(25, 78, 149);
+  color: #FFF;
+}
+/* optional setting to set the background color of the last row - behave like a footer */
+.roundedTable tr:last-child td:last-child
+{
+  background-color: ;
+}
