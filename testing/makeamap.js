@@ -7,6 +7,7 @@ $( document).ready(function(){
   //   attribution: '&copy; ' + mapLink + ' Contributors',
   //   maxZoom: 18,
   // }).addTo(map);
+
   L.tileLayer.wms('http://maps.gov.bc.ca/arcserver/services/province/web_mercator_cache/MapServer/WMSServer', {
    layers: '0',
    format: 'image/png',
@@ -20,8 +21,11 @@ $( document).ready(function(){
       format:'image/png',
       version:'1.1.1',
       layers: 'pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW',
-      transparent: 'true'
+      transparent: 'true',
+      feature_count: 20
   }).addTo(map);
+
+
 
 });
 
@@ -45,7 +49,10 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
     // Make an equest to the server and hope for the best
     var url = this.getFeatureInfoUrl(evt.latlng);
     d3.json(url,function(data){
-      console.log(data.features[0].properties.AQ_TAG);
+      var totalFeatures = data.features.length;
+      if (totalFeatures > 1){
+        console.log('total features: ' + totalFeatures);
+      }
       var tag = data.features[0].properties.AQ_TAG;
       setAquiferFilter(tag);
 
@@ -70,6 +77,7 @@ L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
           width: size.x,
           layers: this.wmsParams.layers,
           query_layers: this.wmsParams.layers,
+          feature_count: this.wmsParams.feature_count,
           info_format: 'application/json'
         };
 

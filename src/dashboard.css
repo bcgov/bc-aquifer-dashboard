@@ -33,14 +33,14 @@ section{
   border: black;
 }
 .widget{
-  display: inline-block;
+  display: block;
   border-radius: 0.5em;
   width: auto;
-  height: auto;
+  height: 300px;
   background: #dddddd;
   float: left;
-  margin: 2px;
-  padding: 1em;
+  margin: 3px;
+  padding: 2em;
 }
 .backupwidget{
   display: inline-block;
@@ -54,7 +54,7 @@ section{
   padding: 1em;
 }
 #map{
-  display: inline-block;
+  display: block;
   border-radius: 0.5em;
   width: 400px;
   height: 400px;

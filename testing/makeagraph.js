@@ -15,9 +15,10 @@ function getWellsByAquiferByTag(tag){
           pntGeoJSON = geojson;
           var polyPnts = turf.pointsWithinPolygon(pntGeoJSON,polyGeoJSON);
           //load aquifer and wells on map
+          makeAquiferInfoWidget(polyGeoJSON);
           makeWellDepthGraph(polyPnts);
           //makeWellMap([polyGeoJSON,polyPnts]);
-          makeAquiferInfoWidget(polyGeoJSON);
+          
 
       }
 

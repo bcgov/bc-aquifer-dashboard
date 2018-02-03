@@ -18,31 +18,37 @@ function setAquiferFilter(tag){
 }
 
 function makeAquiferInfoWidget(geoJson){
-
-
+  //list of fields to add to info table
   var fieldList = ['AQNAME','AQ_TAG','AQUIFER_CLASSIFICATION','DEMAND','VULNERABILITY', 'AQUIFER_MATERIALS'];
   var tag = geoJson.features[0].properties.AQ_TAG;
-  var infoTable = document.getElementById('widget-table');
-  if ('widget-table'){
-    $('#widget-table').remove()
+  //var infoTable = document.getElementById('widget-table');
+  var table = '<table class="roundedTable" id=info-table><tbody></tbody></table>';
+  if (document.getElementById('info-table')){
+    var infoTable = document.getElementById('info-table');
+    var r = infoTable.rows.length;
+    //delete existing rows
+    for (var i=1; i<r;i++){
+      //delete last row
+      infoTable.deleteRow(-1);
+    }
   }
-  var table = '<table class="roundedTable" id=well-table><tbody></tbody></table>';
-  var newWidget = setWidget(table,'dashboard','widget-table');
-  var infoTable = document.getElementById('well-table');
-
+  else{
+    var newWidget = setWidget(table,'dashboard','widget-table');
+    var infoTable = document.getElementById('info-table');
+    var row = infoTable.insertRow(0);
+    var cell = row.insertCell(0);
+    cell.innerHTML = 'AQUIFER INFORMATION';
+  }
+  
   var featureProperties = geoJson.features[0].properties;
-  var row = infoTable.insertRow(0);
-  var cell = row.insertCell(0);
-  cell.innerHTML = 'AQUIFER INFORMATION';
-
   var field;
   var data;
   for(var i=0; i<fieldList.length;i++){
     field = '<strong>'+ fieldList[i].replace("_", " ") + ":</strong>";
     data = featureProperties[fieldList[i]];
-    info = field + "  " + data;
-    row = infoTable.insertRow(-1);
-    cell = row.insertCell(0);
+    var info = field + "  " + data;
+    var row = infoTable.insertRow(-1);
+    var cell = row.insertCell(0);
     cell.innerHTML = info;
   }
   console.log('makeInfoWidget');
