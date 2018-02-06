@@ -26,7 +26,7 @@ $( document ).ready(function() {
     service: 'WFS',
     version: '2.0',
     request: 'GetFeature',
-    //typeName: 'Ground Water Aquifers',
+    typeName: 'WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW',
     outputFormat: 'text/javascript',
     format_options: 'callback:getJson',
     SrsName: 'EPSG:4326'
@@ -44,14 +44,18 @@ $( document ).ready(function() {
       WFSLayer = L.geoJson(response, {
         style: function (feature) {
           return{
-            stroke: false,
-            fillColor: 'FFFFFF',
-            fillOpacity: 0
+            stroke: true,
+            color: '#d440f1',
+            weight: 1,
+            opacity: 1,
+            fill: true,
+            fillColor: '000000',
+            fillOpacity: 0.25
           };
         },
         onEachFeature: function (feature, layer) {
           popupOptions = {maxWidth: 200};
-          layer.bindPopup(feature.properties.AQ_TAG);
+          layer.bindPopup('AQ_TAG: ' + feature.properties.AQ_TAG);
         }
       }).addTo(map)
     }
