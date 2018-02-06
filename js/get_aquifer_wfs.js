@@ -1,7 +1,8 @@
 ﻿/* -----------------------------------------------------------------------------------
-   Groundwater Wells
+   Aquifer WFS
    Developed by GeoBC
    (c) 2018 GeoBC | http://www.geobc.gov.bc.ca
+   https://gis.stackexchange.com/questions/64406/getting-wfs-data-from-geoserver-into-leaflet
 ----------------------------------------------------------------------------------- */
 
 $.urlParam = function(name) {
@@ -55,11 +56,12 @@ $( document ).ready(function() {
         },
         onEachFeature: function (feature, layer) {
           popupOptions = {maxWidth: 200};
-          layer.bindPopup('AQ_TAG: ' + feature.properties.AQ_TAG);
+          layer.bindPopup('AQ_TAG: ' + feature.properties.AQ_TAG
+        + '<br>NAME: ' + feature.properties.AQNAME);
         }
       }).addTo(map)
     }
-  }) ;
+  });
 
 /*-----BASE MAPS-----*/
 
