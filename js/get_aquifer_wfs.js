@@ -1,9 +1,8 @@
 ﻿/* -----------------------------------------------------------------------------------
-   Aquifer WFS
+   Get Aquifer WFS
    Developed by GeoBC
    (c) 2018 GeoBC | http://www.geobc.gov.bc.ca
-   https://gis.stackexchange.com/questions/64406/getting-wfs-data-from-geoserver-into-leaflet
------------------------------------------------------------------------------------ */
+   ----------------------------------------------------------------------------------- */
 
 $.urlParam = function(name) {
   var results = new RegExp('[\\?&]' + name + '=([^&#]*)')
@@ -21,6 +20,8 @@ $( document ).ready(function() {
     minZoom: 1
   }).setView([49.6, -119.5], 9);
 
+/*-----AQUIFER WFS-----*/
+// https://gis.stackexchange.com/questions/64406/getting-wfs-data-from-geoserver-into-leaflet
   var aquiferURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows"
 
   var defaultParameters = {
@@ -28,20 +29,30 @@ $( document ).ready(function() {
     version: '2.0',
     request: 'GetFeature',
     typeName: 'WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW',
-    outputFormat: 'text/javascript',
+    outputFormat: 'text/javascript', //or application/json (but won't work w/ ajax dataType=jsonp )
     format_options: 'callback:getJson',
-    SrsName: 'EPSG:4326'
+    SrsName: 'EPSG:4326',
+    //exclude 'GEOMETRY' from list below if spatial not required
+    propertyName: ['AQ_TAG', 'AQNAME', 'AQUIFER_MATERIALS', 'PRODUCTIVITY',
+    'VULNERABILITY', 'DEMAND', 'AQUIFER_CLASSIFICATION', 'AQUIFER_NAME',
+    'AQUIFER_RANKING_VALUE', 'DESCRIPTIVE_LOCATION', 'LITHO_STRATOGRAPHIC_UNIT',
+    'QUALITY_CONCERNS', 'AQUIFER_DESCRIPTION_RPT_URL', 'AQUIFER_STATISTICS_RPT_URL',
+    'AQUIFER_SUBTYPE_CODE', 'QUANTITY_CONCERNS', 'SIZE_KM2', 'TYPE_OF_WATER_USE',
+    'PRODUCTIVITY_CODE', 'DEMAND_CODE', 'VULNERABILITY_CODE', 'CLASSIFICATION_CODE',
+    'GEOMETRY', 'FEATURE_AREA_SQM']
   };
 
   var parameters = L.Util.extend(defaultParameters);
   var URL = aquiferURL + L.Util.getParamString(parameters);
 
   var WFSLayer = null;
+  //ajax (asynchronous HTTP) request https://www.sitepoint.com/ajaxjquery-getjson-simple-example/
   var ajax = $.ajax({
     url: URL,
     dataType: 'jsonp',
     jsonpCallback: 'getJson',
     success: function(response) {
+      console.log(response);
       WFSLayer = L.geoJson(response, {
         style: function (feature) {
           return{
@@ -57,7 +68,8 @@ $( document ).ready(function() {
         onEachFeature: function (feature, layer) {
           popupOptions = {maxWidth: 200};
           layer.bindPopup('AQ_TAG: ' + feature.properties.AQ_TAG
-        + '<br>NAME: ' + feature.properties.AQNAME);
+        + '<br>NAME: ' + feature.properties.AQNAME
+        + '<br>SUBTYPE CODE: ' + feature.properties.AQUIFER_SUBTYPE_CODE);
         }
       }).addTo(map)
     }
@@ -79,38 +91,9 @@ $( document ).ready(function() {
         attribution: "© 2013-2018 GeoBC, DataBC, The Province of British Columbia"
 	});
 
-  /*
-  var SPOTimagery = new L.tileLayer.wms("http://geo_bc:rzVBvz7a@geocloud.blackbridge.com/service?", {
-      //layers: '0',
-      //format: 'image/png',
-      //transparent: true,
-      attribution: "© 2017 geomatics.planet.com",
-      crs:crs84
-  });
-  */
-
-/*-----OVERLAYS-----*/
+/*-----WMS OVERLAYS-----*/
 
   var crs84 = new L.Proj.CRS('CRS:84', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs');
-
-  /*-----OKANAGAN LAKE IMAGERY-----*/
-  /*
-  var OKimagery2013 = new L.tileLayer.wms("http://openmaps.gov.bc.ca/imagex/ecw_wms.dll?", {
-        layers: 'REGIONAL_MOSAICS_BC_OKANAGAN_LAKE_XC200MM_2013_BCALB',
-        format: 'image/png',
-        transparent: true,
-        maxZoom: 21,
-        attribution: "© 2013-2018 GeoBC, DataBC, The Province of British Columbia"
-  });
-
-  var OKimagery2018 = new L.tileLayer.wms("http://test.openmaps.gov.bc.ca/lzt/ows?", {
-        layers: 'o17',
-        format: 'image/png',
-        transparent: true,
-        maxZoom: 21,
-        attribution: "© 2013-2018 GeoBC, DataBC, The Province of British Columbia"
-  }).addTo(map);
-  */
 
   /*-----AQUIFERS POLY-----*/
   /*
@@ -147,8 +130,6 @@ $( document ).ready(function() {
     {
     //'Groundwater Wells (Scale Dependent)': gwWells,
     //'Aquifers (Scale Dependent)': aquiferPolys
-    //'Okanagan Lake 2013 Imagery': OKimagery2013,
-    //'Okanagan Lake 2017 Imagery': OKimagery2017
   },
     {
     collapsed: false
