@@ -62,3 +62,14 @@ function setDiv(content, parentElementId, widgetId){
   parentE.appendChild(widgetDiv);
   return widgetDiv
 }
+
+$(document).ready(function(){
+  getProvincialAquiferList();
+});
+
+
+function filterEvents(filterValue){
+  //this function is fired when the filter box value is changed
+  console.log(filterValue);
+
+}

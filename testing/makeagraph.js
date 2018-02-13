@@ -92,3 +92,32 @@ function json2array(jsonObj){
   console.log("finished json to array");
   return darray;
 }
+
+function getProvincialAquiferList (){
+  var aquifer = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?service=WFS&request=GetFeature&typeName=WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW&SRSNAME=epsg:4326&outputFormat=json&propertyname=AQ_TAG";
+  var aquiferData = [];
+  var aqList = [];
+  //rest request for data
+  d3.queue()
+	.defer(d3.json, aquifer)
+	.await(seethedata);
+  function seethedata(error,a,w){
+    //add data counts to div
+
+    //convert to array
+    aquiferData = json2array(a);
+    //create an array of fieldname values
+    var fIndex = aquiferData[0].indexOf('AQ_TAG');
+    //expect field names to be first array
+    for (i=1;i<aquiferData.length;i++){
+      var val = aquiferData[i][fIndex];
+      aqList.push(val);
+    }
+    $( "#filterbox" ).autocomplete({
+      source: aqList,
+      appendTo: "#filter"
+
+    });
+  }
+  
+}

@@ -9,6 +9,7 @@
 
 	<!-- Load Leaflet from CDN-->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 	<!-- Load Esri Leaflet from CDN -->
 	<script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
@@ -17,6 +18,7 @@
 
 	<!-- Load jquery from CDN -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<script src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 	<script src="./testing/makeamap.js"></script>
@@ -33,7 +35,10 @@
 <body>
 
 	<div class ='topbar'>BC Aquifer Dashboard
-		<div id=filter>Filter Value</div>
+		<div class="ui-widget" id=filter>
+			<label for="filterbox">Locate: </label>
+			<input id="filterbox" placeholder="Aquifer Tag" onchange="filterEvents(this.value)">
+		</div>
 	</div>
 	<section id='dashboard'>
 		<div id='map'></div>
