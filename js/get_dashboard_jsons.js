@@ -1,7 +1,9 @@
 ﻿/* -----------------------------------------------------------------------------------
    get_dashboard_jsons.js
-   Retrieves WFS (as JSONs) for the Aquifer Dashboard: makes various data available for 
-   different features of the dashboard (e.g., maps, graphs, widgets)
+
+   Retrieves WFS layers (as JSONs) for the Aquifer Dashboard: makes various data
+   available for different features of the dashboard (e.g., maps, graphs, widgets)
+
    Developed by GeoBC
    (c) 2018 GeoBC | http://www.geobc.gov.bc.ca
    ----------------------------------------------------------------------------------- */
@@ -15,18 +17,18 @@ $.urlParam = function(name) {
   return results[1] || 0;
 };
 
-//$( document ).ready(function() {
-
 //geoJson globals
 var aquiferJson = {};
 var regionsJson = {};
 var precinctsJson = {};
 var allWellsJson = {};
 
+//comment out below if you don't want to automatically retrieve Aquifer JSON on page load
+$( document ).ready( getAquiferJSON ); 
+
 //call this to load data into aquiferJson
 function getAquiferJSON(){
-  
-  
+    
   /*-----AQUIFER WFS-----*/
   // https://gis.stackexchange.com/questions/64406/getting-wfs-data-from-geoserver-into-leaflet
   var aquiferURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows"
@@ -63,6 +65,7 @@ function getAquiferJSON(){
     }
   });
 }
+
 //this is a callback function to be run when JSON is returned by wfs call
 var getJson = function (response){
   console.log('getJson callback function');
