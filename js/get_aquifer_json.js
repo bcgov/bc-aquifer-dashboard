@@ -19,7 +19,7 @@ $.urlParam = function(name) {
 var aquiferJson = {};
 
 //call this to load data into aquiferJson
-function exampleDataByIan(){
+function getAquiferJSON(){
   
   
   /*-----AQUIFER WFS-----*/
