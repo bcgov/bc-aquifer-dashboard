@@ -50,7 +50,7 @@ function makeWellDepthGraph(geoJSONPnts){
   function drawChart() {
         var data = google.visualization.arrayToDataTable(graphArray,false);
         var options = {
-          title: 'Aquifer ' + $('#filter').text() +': Well Water Depth',
+          title: 'Aquifer ' + $('#filter').value +': Well Water Depth',
           legend: { position: 'none' },
           vAxis: {title: 'count'},
           width:500,
@@ -113,6 +113,7 @@ function getProvincialAquiferList (){
       var val = aquiferData[i][fIndex];
       aqList.push(val);
     }
+   
     $( "#filterbox" ).autocomplete({
       source: aqList,
       appendTo: "#filter"

@@ -1,28 +1,42 @@
 
+
 body {
   background: white;
   width: 100%
 }
-div {
-  display: block;
-  line-height: 1.3em;
-  vertical-align: top;
-  margin-bottom: 0em;
-}
-div.topbar{
-  display: inline-block;
-  padding: 10px;
-  height: auto;
-  width: 100%;
-  font-size: 3em;
-  color: white;
+.topbar{
   background-color: rgb(25, 78, 149);
-  position: relative;
-  text-align: left;
-  vertical-align: middle;
+  overflow: hidden;
 }
 
+#title{
+  float: left;
+  display: block;
+  padding: 14px 16px;
+  text-decoration: none;
+  text-align: left;
+  font-size: 44px;
+  color: white;
+}
+#filter{
+  float: right;
+  height: 20px;
+  top: 40px;
+  right: 20px;
+  position: relative;
+  z-index: 100;
+  
+}
+.topbar input[type=text] {
+  padding: 6px;
+  margin-top: 8px;
+  font-size: 17px;
+  border: none;
+  position: relative;
+  
+}
 section{
+  position: absolute;
   width: 100%;
   background:white;
   padding: 1em;
@@ -30,7 +44,9 @@ section{
   max-width: 100%;
   overflow: auto;
   margin: 0em;
+  background-color: black;
   border: black;
+  z-index: 0;
 }
 .widget{
   display: block;
@@ -45,14 +61,16 @@ section{
 
 #map{
   display: block;
+  position: relative;
   border-radius: 0.5em;
   width: 400px;
   height: 400px;
   background: #dddddd;
   font-size: 18px;
   float: left;
-  margin: 2px;
+  margin: 15px;
   padding: 2em;
+  top: 20px;
 }
 #well-map{
   display: inline-block;
@@ -64,17 +82,16 @@ section{
   margin: 1px;
   padding: 2em;
 }
-#filter{
-  display: inline-block;
-  float: right;
-  padding-right: 2em;
-  font-size: 16px;
-  position: relative;
-  text-align: right;
-  vertical-align: bottom;
-  line-height: normal;
-}
-.ui-autocomplete { height: 200px; width: 50px; overflow-y: scroll; overflow-x: hidden;}
+
+
+.ui-autocomplete {
+  position: absolute;
+  cursor: default;
+  z-index: 100; 
+  height: 400px; 
+  width: 50px; 
+  overflow-y: scroll; 
+  overflow-x: hidden;}
 
 div.bottombar{
   display: inline-block;
@@ -87,7 +104,6 @@ div.bottombar{
   background-color: rgb(25, 78, 149);
   position: relative;
   text-align: center;
-  vertical-align: middle;
   line-height: 90px;
 }
 .roundedTable
@@ -129,7 +145,4 @@ div.bottombar{
   color: #FFF;
 }
 /* optional setting to set the background color of the last row - behave like a footer */
-.roundedTable tr:last-child td:last-child
-{
-  background-color: ;
-}
+/*.roundedTable tr:last-child td:last-child{}

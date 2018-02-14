@@ -8,12 +8,12 @@ function setWidget(content, parentElementId, widgetId){
   return widgetDiv
 }
 function setFilterDisplay(filterText){
-  $('#filter').text('Filter: ' + filterText);
+  $('#filter').value = filterText;
 }
 
 function setAquiferFilter(tag){
   //var tag = '0255'
-  setFilterDisplay('AQ_TAG:'+ tag);
+  setFilterDisplay(tag);
   getWellsByAquiferByTag(tag);
 }
 
@@ -71,5 +71,6 @@ $(document).ready(function(){
 function filterEvents(filterValue){
   //this function is fired when the filter box value is changed
   console.log(filterValue);
+  getWellsByAquiferByTag(filterValue);
 
 }
