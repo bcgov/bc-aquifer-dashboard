@@ -17,8 +17,11 @@ $.urlParam = function(name) {
 
 //$( document ).ready(function() {
 
-//aquifer geoJson global
+//geoJson globals
 var aquiferJson = {};
+var regionsJson = {};
+var precinctsJson = {};
+var allWellsJson = {};
 
 //call this to load data into aquiferJson
 function getAquiferJSON(){
