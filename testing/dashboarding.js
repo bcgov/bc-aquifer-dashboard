@@ -63,14 +63,13 @@ function setDiv(content, parentElementId, widgetId){
   return widgetDiv
 }
 
-$(document).ready(function(){
-  getProvincialAquiferList();
-});
-
-
 function filterEvents(filterValue){
   //this function is fired when the filter box value is changed
-  console.log(filterValue);
-  getWellsByAquiferByTag(filterValue);
+  console.log('filterEvent');
+  if (filterValue){
+    console.log(filterValue);
+    getWellsByAquiferByTag(filterValue);
+  }
+  else {console.log('no filter value');}
 
 }
