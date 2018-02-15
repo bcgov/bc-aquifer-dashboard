@@ -88,7 +88,6 @@ function json2array(jsonObj){
     }
 
   });
-  console.log(darray);
   console.log("finished json to array");
   return darray;
 }

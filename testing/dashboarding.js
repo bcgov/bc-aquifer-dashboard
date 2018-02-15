@@ -8,10 +8,17 @@ function setWidget(content, parentElementId, widgetId){
   return widgetDiv
 }
 function setFilterDisplay(filterText){
-  $('#filter').value = filterText;
+  var firstChar = filterText.charAt(0);
+  if ('0123456789'.indexOf(firstChar) !== -1) {
+    // Is a number
+    document.getElementById('filter-text').innerHTML = 'Aquifer TAG: ' + filterText;}
+  else {
+    //its something else
+    document.getElementById('filter-text').innerHTML = filterText;
+  }
 }
 
-function setAquiferFilter(tag){
+function setDashboardFilter(tag){
   //var tag = '0255'
   setFilterDisplay(tag);
   getWellsByAquiferByTag(tag);
@@ -68,7 +75,8 @@ function filterEvents(filterValue){
   console.log('filterEvent');
   if (filterValue){
     console.log(filterValue);
-    getWellsByAquiferByTag(filterValue);
+    //trigger any filter actions here! --map and --graphing
+    setDashboardFilter(filterValue);
   }
   else {console.log('no filter value');}
 
@@ -86,5 +94,8 @@ function makeFilterList(){
   }
   $( "#filterbox" ).autocomplete({
     source: aqList
+  });
+  $('#filterbox').on('autocompleteSelect', function(event, node) {
+      $(this).val(node.value);
   });
 }
