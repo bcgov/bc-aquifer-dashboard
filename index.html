@@ -9,13 +9,13 @@
 
 	<!-- Load Leaflet from CDN-->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 	
 	<!-- Load js reources from CDN -->
 	<script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 	<script src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
 
@@ -31,7 +31,7 @@
 	<script src="./testing/plugins/leaflet.ajax.min.js"></script>
 	<script src="./testing/plugins/L.Control.MousePosition.js"></script>
 	
-	<!-- Load Leaflet plugin css -->
+	<!-- Load stylesheets css -->
 	<link rel="stylesheet" type="text/css" href="./src/dashboard.css"/>
 	<link rel="stylesheet" type="text/css" href="./src/bootstrap.min.css"/>
 	<link rel="stylesheet" type="text/css" href="./src/bootstrap-theme-min.css"/>
@@ -42,22 +42,20 @@
     <!-- Load local css -->
 	<link rel="stylesheet" type="text/css" href="./src/dashboard.css"/>
 
-	<style>
-
-	</style>
-
-
 </head>
 <body>
-	<div class ='topbar'>
-		<a id='title'>BC Aquifer Dashboard</a>
-		<div class="ui-widget" id=filter>
-			<input id="filterbox" placeholder="Search... " onchange="filterEvents(this.value)">
-		</div>
-	</div>
-	<section id='dashboard'>
+    <div class="topnav">
+        <a class='title'>BC Aquifer Dashboard</a>
+        <a class='dashboard-type'>Provincial Overview</a>
+        <div class="search-container">
+          <form>
+            <input id='filterbox' type="text" placeholder="Search.." onchange="filterEvents(this.value)">
+            <button onclick="filterEvents(this.value)"><i class="material-icons">search</i></button>
+          </form>
+        </div>
+    </div>
+    <section id='dashboard'>
 		<div id='map'></div>
 	</section>
-	<div class='bottombar'></div>
 </body>
 </html>
