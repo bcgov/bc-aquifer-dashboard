@@ -55,6 +55,7 @@ function getAquiferJSON(){
   var URL = aquiferURL + L.Util.getParamString(parameters);
 
   var WFSLayer = null;
+  map.spin(true);
   //ajax (asynchronous HTTP) request https://www.sitepoint.com/ajaxjquery-getjson-simple-example/
   var ajax = $.ajax({
     url: URL,
@@ -62,6 +63,7 @@ function getAquiferJSON(){
     jsonpCallback: 'getJson',
     success: function(response) {
       console.log('executed wfs request');
+      map.spin(false);
     }
   });
 }
