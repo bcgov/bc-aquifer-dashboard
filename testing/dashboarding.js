@@ -73,3 +73,18 @@ function filterEvents(filterValue){
   else {console.log('no filter value');}
 
 }
+function makeFilterList(){
+  var aqList = [];
+  //convert to array
+  var aquiferData = json2array(aquiferJson);
+  //create an array of fieldname values
+  var fIndex = aquiferData[0].indexOf('AQ_TAG');
+  //expect field names to be first array
+  for (i=1;i<aquiferData.length;i++){
+    var val = aquiferData[i][fIndex];
+    aqList.push(val);
+  }
+  $( "#filterbox" ).autocomplete({
+    source: aqList
+  });
+}

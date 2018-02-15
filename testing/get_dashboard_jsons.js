@@ -72,4 +72,6 @@ function getAquiferJSON(){
 var getJson = function (response){
   console.log('getJson callback function');
   aquiferJson = response;
+  //populate search box
+  makeFilterList();
 };
