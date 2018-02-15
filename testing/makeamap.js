@@ -26,8 +26,9 @@ var lyrTopoMap;
 
 var map;
 var mapControl;
+var ctlAttribute;
 var ctlZoomer;
-var ctlSearch;
+var ctlScale;
 
 var baseLayers;
 var overlays;
@@ -43,6 +44,7 @@ $(document).ready(function(){
   lyrTopoMap = L.tileLayer.provider('OpenTopoMap');
   lyrStreetsMap = L.tileLayer.provider('OpenStreetMap');
   map.addLayer(lyrTopoMap); //start with default base map
+
   
   var URL_BCBASE = "http://maps.gov.bc.ca/arcserver/services/Province/web_mercator_cache/MapServer/WMSServer"
   wmsBCBASELayer = L.tileLayer.wms(URL_BCBASE,{
@@ -51,9 +53,10 @@ $(document).ready(function(){
     transparent: 'false'
   });
 
-  lyrWellsAjax = L.geoJSON.ajax(wellsCallback);
+  lyrWellsAjax = L.geoJSON.ajax(wellsCallback.geoJSON);
   lyrWellsAjax.on('data:loaded', function(){
     console.log("layers loaded by Ajax method")
+    console.log("well count: " + lyrWellsAjax.geoJSONcount.toString)
     //map.fitBounds(lyrWellsAjax.getBounds());
 });
 
@@ -115,6 +118,9 @@ $(document).ready(function(){
   };
   mapControl = new L.control.layers(baseLayers,overlays);
   mapControl.addTo(map);
+  //add scale bar and cursor controls to map
+  ctlScale = L.control.scale({position:'bottomleft', metric:false, maxWidth:200}).addTo(map);
+  ctlMouseposition = L.control.mousePosition().addTo(map);
 
 
 
