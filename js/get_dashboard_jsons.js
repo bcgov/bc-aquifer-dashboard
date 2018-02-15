@@ -24,11 +24,11 @@ var precinctsJson = {};
 var allWellsJson = {};
 
 //comment out below if you don't want to automatically retrieve Aquifer JSON on page load
-$( document ).ready( getAquiferJSON ); 
+$( document ).ready( getAquiferJSON );
 
 //call this to load data into aquiferJson
 function getAquiferJSON(){
-    
+
   /*-----AQUIFER WFS-----*/
   // https://gis.stackexchange.com/questions/64406/getting-wfs-data-from-geoserver-into-leaflet
   var aquiferURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows"
@@ -55,6 +55,7 @@ function getAquiferJSON(){
   var URL = aquiferURL + L.Util.getParamString(parameters);
 
   var WFSLayer = null;
+  map.spin(true);
   //ajax (asynchronous HTTP) request https://www.sitepoint.com/ajaxjquery-getjson-simple-example/
   var ajax = $.ajax({
     url: URL,
@@ -62,6 +63,7 @@ function getAquiferJSON(){
     jsonpCallback: 'getJson',
     success: function(response) {
       console.log('executed wfs request');
+      map.spin(false);
     }
   });
 }
@@ -70,4 +72,6 @@ function getAquiferJSON(){
 var getJson = function (response){
   console.log('getJson callback function');
   aquiferJson = response;
+  //populate search box
+  makeFilterList();
 };
