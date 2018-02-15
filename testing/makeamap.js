@@ -19,6 +19,7 @@ var wmsWellsLAyer;
 var wmsDistLayer;
 var wmsPrecLayer;
 var wmsBCBASELayer;
+var lyrLocalAQ;
 
 var lyrStreetsMap;
 var lyrImageMap;
@@ -99,6 +100,13 @@ $(document).ready(function(){
     transparent: 'true',
     feature_count: 200
   }).addTo(map);
+
+  //add local geojson aquifer data
+  lyrLocalAQ = L.geoJSON.ajax('.assets/aquifer_simple.geojson', {onEachFeature:processAquiferss}).addTo(mymap);
+    lyrLocalAQ.on('data:loaded', function(){
+        console.log("local quifers loaded")
+    });
+  });
   
   //setup map Layer control
   //base maps
@@ -112,7 +120,8 @@ $(document).ready(function(){
   overlays = {
     "Districts": wmsDistLayer,
     "Precincts": wmsPrecLayer,
-    "Aquifers": wmsAQLayer,
+    //"Aquifers": wmsAQLayer,
+    "Aquifers": lyrLocalAQ,
     "Wells": wmsWellsLayer
     //"Wells WFS" : lyrWellsAjax
   };
@@ -123,6 +132,15 @@ $(document).ready(function(){
   ctlMouseposition = L.control.mousePosition().addTo(map);
 
 }); // end document ready function
+
+//functions for local layers
+//function Aquifer foreachfeature
+function processAquifers(json, lyr) {
+  var att = json.properties;
+  lyr.bindTooltip("<h4>Aquifer ID: "+att.AQUIFER_NUMBER+"</h4>Type: "+att.TYPE_OF_WATER_USE);
+  //could create list of AQ IDs here
+  //arAquiferIDs.push(att.AQUIFER_NUMBER.toString());
+}
 
 L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
   onAdd: function (map) {
