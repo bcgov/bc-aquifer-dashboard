@@ -6,8 +6,8 @@ var wells = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_W
 var wellsCallback = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW/ows?service=WFS&request=GetFeature&typeName=WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW&outputFormat=json&CQL_FILTER=OBSERVATION_WELL_NUMBER%20IS%20NOT%20NULL&format_options=callback:processJSON";
 var wellfilter = "CQL_FILTER=OBSERVATION_WELL_NUMBER IS NOT NULL";
 var options = {};
-var aquiferJSON = {};
-var wellJSON = {};
+var aquiferGEOJSON;
+var wellGEOJSON;
 var summaryData = [];
 var selection; //variable boolean for selection
 
@@ -122,12 +122,9 @@ $(document).ready(function(){
   ctlScale = L.control.scale({position:'bottomleft', metric:false, maxWidth:200}).addTo(map);
   ctlMouseposition = L.control.mousePosition().addTo(map);
 
-
-
-});
+}); // end document ready function
 
 L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
-
   onAdd: function (map) {
     // Triggered when the layer is added to a map.
     //   Register a click listener, then do all the upstream WMS things
