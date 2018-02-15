@@ -102,12 +102,11 @@ $(document).ready(function(){
   }).addTo(map);
 
   //add local geojson aquifer data
-  lyrLocalAQ = L.geoJSON.ajax('.assets/aquifer_simple.geojson', {onEachFeature:processAquiferss}).addTo(mymap);
+  lyrLocalAQ = L.geoJSON.ajax('/assets/aquifer_simple.json', {onEachFeature:processAquifers}).addTo(map);
     lyrLocalAQ.on('data:loaded', function(){
-        console.log("local quifers loaded")
+        console.log("local aquifers loaded")
     });
-  });
-  
+    
   //setup map Layer control
   //base maps
   baseLayers = {
@@ -130,7 +129,6 @@ $(document).ready(function(){
   //add scale bar and cursor controls to map
   ctlScale = L.control.scale({position:'bottomleft', metric:true, maxWidth:150}).addTo(map);
   ctlMouseposition = L.control.mousePosition().addTo(map);
-
 }); // end document ready function
 
 //functions for local layers
@@ -140,7 +138,7 @@ function processAquifers(json, lyr) {
   lyr.bindTooltip("<h4>Aquifer ID: "+att.AQUIFER_NUMBER+"</h4>Type: "+att.TYPE_OF_WATER_USE);
   //could create list of AQ IDs here
   //arAquiferIDs.push(att.AQUIFER_NUMBER.toString());
-}
+};
 
 L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
   onAdd: function (map) {
