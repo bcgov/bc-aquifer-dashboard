@@ -1,3 +1,23 @@
+
+//set variables
+var wmsAQLayer;
+var wmsWellsLAyer;
+var wmsDistLayer;
+var wmsPrecLayer;
+var wmsBCBASELayer;
+
+var lyrStreetsMap;
+var lyrImageMap;
+var lyrTopoMap;
+
+var mapControl;
+var ctlZoomer;
+var ctlSearch;
+
+var baseLayers;
+var overlays;
+
+
 //basic map
 //set map size
 $( document).ready(function(){
