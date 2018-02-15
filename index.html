@@ -11,20 +11,33 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
-	<!-- Load Esri Leaflet from CDN -->
-	<script src="https://unpkg.com/esri-leaflet@2.0.8"></script>
-	<!-- Load turf from CDN -->
+	
+	<!-- Load js reources from CDN -->
 	<script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
-
-	<!-- Load jquery from CDN -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 	<script src="https://www.gstatic.com/charts/loader.js"></script>
 	<script src="https://d3js.org/d3.v4.min.js"></script>
+
+	<!-- Load local js files -->
 	<script src="./testing/makeamap.js"></script>
 	<script src="./testing/makeagraph.js"></script>
 	<script src="./testing/dashboarding.js"></script>
 	<script src="./testing/get_dashboard_jsons.js"></script>
+	
+	<!-- Load Leaflet plugin js -->
+	<script src="./testing/plugins/L.control.Zoomslider.js"></script>
+	<script src="./testing/plugins/leaflet-providers.js"></script>
+	<script src="./testing/plugins/leaflet.ajax.min.js"></script>
+	
+	<!-- Load Leaflet plugin css -->
+	<link rel="stylesheet" type="text/css" href="./src/dashboard.css"/>
+	<link rel="stylesheet" type="text/css" href="./src/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="./src/bootstrap-theme-min.css"/>
+	<link rel="stylesheet" type="text/css" href="./src/L.Control.Zoomslider.css"/>
+	<link rel="stylesheet" type="text/css" href="./src/L.Control.Zoomslider.ie.css"/>
+
+    <!-- Load local css -->
 	<link rel="stylesheet" type="text/css" href="./src/dashboard.css"/>
 
 	<style>

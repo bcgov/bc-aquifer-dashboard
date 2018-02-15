@@ -1,5 +1,19 @@
 
 //set variables
+
+var aquifer = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?service=WFS&request=GetFeature&typeName=WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW&SRSNAME=epsg:4326&outputFormat=json&propertyname=AQ_TAG,AREA,PRODUCTIVITY,VULNERABILITY,DEMAND,DESCRIPTIVE_LOCATION";
+var wells = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW/ows?service=WFS&request=GetFeature&typeName=WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW&SRSNAME=epsg:4326&outputFormat=json&CQL_FILTER=OBSERVATION_WELL_NUMBER IS NOT NULL&propertyname=WELL_ID,LONGITUDE,LATITUDE";
+var wellsCallback = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW/ows?service=WFS&request=GetFeature&typeName=WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW&outputFormat=json&CQL_FILTER=OBSERVATION_WELL_NUMBER%20IS%20NOT%20NULL&format_options=callback:processJSON";
+var wellfilter = "CQL_FILTER=OBSERVATION_WELL_NUMBER IS NOT NULL";
+var options = {};
+var aquiferJSON = {};
+var wellJSON = {};
+var summaryData = [];
+var selection; //variable boolean for selection
+
+var jsonLayer;
+var lyrWellsAjax;
+
 var wmsAQLayer;
 var wmsWellsLAyer;
 var wmsDistLayer;
@@ -10,6 +24,7 @@ var lyrStreetsMap;
 var lyrImageMap;
 var lyrTopoMap;
 
+var map;
 var mapControl;
 var ctlZoomer;
 var ctlSearch;
@@ -20,30 +35,86 @@ var overlays;
 
 //basic map
 //set map size
-$( document).ready(function(){
-  var map = L.map('map').setView([55, -124], 5);
-  // var mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-  // L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  //   attribution: '&copy; ' + mapLink + ' Contributors',
-  //   maxZoom: 18,
-  // }).addTo(map);
+$(document).ready(function(){
+  map = L.map('map').setView([50.6, -120.3], 10);
 
-  L.tileLayer.wms('http://maps.gov.bc.ca/arcserver/services/province/web_mercator_cache/MapServer/WMSServer', {
-   layers: '0',
-   format: 'image/png',
-   transparent: true,
-         attribution: 'Province of BC',
-         maxZoom: 18,
-  }).addTo(map);
-  //LAYERS=pub%3AWHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW&TRANSPARENT=TRUE&SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&FORMAT=image%2Fpng&SRS=EPSG%3A3857', {
-  var wmsLayer = L.tileLayer.betterWms('https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?',{
+  //add base maps
+  lyrImageMap = L.tileLayer.provider('Esri.WorldImagery')
+  lyrTopoMap = L.tileLayer.provider('OpenTopoMap');
+  lyrStreetsMap = L.tileLayer.provider('OpenStreetMap');
+  map.addLayer(lyrTopoMap); //start with default base map
+  
+  var URL_BCBASE = "http://maps.gov.bc.ca/arcserver/services/Province/web_mercator_cache/MapServer/WMSServer"
+  wmsBCBASELayer = L.tileLayer.wms(URL_BCBASE,{
+    format:'image/png',
+    layers: '0',
+    transparent: 'false'
+  });
+
+  lyrWellsAjax = L.geoJSON.ajax(wellsCallback);
+  lyrWellsAjax.on('data:loaded', function(){
+    console.log("layers loaded by Ajax method")
+    //map.fitBounds(lyrWellsAjax.getBounds());
+});
+
+  var URL_AQ = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?"
+  wmsAQLayer = L.tileLayer.wms(URL_AQ,{
       service: 'wms',
       format:'image/png',
       version:'1.1.1',
       layers: 'pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW',
       transparent: 'true',
-      feature_count: 20
+      feature_count: 200
   }).addTo(map);
+
+  var URL_DIST = "https://openmaps.gov.bc.ca/geo/pub/WHSE_ADMIN_BOUNDARIES.LWADM_WATMGMT_DIST_AREA_SVW/ows?"
+  wmsDistLayer = L.tileLayer.wms(URL_DIST,{
+    service: 'wms',
+    format:'image/png',
+    version:'1.1.1',
+    layers: 'pub:WHSE_ADMIN_BOUNDARIES.LWADM_WATMGMT_DIST_AREA_SVW',
+    transparent: 'true',
+    feature_count: 200
+  });
+    
+  var URL_PREC = "https://openmaps.gov.bc.ca/geo/pub/WHSE_ADMIN_BOUNDARIES.LWADM_WATMGMT_PREC_AREA_SVW/ows?"
+  wmsPrecLayer = L.tileLayer.wms(URL_PREC,{
+    service: 'wms',
+    format:'image/png',
+    version:'1.1.1',
+    layers: 'pub:WHSE_ADMIN_BOUNDARIES.LWADM_WATMGMT_PREC_AREA_SVW',
+    transparent: 'true',
+    feature_count: 200
+  });
+  
+  var URL_Wells = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW/ows?"
+  wmsWellsLayer = L.tileLayer.wms(URL_Wells,{
+    service: 'wms',
+    format:'image/png',
+    version:'1.1.1',
+    layers: 'pub:WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW',
+    transparent: 'true',
+    feature_count: 200
+  }).addTo(map);
+  
+  //setup map Layer control
+  //base maps
+  baseLayers = {
+    "Topo Map": lyrTopoMap,
+    "Street Map": lyrStreetsMap,
+    "BC Base" : wmsBCBASELayer,
+    "Imagery": lyrImageMap
+  };
+  //WMS layers
+  overlays = {
+    "Districts": wmsDistLayer,
+    "Precincts": wmsPrecLayer,
+    "Aquifers": wmsAQLayer,
+    "Wells": wmsWellsLayer,
+    "Wells WFS" : lyrWellsAjax
+  };
+  mapControl = new L.control.layers(baseLayers,overlays);
+  mapControl.addTo(map);
 
 
 
