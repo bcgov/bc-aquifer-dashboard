@@ -76,6 +76,7 @@ function filterEvents(filterValue){
   if (filterValue){
     console.log(filterValue);
     //trigger any filter actions here! --map and --graphing
+    zoomToFeatureByID(filterValue);
     setDashboardFilter(filterValue);
   }
   else {console.log('no filter value');}

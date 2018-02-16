@@ -180,14 +180,14 @@ $("#btnFilter").click(function(){
   console.log("Button Clicked :" + $("#filterbox").value)
 });
 
-function zoomToFeatureByID(){
-  var val = $("#filterbox").value;
+function zoomToFeatureByID(aqtag){
+  var val = aqtag;
   var lyr = returnLayerByAttribute(lyrLocalAQ,'AQUIFER_NUMBER',val);
   if (lyr) {
       if (lyrSearch) {
           lyrSearch.remove();
       }
-      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, opacity:0.5}}).addTo(mymap);
+      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, opacity:0.5}}).addTo(map);
       map.fitBounds(lyr.getBounds().pad(1));
   } else {
       //let the user know the feature was not found somehow.
