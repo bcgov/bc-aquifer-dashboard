@@ -23,13 +23,14 @@ body {
 
 .topnav a.title {
   position: relative;
-  background-color: rgb(8, 98, 172);
+  background-color: rgb(25, 78, 149);
   color: white;
   font-size:30px;
   bottom: 0px;
 }
 .topnav a.dashboard-type {
-  color: rgb(8, 98, 172);
+  color: rgb(25, 78, 149);
+  font-weight: bolder;
   margin-top: 20px;
 }
 
