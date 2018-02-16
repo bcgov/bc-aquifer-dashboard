@@ -13,15 +13,15 @@ $.urlParam = function(name) {
   return results[1] || 0;
 };
 
-//$( document ).ready(function() {
+//$( document ).ready(function() {});
 
 //aquifer geoJson global
 var aquiferJson = {};
 
 //call this to load data into aquiferJson
 function getAquiferJSON(){
-  
-  
+
+
   /*-----AQUIFER WFS-----*/
   // https://gis.stackexchange.com/questions/64406/getting-wfs-data-from-geoserver-into-leaflet
   var aquiferURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows"
