@@ -61,15 +61,15 @@ $(document).ready(function(){
     //map.fitBounds(lyrWellsAjax.getBounds());
   //});
 
-  var URL_AQ = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?"
-  wmsAQLayer = L.tileLayer.wms(URL_AQ,{
-      service: 'wms',
-      format:'image/png',
-      version:'1.1.1',
-      layers: 'pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW',
-      transparent: 'true',
-      feature_count: 200
-  }).addTo(map);
+  // var URL_AQ = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?"
+  // wmsAQLayer = L.tileLayer.wms(URL_AQ,{
+  //     service: 'wms',
+  //     format:'image/png',
+  //     version:'1.1.1',
+  //     layers: 'pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW',
+  //     transparent: 'true',
+  //     feature_count: 200
+  // }).addTo(map);
 
   var URL_DIST = "https://openmaps.gov.bc.ca/geo/pub/WHSE_ADMIN_BOUNDARIES.LWADM_WATMGMT_DIST_AREA_SVW/ows?"
   wmsDistLayer = L.tileLayer.wms(URL_DIST,{
@@ -102,7 +102,7 @@ $(document).ready(function(){
   }).addTo(map);
 
   //add local geojson aquifer data
-  lyrLocalAQ = L.geoJSON.ajax('/assets/aquifer_simple.json', {onEachFeature:processAquifers}).addTo(map);
+  lyrLocalAQ = L.geoJSON.ajax('assets/aquifer_simple.json', {onEachFeature:processAquifers}).addTo(map);
     lyrLocalAQ.on('data:loaded', function(){
         console.log("local aquifers loaded")
     });
@@ -132,13 +132,29 @@ $(document).ready(function(){
 }); // end document ready function
 
 //functions for local layers
+
 //function Aquifer foreachfeature
 function processAquifers(json, lyr) {
   var att = json.properties;
-  lyr.bindTooltip("<h4>Aquifer ID: "+att.AQUIFER_NUMBER+"</h4>Type: "+att.TYPE_OF_WATER_USE);
+  lyr.bindTooltip("<h5>Aquifer ID: "+att.AQUIFER_NUMBER+"</h5>Type: "+att.TYPE_OF_WATER_USE);
   //could create list of AQ IDs here
   //arAquiferIDs.push(att.AQUIFER_NUMBER.toString());
-};
+  };
+function styleAquifers(json) {
+    var att = json.properties;
+    switch (att.VULNERABILITY) {
+        case 'High':
+            return {color:'red'};
+            break;
+        case 'Moderate':
+            return {color: 'yellow'};
+            break;
+        case 'Low':
+            return {color:'green'};
+            break;
+    }
+}
+
 
 L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
   onAdd: function (map) {
