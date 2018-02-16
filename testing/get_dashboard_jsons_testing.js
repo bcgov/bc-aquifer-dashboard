@@ -1,5 +1,9 @@
-﻿/* -----------------------------------------------------------------------------------
+/* -----------------------------------------------------------------------------------
    get_dashboard_jsons_testing.js
+
+   Retrieves WFS layers (as JSONs) for the Aquifer Dashboard: makes various data
+   available for different features of the dashboard (e.g., maps, graphs, widgets)
+
    Developed by GeoBC
    (c) 2018 GeoBC | http://www.geobc.gov.bc.ca
    ----------------------------------------------------------------------------------- */
@@ -30,6 +34,8 @@ var aquiferCallback = 'getJsonAquifer';
 var getJsonAquifer = function (response){
   console.log(aquiferCallback + ' callback function');
   aquiferJson = response;
+  //populate search box
+  //makeFilterList();
 };
 
 //NRS regions globals
@@ -94,6 +100,7 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
   var parameters = L.Util.extend(defaultParameters);
   var URL = wfsURL + L.Util.getParamString(parameters);
 
+  //map.spin(true);
   //ajax (asynchronous HTTP) request https://www.sitepoint.com/ajaxjquery-getjson-simple-example/
   var ajax = $.ajax({
     url: URL,
@@ -101,6 +108,7 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
     jsonpCallback: wfsCallback,
     success: function(response) {
       console.log('executed wfs request');
+      //map.spin(false);
     }
   });
 }
