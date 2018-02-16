@@ -67,7 +67,7 @@ function filterEvents(filterValue){
   //this function is fired when the filter box value is changed
   console.log('filterEvent');
   if (filterValue){
-    console.log(filterValue);
+    console.log("filter value:" + filterValue);
     getWellsByAquiferByTag(filterValue);
   }
   else {console.log('no filter value');}

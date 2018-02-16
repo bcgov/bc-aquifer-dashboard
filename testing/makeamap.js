@@ -24,6 +24,7 @@ var lyrLocalAQ;
 var lyrStreetsMap;
 var lyrImageMap;
 var lyrTopoMap;
+var lyrSearch;
 
 var map;
 var mapControl;
@@ -102,7 +103,7 @@ $(document).ready(function(){
   }).addTo(map);
 
   //add local geojson aquifer data
-  lyrLocalAQ = L.geoJSON.ajax('assets/aquifer_simple.json', {onEachFeature:processAquifers}).addTo(map);
+  lyrLocalAQ = L.geoJSON.ajax('assets/aquifer_simple.json', {style:styleAquifers,onEachFeature:processAquifers}).addTo(map);
     lyrLocalAQ.on('data:loaded', function(){
         console.log("local aquifers loaded")
     });
@@ -129,6 +130,14 @@ $(document).ready(function(){
   //add scale bar and cursor controls to map
   ctlScale = L.control.scale({position:'bottomleft', metric:true, maxWidth:150}).addTo(map);
   ctlMouseposition = L.control.mousePosition().addTo(map);
+
+  // map.on('click', function (e) {
+  //   if (e.originalEvent.shiftKey) {
+  //     alert(mymap.getZoom());
+  //   } else {
+  //     alert(e.latlng.toString());
+  //   }
+  //});
 }); // end document ready function
 
 //functions for local layers
@@ -136,10 +145,20 @@ $(document).ready(function(){
 //function Aquifer foreachfeature
 function processAquifers(json, lyr) {
   var att = json.properties;
-  lyr.bindTooltip("<h5>Aquifer ID: "+att.AQUIFER_NUMBER+"</h5>Type: "+att.TYPE_OF_WATER_USE);
+  lyr.bindTooltip("<h5>Aquifer ID: "+att.AQUIFER_NUMBER+"<br>Type: "+att.TYPE_OF_WATER_USE + "</h5>");
   //could create list of AQ IDs here
   //arAquiferIDs.push(att.AQUIFER_NUMBER.toString());
+  lyr.on('click', function(e){
+    console.log("layer on click " + json.properties.AQUIFER_NUMBER);
+    lyrLocalAQOnClicked(e,json.properties.AQUIFER_NUMBER);
+    });
   };
+
+  function lyrLocalAQOnClicked(e,ID){
+    setAquiferFilter(ID);
+    //console.log("layer on click in function" + ID)
+  };
+
 function styleAquifers(json) {
     var att = json.properties;
     switch (att.VULNERABILITY) {
@@ -147,13 +166,49 @@ function styleAquifers(json) {
             return {color:'red'};
             break;
         case 'Moderate':
-            return {color: 'yellow'};
+            return {color: '#FFC300' };
             break;
         case 'Low':
             return {color:'green'};
             break;
     }
 }
+//function to zoom to feature when search box event fires or button event
+$("#btnFilter").click(function(){
+  console.log("Button Clicked :" + $("#filterbox").value)
+  zoomToFeatureByID()
+  console.log("Button Clicked :" + $("#filterbox").value)
+});
+
+function zoomToFeatureByID(){
+  var val = $("#filterbox").value;
+  var lyr = returnLayerByAttribute(lyrLocalAQ,'AQUIFER_NUMBER',val);
+  if (lyr) {
+      if (lyrSearch) {
+          lyrSearch.remove();
+      }
+      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, opacity:0.5}}).addTo(mymap);
+      map.fitBounds(lyr.getBounds().pad(1));
+  } else {
+      //let the user know the feature was not found somehow.
+      console.log("**** Project ID not found ****");
+  }
+};
+
+function returnLayerByAttribute(lyr,att,val) {
+  var arLayers = lyr.getLayers();
+  for (i=0;i<arLayers.length-1;i++) {
+      var ftrVal = arLayers[i].feature.properties[att];
+      if (ftrVal==val) {
+          return arLayers[i];
+          console.log("tags searched:" + ftrVal.toString())
+      }
+  }
+  return false;
+}
+
+
+//dont think the stuff below here is doing anything right now
 
 
 L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
@@ -280,4 +335,4 @@ function makeWellMap(geoJSONlist){
   }
 
   map.on('click', onMapClick);
-}
+};

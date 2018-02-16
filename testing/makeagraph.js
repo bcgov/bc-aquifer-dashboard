@@ -112,6 +112,7 @@ function getProvincialAquiferList (){
     for (i=1;i<aquiferData.length;i++){
       var val = aquiferData[i][fIndex];
       aqList.push(val);
+      aqList.sort();
     }
    
     $( "#filterbox" ).autocomplete({
