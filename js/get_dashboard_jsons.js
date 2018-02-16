@@ -1,5 +1,5 @@
 /* -----------------------------------------------------------------------------------
-   get_dashboard_jsons_testing.js
+   get_dashboard_jsons.js
 
    Retrieves WFS layers (as JSONs) for the Aquifer Dashboard: makes various data
    available for different features of the dashboard (e.g., maps, graphs, widgets)

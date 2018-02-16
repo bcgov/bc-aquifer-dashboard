@@ -38,6 +38,20 @@ var getJsonAquifer = function (response){
   //makeFilterList();
 };
 
+//Groundwater Wells globals
+var allWellsJson = {};
+var allWellsURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW/ows";
+var allWellsTypeName = 'WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW';
+var allWellsProperties = ['REGION_NAME', 'ORG_UNIT', 'ORG_UNIT_NAME',
+'FEATURE_CODE', 'FEATURE_NAME', 'SHAPE', 'FEATURE_AREA_SQM'];
+var allWellsCallback = 'getJsonAllWells';
+
+//NRS allWells callback function run when JSON is returned by wfs call
+var getJsonAllWells = function (response){
+  console.log(allWellsCallback + ' callback function');
+  allWellsJson = response;
+};
+
 //NRS regions globals
 var regionsJson = {};
 var regionsURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_ADMIN_BOUNDARIES.ADM_NR_REGIONS_SPG/ows";
