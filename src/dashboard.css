@@ -93,7 +93,7 @@ section{
   display: block;
   border-radius: 0.5em;
   width: auto;
-  height: 300px;
+  height: 400px;
   background: #dddddd;
   float: left;
   margin: 3px;
@@ -163,3 +163,6 @@ section{
   height: 150px; 
   overflow-y: scroll; 
   overflow-x: hidden;}
+#filter-text{
+  font-weight: bold;
+}

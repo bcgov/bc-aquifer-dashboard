@@ -155,7 +155,7 @@ function processAquifers(json, lyr) {
   };
 
   function lyrLocalAQOnClicked(e,ID){
-    setAquiferFilter(ID);
+    setDashboardFilter(ID);
     //console.log("layer on click in function" + ID)
   };
 
