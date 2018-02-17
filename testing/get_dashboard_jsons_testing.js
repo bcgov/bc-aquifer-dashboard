@@ -81,10 +81,10 @@ var getJsonDistricts = function (response){
 };
 
 //Groundwater Wells globals
-var allWellsJson = {};
-var allWellsURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW/ows";
-var allWellsTypeName = 'WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW';
-var allWellsProperties = ['WELL_TAG_NO', 'SOURCE_ACCURACY', 'GEOMETRY', 'FCODE',
+var gwWellsJson = {};
+var gwWellsURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW/ows";
+var gwWellsTypeName = 'WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW';
+var gwWellsProperties = ['WELL_TAG_NO', 'SOURCE_ACCURACY', 'GEOMETRY', 'FCODE',
  'WELL_ID', 'WELL_LOCATION', 'WELL_SEQUENCE_NO', 'WELL_IDENTIFICATION_PLATE_NO',
  'WATER_UTILITY_FLAG', 'WATER_SUPPLY_WELL_NAME', 'WELL_TAG_NUMBER',
  'WATER_SUPPLY_SYSTEM_NAME', 'OBSERVATION_WELL_NUMBER', 'AQUIFER_LITHOLOGY_CODE',
@@ -116,12 +116,32 @@ var allWellsProperties = ['WELL_TAG_NO', 'SOURCE_ACCURACY', 'GEOMETRY', 'FCODE',
   'WHERE_PLATE_ATTACHED', 'WHO_CREATED', 'WHO_UPDATED', 'YIELD_UNIT_CODE',
   'YIELD_UNIT_DESCRIPTION', 'YIELD_VALUE', 'WELL_LICENCE_GENERAL_STATUS',
   'WELL_DETAIL_URL', 'SE_ANNO_CAD_DATA'];
-var allWellsCallback = 'getJsonAllWells';
+var gwWellsCallback = 'getJsonGwWells';
 
-//NRS allWells callback function run when JSON is returned by wfs call
-var getJsonAllWells = function (response){
-  console.log(allWellsCallback + ' callback function');
-  allWellsJson = response;
+//NRS gwWells callback function run when JSON is returned by wfs call
+var getJsonGwWells = function (response){
+  console.log(gwWellsCallback + ' callback function');
+  gwWellsJson = response;
+};
+
+//points of well diversions (PWD) licences globals
+var pwdLicencesJson = {};
+var pwdLicencesURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.WLS_PWD_LICENCES_SVW/ows";
+var pwdLicencesTypeName = 'WHSE_WATER_MANAGEMENT.WLS_PWD_LICENCES_SVW';
+var pwdLicencesProperties = ['PWD_LICENCE_ID', 'PWD_NUMBER', 'PWD_STATUS',
+'FILE_NUMBER', 'WELL_TAG_NUMBER', 'LICENCE_NUMBER', 'LICENCE_STATUS',
+'LICENCE_STATUS_DATE', 'PRIORITY_DATE', 'EXPIRY_DATE', 'PURPOSE_USE_CODE',
+'PURPOSE_USE', 'AQUIFER_NAME', 'REDIVERSION_IND', 'QUANTITY', 'QUANTITY_UNITS',
+'QUANTITY_FLAG', 'QUANTITY_FLAG_DESCRIPTION', 'HYDRAULIC_CONNECTIVITY',
+'PERMIT_OVER_CROWN_LAND_NUMBER', 'PRIMARY_LICENSEE_NAME', 'ADDRESS_LINE_1',
+'ADDRESS_LINE_2', 'ADDRESS_LINE_3', 'ADDRESS_LINE_4', 'COUNTRY', 'POSTAL_CODE',
+'LATITUDE', 'LONGITUDE', 'DISTRICT_PRECINCT_NAME', 'SHAPE'];
+var pwdLicencesCallback = 'getJsonPwdLicences';
+
+//points of well diversions (PWD) licences callback function run when JSON is returned by wfs call
+var getJsonPwdLicences = function (response){
+  console.log(pwdLicencesCallback + ' callback function');
+  pwdLicencesJson = response;
 };
 
 //$( document ).ready(function() {});
