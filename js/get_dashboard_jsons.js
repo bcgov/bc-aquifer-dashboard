@@ -80,8 +80,28 @@ var getJsonDistricts = function (response){
   districtsJson = response;
 };
 
+//points of well diversions (PWD) licences globals
+var pwdLicencesJson = {};
+var pwdLicencesURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.WLS_PWD_LICENCES_SVW/ows";
+var pwdLicencesTypeName = 'WHSE_WATER_MANAGEMENT.WLS_PWD_LICENCES_SVW';
+var pwdLicencesProperties = ['PWD_LICENCE_ID', 'PWD_NUMBER', 'PWD_STATUS',
+'FILE_NUMBER', 'WELL_TAG_NUMBER', 'LICENCE_NUMBER', 'LICENCE_STATUS',
+'LICENCE_STATUS_DATE', 'PRIORITY_DATE', 'EXPIRY_DATE', 'PURPOSE_USE_CODE',
+'PURPOSE_USE', 'AQUIFER_NAME', 'REDIVERSION_IND', 'QUANTITY', 'QUANTITY_UNITS',
+'QUANTITY_FLAG', 'QUANTITY_FLAG_DESCRIPTION', 'HYDRAULIC_CONNECTIVITY',
+'PERMIT_OVER_CROWN_LAND_NUMBER', 'PRIMARY_LICENSEE_NAME', 'ADDRESS_LINE_1',
+'ADDRESS_LINE_2', 'ADDRESS_LINE_3', 'ADDRESS_LINE_4', 'COUNTRY', 'POSTAL_CODE',
+'LATITUDE', 'LONGITUDE', 'DISTRICT_PRECINCT_NAME', 'SHAPE'];
+var pwdLicencesCallback = 'getJsonPwdLicences';
+
+//points of well diversions (PWD) licences callback function run when JSON is returned by wfs call
+var getJsonPwdLicences = function (response){
+  console.log(pwdLicencesCallback + ' callback function');
+  pwdLicencesJson = response;
+};
+
 //$( document ).ready(function() {});
-//$( document ).ready(getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback));
+$( document ).ready(getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback));
 
 //fetch WFS (json) from openmaps geoserver
 function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
