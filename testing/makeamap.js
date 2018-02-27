@@ -102,6 +102,8 @@ $(document).ready(function(){
     feature_count: 200
   }).addTo(map);
 
+  //add local district data and layer
+
   //add local geojson aquifer data
   lyrLocalAQ = L.geoJSON.ajax('assets/aquifer_simple.json', {style:styleAquifers,onEachFeature:processAquifers}).addTo(map);
     lyrLocalAQ.on('data:loaded', function(){
