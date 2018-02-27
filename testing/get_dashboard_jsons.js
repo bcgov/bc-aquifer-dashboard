@@ -36,6 +36,8 @@ var getJsonAquifer = function (response){
   aquiferJson = response;
   //populate search box
   makeFilterList();
+  //provincialdataSummaries(aquiferJson);
+  //provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinctsJson);
 };
 
 //NRS regions globals
@@ -122,6 +124,7 @@ var gwWellsCallback = 'getJsonGwWells';
 var getJsonGwWells = function (response){
   console.log(gwWellsCallback + ' callback function');
   gwWellsJson = response;
+  provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinctsJson);
 };
 
 //points of well diversions (PWD) licences globals
@@ -146,6 +149,11 @@ var getJsonPwdLicences = function (response){
 
 //$( document ).ready(function() {});
 $( document ).ready(getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback));
+$( document ).ready(getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback));
+$( document ).ready(getWFSjson(precinctsURL, precinctsTypeName, precinctsProperties, precinctsCallback));
+$( document ).ready(getWFSjson(districtsURL, districtsTypeName, districtsProperties, districtsCallback));
+$( document ).ready(getWFSjson(pwdLicencesURL, pwdLicencesTypeName, pwdLicencesProperties, pwdLicencesCallback));
+$( document ).ready(getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, gwWellsCallback));
 
 //fetch WFS (json) from openmaps geoserver
 function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
@@ -164,7 +172,7 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
   var parameters = L.Util.extend(defaultParameters);
   var URL = wfsURL + L.Util.getParamString(parameters);
 
-  map.spin(true);
+  //map.spin(true);
   //ajax (asynchronous HTTP) request https://www.sitepoint.com/ajaxjquery-getjson-simple-example/
   var ajax = $.ajax({
     url: URL,
@@ -172,7 +180,7 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
     jsonpCallback: wfsCallback,
     success: function(response) {
       console.log('executed wfs request');
-      map.spin(false);
+      //map.spin(false);
     }
   });
 }

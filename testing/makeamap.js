@@ -47,7 +47,7 @@ $(document).ready(function(){
   lyrStreetsMap = L.tileLayer.provider('OpenStreetMap');
   map.addLayer(lyrTopoMap); //start with default base map
 
-  
+
   var URL_BCBASE = "http://maps.gov.bc.ca/arcserver/services/Province/web_mercator_cache/MapServer/WMSServer"
   wmsBCBASELayer = L.tileLayer.wms(URL_BCBASE,{
     format:'image/png',
@@ -81,7 +81,7 @@ $(document).ready(function(){
     transparent: 'true',
     feature_count: 200
   });
-    
+
   var URL_PREC = "https://openmaps.gov.bc.ca/geo/pub/WHSE_ADMIN_BOUNDARIES.LWADM_WATMGMT_PREC_AREA_SVW/ows?"
   wmsPrecLayer = L.tileLayer.wms(URL_PREC,{
     service: 'wms',
@@ -91,7 +91,7 @@ $(document).ready(function(){
     transparent: 'true',
     feature_count: 200
   });
-  
+
   var URL_Wells = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW/ows?"
   wmsWellsLayer = L.tileLayer.wms(URL_Wells,{
     service: 'wms',
@@ -107,7 +107,7 @@ $(document).ready(function(){
     lyrLocalAQ.on('data:loaded', function(){
         console.log("local aquifers loaded")
     });
-    
+
   //setup map Layer control
   //base maps
   baseLayers = {
