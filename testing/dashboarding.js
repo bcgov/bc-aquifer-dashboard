@@ -93,10 +93,18 @@ function makeFilterList(){
     var val = aquiferData[i][fIndex];
     aqList.push(val);
   }
+  $('#filterbox').autocomplete({
+                  source: aqList,
+                  select: function(event, ui) {
+                      filterEvents(ui.item.value);
+                      $(this).val(ui.item.value);
+                  }
+              })
+  /*
   $( "#filterbox" ).autocomplete({
     source: aqList
   });
   $('#filterbox').on('autocompleteSelect', function(event, node) {
       $(this).val(node.value);
-  });
+  });*/
 }

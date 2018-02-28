@@ -153,7 +153,7 @@ $( document ).ready(getWFSjson(regionsURL, regionsTypeName, regionsProperties, r
 $( document ).ready(getWFSjson(precinctsURL, precinctsTypeName, precinctsProperties, precinctsCallback));
 $( document ).ready(getWFSjson(districtsURL, districtsTypeName, districtsProperties, districtsCallback));
 $( document ).ready(getWFSjson(pwdLicencesURL, pwdLicencesTypeName, pwdLicencesProperties, pwdLicencesCallback));
-$( document ).ready(getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, gwWellsCallback));
+//$( document ).ready(getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, gwWellsCallback));
 
 //fetch WFS (json) from openmaps geoserver
 function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
