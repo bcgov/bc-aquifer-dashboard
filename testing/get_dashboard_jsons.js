@@ -164,7 +164,7 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
   var parameters = L.Util.extend(defaultParameters);
   var URL = wfsURL + L.Util.getParamString(parameters);
 
-  map.spin(true);
+  //map.spin(true);
   //ajax (asynchronous HTTP) request https://www.sitepoint.com/ajaxjquery-getjson-simple-example/
   var ajax = $.ajax({
     url: URL,
@@ -172,7 +172,7 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
     jsonpCallback: wfsCallback,
     success: function(response) {
       console.log('executed wfs request');
-      map.spin(false);
+      //map.spin(false);
     }
   });
 }
