@@ -1,10 +1,17 @@
 function setWidget(content, parentElementId, widgetId){
-  var parentE = document.getElementById(parentElementId);
-  var widgetDiv = document.createElement('div');
-  widgetDiv.className += 'widget';
-  widgetDiv.id = widgetId;
-  widgetDiv.innerHTML = content;
-  parentE.appendChild(widgetDiv);
+  //if widget exists return it
+  if (document.getElementById(widgetId)){
+    var widgetDiv = document.getElementById(widgetId);
+    widgetDiv.innerHTML = '';
+  }
+  else {
+    var parentE = document.getElementById(parentElementId);
+    var widgetDiv = document.createElement('div');
+    widgetDiv.className += 'widget';
+    widgetDiv.id = widgetId;
+    widgetDiv.innerHTML = content;
+    parentE.appendChild(widgetDiv);
+  }
   return widgetDiv
 }
 function setFilterDisplay(filterText){
@@ -100,11 +107,5 @@ function makeFilterList(){
                       $(this).val(ui.item.value);
                   }
               })
-  /*
-  $( "#filterbox" ).autocomplete({
-    source: aqList
-  });
-  $('#filterbox').on('autocompleteSelect', function(event, node) {
-      $(this).val(node.value);
-  });*/
+
 }
