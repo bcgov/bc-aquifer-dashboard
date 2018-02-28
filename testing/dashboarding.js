@@ -46,7 +46,7 @@ function makeAquiferInfoWidget(geoJson){
     var cell = row.insertCell(0);
     cell.innerHTML = 'AQUIFER INFORMATION';
   }
-  
+
   var featureProperties = geoJson.features[0].properties;
   var field;
   var data;
