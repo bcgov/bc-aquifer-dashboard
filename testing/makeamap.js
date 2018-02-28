@@ -19,7 +19,10 @@ var wmsWellsLAyer;
 var wmsDistLayer;
 var wmsPrecLayer;
 var wmsBCBASELayer;
+//local json layers
 var lyrLocalAQ;
+var lyrLocalPrec;
+var lyrLocalDist;
 
 var lyrStreetsMap;
 var lyrImageMap;
@@ -103,6 +106,17 @@ $(document).ready(function(){
   }).addTo(map);
 
   //add local district data and layer
+  lyrLocalPrec = L.geoJSON.ajax('assets/precinct.json', {style:{color:'black', weight:3, opacity:0.5},onEachFeature:processPrecincts}).addTo(map);
+    lyrLocalPrec.on('data:loaded', function(){
+        console.log("local precinct loaded")
+    });
+
+  //add local district data and layer
+  lyrLocalDist = L.geoJSON.ajax('assets/district.json', {style:{color:'rgb(8, 6, 92)', weight:3, opacity:0.5},onEachFeature:processDistricts}).addTo(map);
+  lyrLocalDist.on('data:loaded', function(){
+      console.log("local precinct loaded")
+  });
+
 
   //add local geojson aquifer data
   lyrLocalAQ = L.geoJSON.ajax('assets/aquifer_simple.json', {style:styleAquifers,onEachFeature:processAquifers}).addTo(map);
@@ -120,11 +134,11 @@ $(document).ready(function(){
   };
   //WMS layers
   overlays = {
-    "Districts": wmsDistLayer,
-    "Precincts": wmsPrecLayer,
     //"Aquifers": wmsAQLayer,
+    "Wells": wmsWellsLayer,
     "Aquifers": lyrLocalAQ,
-    "Wells": wmsWellsLayer
+    "Precincts": lyrLocalPrec,
+    "Districts": lyrLocalDist
     //"Wells WFS" : lyrWellsAjax
   };
   mapControl = new L.control.layers(baseLayers,overlays);
@@ -132,6 +146,17 @@ $(document).ready(function(){
   //add scale bar and cursor controls to map
   ctlScale = L.control.scale({position:'bottomleft', metric:true, maxWidth:150}).addTo(map);
   ctlMouseposition = L.control.mousePosition().addTo(map);
+
+
+  //add legend
+  ctlLegend = new L.Control.Legend({
+    position:'topright',
+    controlButton:{title:"Legend"}
+  }).addTo(map);
+
+  $(".legend-container").append($("#legend"));
+  $(".legend-toggle").append($("<i class='legend-toggle-icon fa fa-server ' style='color:#000'></i>"));
+
 
   // map.on('click', function (e) {
   //   if (e.originalEvent.shiftKey) {
@@ -143,6 +168,20 @@ $(document).ready(function(){
 }); // end document ready function
 
 //functions for local layers
+
+//function Precinct foreachfeature
+function processPrecincts(json,lyr) {
+  var att = json.properties;
+  lyr.bindTooltip("<h5>Precinct Name: "+att.PRECINCT_NAME+"<br>Precinct ID: "+att.PRECINCT_ID +"<br>District Name: "+att.DISTRICT_NAME +"</h5>");
+  //properties":{"PRECINCT_NAME":"Victoria","PRECINCT_ID":179,"DISTRICT_NAME":"Victoria"}}
+}
+
+//function District foreachfeature
+function processDistricts(json,lyr) {
+  var att = json.properties;
+  lyr.bindTooltip("<h5>District Name: "+ att.DISTRICT_NAME+"<br>District ID: "+ att.DISTRICT_ID+"</h5>");
+  //properties":{"PRECINCT_NAME":"Victoria","PRECINCT_ID":179,"DISTRICT_NAME":"Victoria"}}
+}
 
 //function Aquifer foreachfeature
 function processAquifers(json, lyr) {
