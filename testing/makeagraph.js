@@ -1,3 +1,6 @@
+//GLOBAL store the current aquifer geojson here
+var currentAquiferGeoJson;
+
 function provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinctsJson){
         aquiferProvDataarray = json2array(aquiferJson);
         aquiferProvVulnerability(aquiferProvDataarray);
@@ -5,43 +8,24 @@ function provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinc
         //wellsbyAreas(gwWellsJson,precinctsJson);
 }
 function getWellsByAquiferTag(tag){
-  var polyGeoJSON;
-  var pntGeoJSON;
-  returnLayerByAttribute(lyr,att,val)
+  currentAquiferGeoJson = filterGeoJsonByAttribute(aquiferJson,'AQ_TAG',tag);
+  //set bounding box for aquifer
+  var bbox = turf.bbox(currentAquiferGeoJson);
+  gwWells.bbox = bbox[0] + ","+ bbox[1]+ "," + bbox[2] + ","+ bbox[3];
+  //set and run callback
+  gwWells.callback = doStuffWithWells;
+  gwWells.get_data();
 }
-function getWellsByAquiferByTag(tag){
-  var polyGeoJSON;
-  var pntGeoJSON;
-  var aqURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?service=WFS&version=2.0.0&request=GetFeature&typeName=WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW&SRSNAME=epsg:4326&outputFormat=json";
-  aqURL = aqURL + "&CQL_FILTER=AQ_TAG" + "=%27"+ tag + "%27";
-  var wellURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW/ows?service=WFS&version=2.0.0&request=GetFeature&typeName=WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW&SRSNAME=epsg:4326&outputFormat=json";
-  function getWFS(url, bbox){
-    //build bounding box into query
-    var newURL = url + "&BBOX=" + bbox[0] + ","+ bbox[1]+ "," + bbox[2] + ","+ bbox[3] + ",epsg:4326";
-    d3.queue()
-      .defer(d3.json,newURL)
-      .await(doturfwork);
-      function doturfwork(error,geojson){
-          pntGeoJSON = geojson;
-          var polyPnts = turf.pointsWithinPolygon(pntGeoJSON,polyGeoJSON);
-          //load aquifer and wells on map
-          makeAquiferInfoWidget(polyGeoJSON);
-          makeWellDepthGraph(polyPnts);
-          makeBoxChartGraph(polyPnts);
-          makeWellsInfoWidget(polyPnts);
-      }
-  }
-  d3.queue()
-    .defer(d3.json, aqURL)
-    .await(getBBOX);
-    function getBBOX(error,geojson){
-      bbox = turf.bbox(geojson);
-      polyGeoJSON = geojson;
-      getWFS(wellURL,bbox);
-    }
+function doStuffWithWells(){
+  var polyPnts = turf.pointsWithinPolygon(gwWells.data,currentAquiferGeoJson);
+  //replace bbox wells with wells within aquifer
+  gwWells.data = polyPnts;
+  //load aquifer and wells on map
+  makeAquiferInfoWidget(currentAquiferGeoJson);
+  makeWellDepthGraph(polyPnts);
+  makeBoxChartGraph(polyPnts);
+}
 
-  console.log("done");
-}
 function makeWellDepthGraph(geoJSONPnts){
   var dataArray = json2array(geoJSONPnts);
   var graphArray = [];
@@ -243,14 +227,19 @@ function makeBoxChartGraph(inpolyPnts){
       chart.draw(data, options);
     }
 }
-function filterGeoJsonByAttribute(geojson,att,val) {
+function filterGeoJsonByAttribute(aGeoJson,att,val) {
+  const geojson = Object.assign({}, aGeoJson);
   var f = geojson.features;
-  for (i=0;i<f.length-1;i++) {
+  var newf = [];
+  for (i=0;i<f.length;i++) {
       var ftrVal = f[i].properties[att];
+      //check for property value match
       if (ftrVal==val) {
-          return f[i];
-          console.log("tags searched:" + ftrVal.toString())
+        //push to new array
+          newf.push(f[i])
       }
   }
-  return false;
+  geojson.features = newf;
+  geojson.totalFeatures = newf.length;
+  return geojson;
 }
