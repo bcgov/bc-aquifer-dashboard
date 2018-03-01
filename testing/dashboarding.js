@@ -77,6 +77,53 @@ function setDiv(content, parentElementId, widgetId){
   return widgetDiv
 }
 
+function makeWellsInfoWidget(ingeoJson){
+  //convert selected pointds to array
+  var dataArray = json2array(ingeoJson);
+  //Just get data from filed in array and return numbers in arrary list and nulls that were in data . e.g. [2,5,6,2,13,67]
+  outArrayvars = flatArray(dataArray,'WATER_DEPTH')
+  //sets returns from flatArray
+  flatArraypnts = outArrayvars[0]
+  nullcount = outArrayvars[1]
+  //sort flat array sequential
+  sortedflatArraypnts = Array_Sort_Numbers(flatArraypnts)
+  //call arraystats.js and return stats from array list
+  var q25 = Quartile_25(sortedflatArraypnts);
+  var q75 = Quartile_75(sortedflatArraypnts);
+  var arrayMedian = Quartile_50(sortedflatArraypnts);
+  var arrayLow = sortedflatArraypnts[0]
+  var end = sortedflatArraypnts[((sortedflatArraypnts.length) - 1)]
+  arrayHigh = end
+  var fieldList = ['Total Wells'];
+  //var infoTable = document.getElementById('widget-table');
+  var table = '<table class="roundedTable" id=info-table-wells><tbody></tbody></table>';
+  var newWidget = setWidget(table,'dashboard','widget-table-wells');
+  var infoTable = document.getElementById('info-table-wells');
+  var row = infoTable.insertRow(0);
+  var cell = row.insertCell(0);
+  cell.innerHTML = 'WELLS INFORMATION';
+  for(var i=0; i<fieldList.length;i++){
+    var field = '<strong>'+ "We" + ":</strong>";
+    var data = end;
+    var info = field + "  " + data;
+    var row = infoTable.insertRow(-1);
+    var cell = row.insertCell(0);
+    cell.innerHTML = info;
+  }
+  console.log('makeInfoWidget');
+}
+
+
+function setDiv(content, parentElementId, widgetId){
+  var parentE = document.getElementById(parentElementId);
+  var widgetDiv = document.createElement('div');
+  //widgetDiv.className += 'widget';
+  widgetDiv.id = widgetId;
+  widgetDiv.innerHTML = content;
+  parentE.appendChild(widgetDiv);
+  return widgetDiv
+}
+
 function filterEvents(filterValue){
   //this function is fired when the filter box value is changed
   console.log('filterEvent');

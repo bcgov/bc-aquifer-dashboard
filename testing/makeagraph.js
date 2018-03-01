@@ -7,11 +7,7 @@ function provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinc
 function getWellsByAquiferTag(tag){
   var polyGeoJSON;
   var pntGeoJSON;
-  polyGeoJSON = filterGeoJsonByAttribute(aquiferJson,'AQ_TAG',tag);
-  var bbox = turf.bbox(polyGeoJSON);
-  gwWells.bbox = bbox[0] + ","+ bbox[1]+ "," + bbox[2] + ","+ bbox[3];
-  var polyPnts = turf.pointsWithinPolygon(gwWells.data,polyGeoJSON);
-  
+  returnLayerByAttribute(lyr,att,val)
 }
 function getWellsByAquiferByTag(tag){
   var polyGeoJSON;
@@ -32,6 +28,7 @@ function getWellsByAquiferByTag(tag){
           makeAquiferInfoWidget(polyGeoJSON);
           makeWellDepthGraph(polyPnts);
           makeBoxChartGraph(polyPnts);
+          makeWellsInfoWidget(polyPnts);
       }
   }
   d3.queue()
@@ -238,7 +235,7 @@ function makeBoxChartGraph(inpolyPnts){
         legend:'none',
         backgroundColor:'#adafb2',
         vAxis:{
-          title: 'Well Depth Meters'
+          title: 'Well Depth Meters '
         }
       };
       setWidget('','dashboard','well-box-graph');
