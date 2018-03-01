@@ -143,7 +143,17 @@ var get_gwWells = function (response){
   console.log('get_gwWells callback function');
   gwWells.data = response;
   gwWells.callback();
+  get_obsWells();
  };
+
+//Observation Wells
+var obsWells = {};
+
+//obsWells function
+var get_obsWells = function(){
+  console.log('get_obsWells callback function');
+  obsWells = filterGeoJsonByAttribute(gwWells.data,"MINISTRY_OBSERVATION_WELL_STAT", "Active");
+  }
 
 //points of well diversions (PWD) licences globals
 var pwdLicencesJson = {};
