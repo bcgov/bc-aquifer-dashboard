@@ -7,7 +7,11 @@ function provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinc
 function getWellsByAquiferTag(tag){
   var polyGeoJSON;
   var pntGeoJSON;
-  returnLayerByAttribute(lyr,att,val)
+  polyGeoJSON = filterGeoJsonByAttribute(aquiferJson,'AQ_TAG',tag);
+  var bbox = turf.bbox(polyGeoJSON);
+  gwWells.bbox = bbox[0] + ","+ bbox[1]+ "," + bbox[2] + ","+ bbox[3];
+  var polyPnts = turf.pointsWithinPolygon(gwWells.data,polyGeoJSON);
+  
 }
 function getWellsByAquiferByTag(tag){
   var polyGeoJSON;
