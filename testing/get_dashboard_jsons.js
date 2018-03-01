@@ -166,6 +166,7 @@ var getJsonPwdLicences = function (response){
 };
 
 getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
+getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback);
 
 //$( document ).ready(function() {});
 /*
