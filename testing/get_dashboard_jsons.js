@@ -130,8 +130,8 @@ var getJsonGwWells = function (response){
 //Groundwater Wells OBJECT
 var gwWells = {
   data: {},
-  //bbox: lwr left (x max, y min), upper right (x min, y max)
-  bbox: "",
+  //bbox: lwr left (x max, y min), upper right (x min, y max), epsg
+  bbox: "", //example: -120.54016124, 50.68184294, -120.34252514, 50.73057956, epsg:4326
   get_data: function(){
     getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWells.bbox)
   },
