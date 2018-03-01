@@ -28,7 +28,7 @@ function setFilterDisplay(filterText){
 function setDashboardFilter(tag){
   //var tag = '0255'
   setFilterDisplay(tag);
-  getWellsByAquiferByTag(tag);
+  getWellsByAquiferTag(tag);//getWellsByAquiferByTag(tag);
 }
 
 function makeAquiferInfoWidget(geoJson){
