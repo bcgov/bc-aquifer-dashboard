@@ -133,9 +133,9 @@ var gwWells = {
   //bbox: lwr left (x max, y min), upper right (x min, y max), epsg
   bbox: "", //example: -120.54016124, 50.68184294, -120.34252514, 50.73057956, epsg:4326
   get_data: function(){
-    getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWells.bbox)
+    getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWells.bbox + ',epsg:4326')
   },
-  callback: function(){console.log('new blank callback function')}
+  callback: function(){console.log('new blank callback function')} 
 };
 
 //gwWells OBJECT callback function run when JSON is returned by wfs call
