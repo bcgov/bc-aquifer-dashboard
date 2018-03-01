@@ -134,9 +134,7 @@ function flatArray(dataArray,arrayField){
       }
     }
     console.log('flat array');
-    console.log(rollupflat);
-    console.log(nullcounter);
-    return rollupflat;
+    return [rollupflat,nullcounter];
 }
 
 
@@ -189,15 +187,20 @@ function wellsbyAreas(ingwWellsJson,inprecinctsJson){
 
 
 function makeBoxChartGraph(inpolyPnts){
+    //convert selected pointds to array
     var dataArray = json2array(inpolyPnts);
-    flatArraypnts = flatArray(dataArray,'WATER_DEPTH')
-    console.log(flatArraypnts);
+    //Just get data from filed in array and return numbers in arrary list and nulls that were in data . e.g. [2,5,6,2,13,67]
+    outArrayvars = flatArray(dataArray,'WATER_DEPTH')
+    //sets returns from flatArray
+    flatArraypnts = outArrayvars[0]
+    nullcount = outArrayvars[1]
+    //sort flat array sequential
     sortedflatArraypnts = Array_Sort_Numbers(flatArraypnts)
-    console.log(sortedflatArraypnts);
-    q25 = Quartile_25(sortedflatArraypnts)
-    q75 = Quartile_75(sortedflatArraypnts)
-    arrayMedian = Quartile_50(sortedflatArraypnts)
-    arrayLow = sortedflatArraypnts[0]
+    //call arraystats.js and return stats from array list
+    var q25 = Quartile_25(sortedflatArraypnts)
+    var q75 = Quartile_75(sortedflatArraypnts)
+    var arrayMedian = Quartile_50(sortedflatArraypnts)
+    var arrayLow = sortedflatArraypnts[0]
     var end = sortedflatArraypnts[((sortedflatArraypnts.length) - 1)]
     arrayHigh = end
     google.charts.load('current', {'packages':['corechart']});
@@ -205,12 +208,17 @@ function makeBoxChartGraph(inpolyPnts){
     //need to figure out quartile data here
     function drawChart() {
       var data = google.visualization.arrayToDataTable([
-        ['Well Data', arrayLow, q25, q75, arrayHigh]
+        ['Wells Depth in Aquifer', arrayLow, q25, q75, arrayHigh]
         // Treat first row as data as well.
       ], true);
 
       var options = {
-        legend:'none'
+        title:'Well Depth In Aquifer',
+        legend:'none',
+        backgroundColor:'#adafb2',
+        vAxis:{
+          title: 'Well Depth Meters'
+        }
       };
       setWidget('','dashboard','well-box-graph');
       var chart = new google.visualization.CandlestickChart(document.getElementById('well-box-graph'));
