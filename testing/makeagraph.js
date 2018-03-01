@@ -194,7 +194,7 @@ function makeBoxChartGraph2(ingeoJSONPnts){
       var options = {
         legend:'none'
       };
-      setWidget('','dashboard2','well-box-graph');
+      setWidget('','dashboard','well-box-graph');
       var chart = new google.visualization.CandlestickChart(document.getElementById('well-box-graph'));
 
       chart.draw(data, options);

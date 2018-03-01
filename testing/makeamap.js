@@ -19,7 +19,10 @@ var wmsWellsLAyer;
 var wmsDistLayer;
 var wmsPrecLayer;
 var wmsBCBASELayer;
+//local json layers
 var lyrLocalAQ;
+var lyrLocalPrec;
+var lyrLocalDist;
 
 var lyrStreetsMap;
 var lyrImageMap;
@@ -99,10 +102,21 @@ $(document).ready(function(){
     version:'1.1.1',
     layers: 'pub:WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW',
     transparent: 'true',
-    feature_count: 200
+    feature_count: 20000
   }).addTo(map);
 
   //add local district data and layer
+  lyrLocalPrec = L.geoJSON.ajax('assets/precinct.json', {style:{color:'black', weight:3, opacity:0.5, fillOpacity:0},onEachFeature:processPrecincts}).addTo(map);
+    lyrLocalPrec.on('data:loaded', function(){
+        console.log("local precinct loaded")
+    });
+
+  //add local district data and layer
+  lyrLocalDist = L.geoJSON.ajax('assets/district.json', {style:{color:'rgb(9, 7, 129)', weight:6, opacity:0.5,fillOpacity:0},onEachFeature:processDistricts}).addTo(map);
+  lyrLocalDist.on('data:loaded', function(){
+      console.log("local precinct loaded")
+  });
+
 
   //add local geojson aquifer data
   lyrLocalAQ = L.geoJSON.ajax('assets/aquifer_simple.json', {style:styleAquifers,onEachFeature:processAquifers}).addTo(map);
@@ -120,18 +134,35 @@ $(document).ready(function(){
   };
   //WMS layers
   overlays = {
-    "Districts": wmsDistLayer,
-    "Precincts": wmsPrecLayer,
     //"Aquifers": wmsAQLayer,
+    "Wells": wmsWellsLayer,
     "Aquifers": lyrLocalAQ,
-    "Wells": wmsWellsLayer
+    "Precincts": lyrLocalPrec,
+    "Districts": lyrLocalDist
     //"Wells WFS" : lyrWellsAjax
   };
   mapControl = new L.control.layers(baseLayers,overlays);
   mapControl.addTo(map);
+
+  //turn off some layers at start
+  map.removeLayer(lyrLocalDist);
+  map.removeLayer(lyrLocalPrec);
+
   //add scale bar and cursor controls to map
   ctlScale = L.control.scale({position:'bottomleft', metric:true, maxWidth:150}).addTo(map);
   ctlMouseposition = L.control.mousePosition().addTo(map);
+
+
+  //add legend
+  ctlLegend = new L.Control.Legend({
+    position:'topright',
+    controlButton:{title:"Legend"}
+  }).addTo(map);
+  //add the legend div from index.html to the leaflet legend popup div
+  //uses font-awsome css icon
+  $(".legend-container").append($("#legend"));
+  $(".legend-toggle").append($("<i class='legend-toggle-icon fa fa-server ' style='color:#000'></i>"));
+
 
   // map.on('click', function (e) {
   //   if (e.originalEvent.shiftKey) {
@@ -143,6 +174,20 @@ $(document).ready(function(){
 }); // end document ready function
 
 //functions for local layers
+
+//function Precinct foreachfeature
+function processPrecincts(json,lyr) {
+  var att = json.properties;
+  lyr.bindTooltip("<h5>Precinct Name: "+att.PRECINCT_NAME+"<br>Precinct ID: "+att.PRECINCT_ID +"<br>District Name: "+att.DISTRICT_NAME +"</h5>");
+  //properties":{"PRECINCT_NAME":"Victoria","PRECINCT_ID":179,"DISTRICT_NAME":"Victoria"}}
+}
+
+//function District foreachfeature
+function processDistricts(json,lyr) {
+  var att = json.properties;
+  lyr.bindTooltip("<h5>District Name: "+ att.DISTRICT_NAME+"<br>District ID: "+ att.DISTRICT_ID+"</h5>");
+  //properties":{"PRECINCT_NAME":"Victoria","PRECINCT_ID":179,"DISTRICT_NAME":"Victoria"}}
+}
 
 //function Aquifer foreachfeature
 function processAquifers(json, lyr) {
@@ -158,6 +203,7 @@ function processAquifers(json, lyr) {
 
   function lyrLocalAQOnClicked(e,ID){
     setDashboardFilter(ID);
+    zoomToFeatureByID(ID);
     //console.log("layer on click in function" + ID)
   };
 
@@ -190,7 +236,7 @@ function zoomToFeatureByID(aqtag){
           lyrSearch.remove();
       }
       lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, opacity:0.5}}).addTo(map);
-      map.fitBounds(lyr.getBounds().pad(1));
+      map.fitBounds(lyr.getBounds().pad(0.5));
   } else {
       //let the user know the feature was not found somehow.
       console.log("**** Project ID not found ****");
