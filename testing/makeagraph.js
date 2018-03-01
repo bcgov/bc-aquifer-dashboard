@@ -7,7 +7,9 @@ function provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinc
 function getWellsByAquiferTag(tag){
   var polyGeoJSON;
   var pntGeoJSON;
-  returnLayerByAttribute(lyr,att,val)
+  polyGeoJSON = filterGeoJsonByAttribute(aquiferJson,'AQ_TAG',tag);
+  var bbox = turf.bbox(polyGeoJSON);
+  
 }
 function getWellsByAquiferByTag(tag){
   var polyGeoJSON;
@@ -27,7 +29,7 @@ function getWellsByAquiferByTag(tag){
           //load aquifer and wells on map
           makeAquiferInfoWidget(polyGeoJSON);
           makeWellDepthGraph(polyPnts);
-          makeBoxChartGraph2(polyPnts);
+          makeBoxChartGraph(polyPnts);
       }
   }
   d3.queue()
@@ -94,12 +96,12 @@ function json2array(jsonObj){
     if (adata.length != 0){
       darray.push(adata);
     }
-
   });
   console.log(darray);
   console.log("finished json to array");
   return darray;
 }
+
 function rollupArray(dataArray,rollupField, valueField){
   //expects first item to be array of columns followed by arrays of equal size for data
   //rollup field must be a string
@@ -135,6 +137,28 @@ function rollupArray(dataArray,rollupField, valueField){
   return rollup;
 }
 
+function flatArray(dataArray,arrayField){
+    //expects first item to be array of columns followed by arrays of equal size for data
+    var rollupflat = [];
+    var nullcounter = 1
+    var valueIndex = dataArray[0].indexOf(arrayField);
+    //transpose into one array
+    for (i=1;i<dataArray.length; i++){
+      kv = dataArray[i][valueIndex];
+      if (kv!==null){
+        rollupflat.push(kv);
+      }
+      else{
+        nullcounter = nullcounter + 1
+      }
+    }
+    console.log('flat array');
+    console.log(rollupflat);
+    console.log(nullcounter);
+    return rollupflat;
+}
+
+
 function aquiferProvVulnerability(aquiferProvDataarray){
     //convert to array
     var aquiferProvVulnerableArray = [];
@@ -144,9 +168,7 @@ function aquiferProvVulnerability(aquiferProvDataarray){
     for (i=1;i<aquiferProvDataarray.length; i++){
       aquiferProvVulnerableArray.push(['Vulnerable:' + aquiferProvDataarray[i][tagIndex],aquiferProvDataarray[i][valueIndex]]);
     }
-    console.log(aquiferProvVulnerableArray)
     sumVulnerabilitydata = rollupArray(aquiferProvVulnerableArray, "VULNERABILITY", "SIZE_KM2");
-    console.log(sumVulnerabilitydata)
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
     function drawChart() {
@@ -185,13 +207,24 @@ function wellsbyAreas(ingwWellsJson,inprecinctsJson){
 }
 
 
-function makeBoxChartGraph2(ingeoJSONPnts){
+function makeBoxChartGraph(inpolyPnts){
+    var dataArray = json2array(inpolyPnts);
+    flatArraypnts = flatArray(dataArray,'WATER_DEPTH')
+    console.log(flatArraypnts);
+    sortedflatArraypnts = Array_Sort_Numbers(flatArraypnts)
+    console.log(sortedflatArraypnts);
+    q25 = Quartile_25(sortedflatArraypnts)
+    q75 = Quartile_75(sortedflatArraypnts)
+    arrayMedian = Quartile_50(sortedflatArraypnts)
+    arrayLow = sortedflatArraypnts[0]
+    var end = sortedflatArraypnts[((sortedflatArraypnts.length) - 1)]
+    arrayHigh = end
     google.charts.load('current', {'packages':['corechart']});
     google.charts.setOnLoadCallback(drawChart);
     //need to figure out quartile data here
     function drawChart() {
       var data = google.visualization.arrayToDataTable([
-        ['Well Data', 20, 28, 38, 45]
+        ['Well Data', arrayLow, q25, q75, arrayHigh]
         // Treat first row as data as well.
       ], true);
 
@@ -200,7 +233,6 @@ function makeBoxChartGraph2(ingeoJSONPnts){
       };
       setWidget('','dashboard','well-box-graph');
       var chart = new google.visualization.CandlestickChart(document.getElementById('well-box-graph'));
-
       chart.draw(data, options);
     }
 }
