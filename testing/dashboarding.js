@@ -1,10 +1,17 @@
 function setWidget(content, parentElementId, widgetId){
-  var parentE = document.getElementById(parentElementId);
-  var widgetDiv = document.createElement('div');
-  widgetDiv.className += 'widget';
-  widgetDiv.id = widgetId;
-  widgetDiv.innerHTML = content;
-  parentE.appendChild(widgetDiv);
+  //if widget exists return it
+  if (document.getElementById(widgetId)){
+    var widgetDiv = document.getElementById(widgetId);
+    widgetDiv.innerHTML = '';
+  }
+  else {
+    var parentE = document.getElementById(parentElementId);
+    var widgetDiv = document.createElement('div');
+    widgetDiv.className += 'widget';
+    widgetDiv.id = widgetId;
+    widgetDiv.innerHTML = content;
+    parentE.appendChild(widgetDiv);
+  }
   return widgetDiv
 }
 function setFilterDisplay(filterText){
@@ -73,38 +80,54 @@ function setDiv(content, parentElementId, widgetId){
 function filterEvents(filterValue){
   //this function is fired when the filter box value is changed
   console.log('filterEvent');
+
   if (filterValue){
     console.log(filterValue);
+    var firstChar = filterValue.charAt(0);
     //trigger any filter actions here! --map and --graphing
-    zoomToFeatureByID(filterValue);
-    setDashboardFilter(filterValue);
+    //detect region filter
+    if ('0123456789'.indexOf(firstChar) !== -1) {
+      //detect aquifer filter
+      zoomToFeatureByID(filterValue);
+      setDashboardFilter(filterValue);
+    }
+    else{
+      //REGION
+      console.log('regional filter:' + filterValue)
+    }
+
+
   }
   else {console.log('no filter value');}
 
 }
 function makeFilterList(){
-  var aqList = [];
+  var fList = [];
   //convert to array
   var aquiferData = json2array(aquiferJson);
+  var regionData = json2array(regionsJson);
+
+  //array of region names
+  var rIndex = regionData[0].indexOf('REGION_NAME');
   //create an array of fieldname values
   var fIndex = aquiferData[0].indexOf('AQ_TAG');
   //expect field names to be first array
+  for (i=1;i<regionData.length;i++){
+    var val = regionData[i][rIndex];
+    fList.push(val);
+  }
+
   for (i=1;i<aquiferData.length;i++){
     var val = aquiferData[i][fIndex];
-    aqList.push(val);
+    fList.push(val);
   }
+
   $('#filterbox').autocomplete({
-                  source: aqList,
+                  source: fList,
                   select: function(event, ui) {
                       filterEvents(ui.item.value);
                       $(this).val(ui.item.value);
                   }
               })
-  /*
-  $( "#filterbox" ).autocomplete({
-    source: aqList
-  });
-  $('#filterbox').on('autocompleteSelect', function(event, node) {
-      $(this).val(node.value);
-  });*/
+
 }

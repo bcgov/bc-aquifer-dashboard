@@ -120,12 +120,30 @@ var gwWellsProperties = ['WELL_TAG_NO', 'SOURCE_ACCURACY', 'GEOMETRY', 'FCODE',
   'WELL_DETAIL_URL', 'SE_ANNO_CAD_DATA'];
 var gwWellsCallback = 'getJsonGwWells';
 
-//NRS gwWells callback function run when JSON is returned by wfs call
+//gwWells callback function run when JSON is returned by wfs call
 var getJsonGwWells = function (response){
   console.log(gwWellsCallback + ' callback function');
   gwWellsJson = response;
   provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinctsJson);
 };
+
+//Groundwater Wells OBJECT
+var gwWells = {
+  data: {},
+  //bbox: lwr left (x max, y min), upper right (x min, y max)
+  bbox: "",
+  get_data: function(){
+    getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWells.bbox)
+  },
+  callback: function(){console.log('new blank callback function')}
+};
+
+//gwWells OBJECT callback function run when JSON is returned by wfs call
+var get_gwWells = function (response){
+  console.log('get_gwWells callback function');
+  gwWells.data = response;
+  gwWells.callback();
+ };
 
 //points of well diversions (PWD) licences globals
 var pwdLicencesJson = {};
@@ -147,16 +165,22 @@ var getJsonPwdLicences = function (response){
   pwdLicencesJson = response;
 };
 
+getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
+getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback);
+
 //$( document ).ready(function() {});
+/*
 $( document ).ready(getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback));
 $( document ).ready(getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback));
 $( document ).ready(getWFSjson(precinctsURL, precinctsTypeName, precinctsProperties, precinctsCallback));
 $( document ).ready(getWFSjson(districtsURL, districtsTypeName, districtsProperties, districtsCallback));
 $( document ).ready(getWFSjson(pwdLicencesURL, pwdLicencesTypeName, pwdLicencesProperties, pwdLicencesCallback));
-//$( document ).ready(getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, gwWellsCallback));
+$( document ).ready(getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, gwWellsCallback));
+*/
 
 //fetch WFS (json) from openmaps geoserver
-function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
+function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback, wfsBbox=
+'-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326') {
   var defaultParameters = {
     service: 'WFS',
     version: '2.0',
@@ -165,8 +189,9 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
     outputFormat: 'text/javascript', //or application/json (but won't work w/ ajax dataType=jsonp )
     format_options: 'callback:' + wfsCallback,
     SrsName: 'EPSG:4326',
-    //exclude 'GEOMETRY' from list below if spatial not required
-    propertyName: wfsProperties
+    propertyName: wfsProperties,
+    //bbox: '-120.65062584,50.6512122,-120.53745904,50.72483285,epsg:4326'
+    bbox: wfsBbox
   };
 
   var parameters = L.Util.extend(defaultParameters);

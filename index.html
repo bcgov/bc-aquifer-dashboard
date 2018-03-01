@@ -35,7 +35,7 @@
 	<script src="./testing/plugins/leaflet.ajax.min.js"></script>
 	<script src="./testing/plugins/L.Control.MousePosition.js"></script>
 	<script src="./testing/plugins/leaflet-legend.js"></script>
-	
+
 	<!-- Load Leaflet plugin css -->
 	<link rel="stylesheet" type="text/css" href="./src/dashboard.css"/>
 	<link rel="stylesheet" type="text/css" href="./src/bootstrap.min.css"/>
@@ -45,7 +45,7 @@
 	<link rel="stylesheet" type="text/css" href="./src/L.Control.MousePosition.css"/>
 	<link rel="stylesheet" type="text/css" href="./testing/plugins/leaflet-legend.css"/>
 	<link rel="stylesheet" type="text/css" href="./testing/plugins/font-awesome.css">
-	
+
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Load local css -->
 	<link rel="stylesheet" type="text/css" href="./src/dashboard.css"/>
@@ -61,7 +61,7 @@
         <a class='title'>BC Aquifer Dashboard</a>
         <a class='dashboard-type' id='filter-text'>Provincial Overview</a>
         <div class="search-container">
-          <form>
+          <form onSubmit="return false">
 			<i class="material-icons">search</i>
             <input id='filterbox' type="text" placeholder='Search..'>
           </form>

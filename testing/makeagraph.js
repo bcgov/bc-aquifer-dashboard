@@ -4,7 +4,11 @@ function provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinc
         //aquifersbyAreas(aquiferJson,regionsJson,precinctsJson,districtsJson);
         //wellsbyAreas(gwWellsJson,precinctsJson);
 }
-
+function getWellsByAquiferTag(tag){
+  var polyGeoJSON;
+  var pntGeoJSON;
+  returnLayerByAttribute(lyr,att,val)
+}
 function getWellsByAquiferByTag(tag){
   var polyGeoJSON;
   var pntGeoJSON;
@@ -229,4 +233,15 @@ function makeBoxChartGraph(inpolyPnts){
       var chart = new google.visualization.CandlestickChart(document.getElementById('well-box-graph'));
       chart.draw(data, options);
     }
+}
+function filterGeoJsonByAttribute(geojson,att,val) {
+  var f = geojson.features;
+  for (i=0;i<f.length-1;i++) {
+      var ftrVal = f[i].properties[att];
+      if (ftrVal==val) {
+          return f[i];
+          console.log("tags searched:" + ftrVal.toString())
+      }
+  }
+  return false;
 }
