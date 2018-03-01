@@ -18,6 +18,8 @@ function getWellsByAquiferTag(tag){
 }
 function doStuffWithWells(){
   var polyPnts = turf.pointsWithinPolygon(gwWells.data,currentAquiferGeoJson);
+  //replace bbox wells with wells within aquifer
+  gwWells.data = polyPnts;
   //load aquifer and wells on map
   makeAquiferInfoWidget(currentAquiferGeoJson);
   makeWellDepthGraph(polyPnts);
@@ -229,7 +231,7 @@ function filterGeoJsonByAttribute(aGeoJson,att,val) {
   const geojson = Object.assign({}, aGeoJson);
   var f = geojson.features;
   var newf = [];
-  for (i=0;i<f.length-1;i++) {
+  for (i=0;i<f.length;i++) {
       var ftrVal = f[i].properties[att];
       //check for property value match
       if (ftrVal==val) {
