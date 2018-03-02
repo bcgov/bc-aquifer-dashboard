@@ -219,7 +219,7 @@ function makeBoxChartGraph(inpolyPnts){
         legend:'none',
         backgroundColor:'#adafb2',
         vAxis:{
-          title: 'Well Depth Meters'
+          title: 'Well Depth Meters '
         }
       };
       setWidget('','dashboard','well-box-graph');
