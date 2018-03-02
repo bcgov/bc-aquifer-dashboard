@@ -384,3 +384,17 @@ function makeWellMap(geoJSONlist){
 
   map.on('click', onMapClick);
 };
+
+function mapIdentify(e){
+  var bbox = map.getBounds().toBBoxString();
+  var size = map.getSize();
+  var point = e.containerPoint;
+  var layers = "&layers=pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW"
+  var qlayers = "&query_layers=pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW";
+  var url = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo";
+  var newURL = url + layers + "&Format=img/png" + "&bbox=" + bbox + "&SRSNAME=epsg:4326"
+    + "&width=" + size.x + "&height=" + size.y
+    + "&x="+point.x + "&y="+ point.y
+    + "&FEATURE_COUNT=10" + qlayers + "&info_format=application/json";
+  console.log(newURL);
+}
