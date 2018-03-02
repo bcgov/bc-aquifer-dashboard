@@ -360,7 +360,7 @@ function addWellsToMap() {
        var popup = "<h6>Well Tag: "+ ftrWell.properties.WELL_TAG_NUMBER;
  
        //var m = L.marker( [arWells[i].lat, arWells[i].lng]).bindPopup( popup );
-       var m = L.marker(arWells[i].feature.geometry.latlng).bindPopup( popup );
+       var m = L.marker([arWells[i].feature.geometry.coordinates[1],arWells[i].feature.geometry.coordinates[0]]).bindPopup( popup );
        console.log("adding well marker for: " + popup);
        lyrWellsInAquiferGroup.addLayer( m );
      }
