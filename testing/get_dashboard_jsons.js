@@ -135,7 +135,7 @@ var gwWells = {
   get_data: function(){
     getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWells.bbox + ',epsg:4326')
   },
-  callback: function(){console.log('new blank callback function')} 
+  callback: function(){console.log('new empty callback function')} 
 };
 
 //gwWells OBJECT callback function run when JSON is returned by wfs call
@@ -149,7 +149,7 @@ var get_gwWells = function (response){
 //Observation Wells
 var obsWells = {};
 
-//obsWells function
+//obsWells filter function
 var get_obsWells = function(){
   console.log('get_obsWells callback function');
   obsWells = filterGeoJsonByAttribute(gwWells.data,"MINISTRY_OBSERVATION_WELL_STAT", "Active");
