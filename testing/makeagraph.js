@@ -24,7 +24,11 @@ function doStuffWithWells(){
   makeAquiferInfoWidget(currentAquiferGeoJson);
   makeWellDepthGraph(polyPnts);
   makeBoxChartGraph(polyPnts);
+<<<<<<< HEAD
   addWellsToMap()
+=======
+  makeWellsInfoWidget(polyPnts);
+>>>>>>> 896e1adc7b48c5d3680844c5978ed02e9cd952e4
 }
 
 function makeWellDepthGraph(geoJSONPnts){
@@ -220,7 +224,7 @@ function makeBoxChartGraph(inpolyPnts){
         legend:'none',
         backgroundColor:'#adafb2',
         vAxis:{
-          title: 'Well Depth Meters'
+          title: 'Well Depth Meters '
         }
       };
       setWidget('','dashboard','well-box-graph');
