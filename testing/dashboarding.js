@@ -78,11 +78,11 @@ function setDiv(content, parentElementId, widgetId){
 }
 
 function makeWellsInfoWidget(ingeoJson){
-  var fieldList = {'Total Wells':"",'Total Observation Wells':"",'Total Wells No Depth':"",'Wells Median Depth':""};
+  var fieldList = {TotalWells:"",TotalObservationWells:"",TotalWellsNoDepth:"", WellsMedianDepth:""};
   var totalwellfeatures = gwWells.data.totalFeatures
-  fieldList.'Total Wells'= totalwellfeatures
+  fieldList.TotalWells= totalwellfeatures
   var observationwellfeatures = obswells.data.totalFeatures
-  fieldList.'Total Observation Wells'= observationwellfeatures
+  fieldList.TotalObservationWells= observationwellfeatures
   //convert selected pointds to array
   var dataArray = json2array(ingeoJson);
   //Just get data from filed in array and return numbers in arrary list and nulls that were in data . e.g. [2,5,6,2,13,67]
@@ -95,9 +95,9 @@ function makeWellsInfoWidget(ingeoJson){
   var arrayLow = sortedflatArraypnts[0]
   var arrayHigh = sortedflatArraypnts[((sortedflatArraypnts.length) - 1)]
   var arrayMedian = Quartile_50(sortedflatArraypnts);
-  fieldList.'Wells Median Depth'= arrayMedian
+  fieldList.WellsMedianDepth= arrayMedian
   nullcount = outArrayvars[1]
-  fieldList.'Total Wells No Depth'= nullcount
+  fieldList.TotalWellsNoDepth= nullcount
 
   //var infoTable = document.getElementById('widget-table');
   var table = '<table class="roundedTable" id=info-table-wells><tbody></tbody></table>';

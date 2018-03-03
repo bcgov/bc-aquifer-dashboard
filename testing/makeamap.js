@@ -25,6 +25,7 @@ var wmsBCBASELayer;
 var lyrLocalAQ;
 var lyrLocalPrec;
 var lyrLocalDist;
+var lyrLocalRegions;
 var lyrWellsInAquifer;
 var lyrWellsInAquiferGroup;
 
@@ -92,14 +93,20 @@ $(document).ready(function(){
     feature_count: 20000
   }).addTo(map);
 
-  //add local district data and layer
-  lyrLocalPrec = L.geoJSON.ajax('assets/precinct.json', {style:{color:'black', weight:3, opacity:0.5, fillOpacity:0},onEachFeature:processPrecincts}).addTo(map);
+  //add local precinct data and layer
+  lyrLocalPrec = L.geoJSON.ajax('assets/precinct.json', {style:{color:'black', weight:3, opacity:0.5, fillOpacity:0},onEachFeature:processPrecincts});
     lyrLocalPrec.on('data:loaded', function(){
         console.log("local precinct loaded")
     });
 
+  //add local NRS regions data and layer
+  lyrLocalRegions = L.geoJSON.ajax('assets/nrsregions.json', {style:{color:'rgb(9, 27, 129)', weight:5, opacity:0.5, fillOpacity:0},onEachFeature:processRegions});
+  lyrLocalRegions.on('data:loaded', function(){
+      console.log("local region loaded")
+  });
+
   //add local district data and layer
-  lyrLocalDist = L.geoJSON.ajax('assets/district.json', {style:{color:'rgb(9, 7, 129)', weight:6, opacity:0.5,fillOpacity:0},onEachFeature:processDistricts}).addTo(map);
+  lyrLocalDist = L.geoJSON.ajax('assets/district.json', {style:{color:'rgb(9, 7, 129)', weight:6, opacity:0.5,fillOpacity:0},onEachFeature:processDistricts});
   lyrLocalDist.on('data:loaded', function(){
       console.log("local precinct loaded")
   });
@@ -124,15 +131,15 @@ $(document).ready(function(){
     //"Wells": lyrWellsInAquifer,
     "Aquifers": lyrLocalAQ,
     "Precincts": lyrLocalPrec,
-    "Districts": lyrLocalDist
-    //"Wells WFS" : lyrWellsAjax
+    "Districts": lyrLocalDist,
+    "NRS Regions": lyrLocalRegions
   };
   mapControl = new L.control.layers(baseLayers,overlays);
   mapControl.addTo(map);
 
   //turn off some layers at start
-  map.removeLayer(lyrLocalDist);
-  map.removeLayer(lyrLocalPrec);
+  //map.removeLayer(lyrLocalDist);
+  //map.removeLayer(lyrLocalPrec);
 
   //add scale bar and cursor controls to map
   ctlScale = L.control.scale({position:'bottomleft', metric:true, maxWidth:150}).addTo(map);
@@ -164,6 +171,13 @@ function processPrecincts(json,lyr) {
 function processDistricts(json,lyr) {
   var att = json.properties;
   lyr.bindTooltip("<h5>District Name: "+ att.DISTRICT_NAME+"<br>District ID: "+ att.DISTRICT_ID+"</h5>");
+  //properties":{"PRECINCT_NAME":"Victoria","PRECINCT_ID":179,"DISTRICT_NAME":"Victoria"}}
+}
+
+//function regions foreachfeature
+function processRegions(json,lyr) {
+  var att = json.properties;
+  lyr.bindTooltip("<h5>Region Name: "+ att.REGION_NAME.replace("Natural Resource Region","")+"<br>District ID: "+ att.ORG_UNIT+"</h5>");
   //properties":{"PRECINCT_NAME":"Victoria","PRECINCT_ID":179,"DISTRICT_NAME":"Victoria"}}
 }
 
@@ -317,6 +331,8 @@ function returnLayerByAttribute(lyr,att,val) {
 
 function lyrLocalAQOnClicked(e,ID){
     zoomToFeatureByID(ID);
+    map.removeLayer(lyrLocalAQ);
+    map.addLayer(lyrLocalAQ);
     setDashboardFilter(ID);
     //console.log("layer on click in function" + ID)
   };
@@ -348,6 +364,19 @@ function returnWellsMarker(json, latlng){
 //add the wells inside an aquifer, called from make a graph doStuffWithWells()
 function addWellsToMap() {
   if (gwWells.data) {
+    lyrWellsInAquifer = L.geoJSON.ajax(gwWells.data, {pointToLayer: returnWellsMarker});
+    lyrWellsInAquifer.addTo(map);
+    console.log("wells added -simple markers!!!")
+    } else {
+    //let the user know the feature was not found somehow.
+    console.log("**** Wells Data not found ****");
+    };
+    addWellsToMapCluster();
+  };
+
+//add the wells inside an aquifer, called from make a graph doStuffWithWells()
+function addWellsToMapCluster() {
+  if (gwWells.data) {
     //create a cluster group
     lyrWellsInAquiferGroup = L.markerClusterGroup();
     lyrWellsInAquiferGroup.clearLayers();
@@ -363,6 +392,7 @@ function addWellsToMap() {
        var m = L.marker([arWells[i].feature.geometry.coordinates[1],arWells[i].feature.geometry.coordinates[0]]).bindPopup( popup );
        console.log("adding well marker for: " + popup);
        lyrWellsInAquiferGroup.addLayer( m );
+       m.addTo(map)
      }
     
     lyrWellsInAquiferGroup.clearLayers();
@@ -381,7 +411,6 @@ function addWellsToMap() {
 
 //dont think the stuff below here is doing anything right now
 
-<<<<<<< HEAD
 // L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
 //   onAdd: function (map) {
 //     // Triggered when the layer is added to a map.
@@ -452,21 +481,3 @@ function addWellsToMap() {
 // L.tileLayer.betterWms = function (URL_AQ, options) {
 //   return new L.TileLayer.BetterWMS(URL_AQ, options);
 // };
-=======
-  map.on('click', onMapClick);
-};
-
-function mapIdentify(e){
-  var bbox = map.getBounds().toBBoxString();
-  var size = map.getSize();
-  var point = e.containerPoint;
-  var layers = "&layers=pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW"
-  var qlayers = "&query_layers=pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW";
-  var url = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?SERVICE=WMS&VERSION=1.1.1&REQUEST=GetFeatureInfo";
-  var newURL = url + layers + "&Format=img/png" + "&bbox=" + bbox + "&SRSNAME=epsg:4326"
-    + "&width=" + size.x + "&height=" + size.y
-    + "&x="+point.x + "&y="+ point.y
-    + "&FEATURE_COUNT=10" + qlayers + "&info_format=application/json";
-  console.log(newURL);
-}
->>>>>>> 896e1adc7b48c5d3680844c5978ed02e9cd952e4
