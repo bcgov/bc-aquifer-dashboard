@@ -36,6 +36,8 @@ var getJsonAquifer = function (response){
   aquiferJson = response;
   //populate search box
   makeFilterList();
+  //provincialdataSummaries(aquiferJson);
+  //provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinctsJson);
 };
 
 //NRS regions globals
@@ -80,6 +82,79 @@ var getJsonDistricts = function (response){
   districtsJson = response;
 };
 
+//Groundwater Wells globals
+var gwWellsJson = {};
+var gwWellsURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW/ows";
+var gwWellsTypeName = 'WHSE_WATER_MANAGEMENT.GW_WATER_WELLS_WRBC_SVW';
+var gwWellsProperties = ['WELL_TAG_NO', 'SOURCE_ACCURACY', 'GEOMETRY', 'FCODE',
+ 'WELL_ID', 'WELL_LOCATION', 'WELL_SEQUENCE_NO', 'WELL_IDENTIFICATION_PLATE_NO',
+ 'WATER_UTILITY_FLAG', 'WATER_SUPPLY_WELL_NAME', 'WELL_TAG_NUMBER',
+ 'WATER_SUPPLY_SYSTEM_NAME', 'OBSERVATION_WELL_NUMBER', 'AQUIFER_LITHOLOGY_CODE',
+ 'WATER_DEPTH', 'ARTESIAN_FLOW_VALUE', 'BCGS_ID', 'WATERSHED_CODE', 'BCGS_NUMBER',
+ 'BEDROCK_DEPTH', 'CERTIFICATION', 'CHEMISTRY_LAB_DATA', 'CHEMISTRY_SITE_ID',
+ 'CLASS_OF_WELL', 'UTM_NORTH', 'CONSTRUCTION_END_DATE', 'CONSTRUCTION_METHOD_CODE',
+ 'CONSTRUCTION_METHOD_NAME', 'CONSTRUCTION_START_DATE', 'CONSULTANT_COMPANY',
+ 'CONTRACTOR_INFO_1', 'CONTRACTOR_INFO_2', 'CONTRACTOR_WELL_PLATE_NMBR',
+ 'COORDINATE_X', 'COORDINATE_Y', 'COORDINATE_Z', 'CREW_DRILLER_NAME', 'UTM_EAST',
+  'CREW_HELPER_NAME', 'DATE_ENTERED', 'DEPTH_WELL_DRILLED', 'DEVELOPMENT_HOURS',
+  'DEVELOPMENT_NOTES', 'DIAMETER', 'DRILLER_COMPANY_CODE', 'DRILLER_COMPANY_NAME',
+  'DRILLER_WELL_ID', 'ELEVATION', 'FIELD_LAB_DATA', 'GENERAL_REMARKS',
+  'GRAVEL_PACKED_FLAG', 'GRAVEL_PACKED_FROM', 'GRAVEL_PACKED_TO',
+  'GROUND_WATER_FLAG', 'INDIAN_RESERVE', 'INFO_OTHER', 'INFO_SITE', 'LATITUDE',
+  'LEGAL_BLOCK', 'LEGAL_DISTRICT_LOT', 'LEGAL_LAND_DISTRICT_CODE',
+  'LEGAL_LAND_DISTRICT_NAME', 'UTM_ACCURACY_CODE', 'LEGAL_MISCELLANEOUS',
+  'LEGAL_PLAN', 'LEGAL_RANGE', 'LEGAL_SECTION', 'LEGAL_TOWNSHIP',
+  'LITHOLOGY_DESCRIPTION_COUNT', 'LITHOLOGY_FLAG', 'LITHOLOGY_MEASURMENT_UNIT',
+  'LOCATION_ACCURACY', 'LOC_ACCURACY_CODE', 'LONGITUDE', 'LOT_NUMBER', 'MERIDIAN',
+  'MINISTRY_OBSERVATION_WELL_STAT', 'MS_ACCESS_NUM_OF_WELL', 'OLD_MAPSHEET',
+  'OLD_WELL_NUMBER', 'OTHER_CHEMISTRY_DATA', 'OTHER_EQUIPMENT', 'OTHER_INFORMATION',
+  'OWNERS_WELL_NUMBER', 'OWNER_ID', 'SURNAME', 'PERFORATION_FLAG', 'PERMIT_NUMBER',
+  'PID', 'PLATE_ATTACHED_BY', 'PRODUCTION_TIDAL_FLAG', 'PUMP_DESCRIPTION',
+  'PUMP_FLAG', 'REPORTS_FLAG', 'RIG_NUMBER', 'QUARTER', 'SCREEN_FLAG',
+  'SCREEN_INFORMATION_TEXT', 'SCREEN_LENGTH', 'SCREEN_MANUFACTURER', 'SCREEN_WIRE',
+  'SEQUENCE_NO', 'SIEVE_FLAG', 'SITE_AREA', 'SITE_FLAG', 'SITE_ISLAND', 'SITE_STREET',
+  'SURFACE_SEAL_DEPTH', 'SURFACE_SEAL_FLAG', 'SURFACE_SEAL_THICKNESS', 'TYPE_OF_RIG',
+  'TYPE_OF_WORK', 'WELL_USE_CODE', 'WELL_USE_NAME', 'WHEN_CREATED', 'WHEN_UPDATED',
+  'WHERE_PLATE_ATTACHED', 'WHO_CREATED', 'WHO_UPDATED', 'YIELD_UNIT_CODE',
+  'YIELD_UNIT_DESCRIPTION', 'YIELD_VALUE', 'WELL_LICENCE_GENERAL_STATUS',
+  'WELL_DETAIL_URL', 'SE_ANNO_CAD_DATA'];
+var gwWellsCallback = 'getJsonGwWells';
+
+//gwWells callback function run when JSON is returned by wfs call
+var getJsonGwWells = function (response){
+  console.log(gwWellsCallback + ' callback function');
+  gwWellsJson = response;
+  provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinctsJson);
+};
+
+//Groundwater Wells OBJECT
+var gwWells = {
+  data: {},
+  //bbox: lwr left (x max, y min), upper right (x min, y max), epsg
+  bbox: "", //example: -120.54016124, 50.68184294, -120.34252514, 50.73057956, epsg:4326
+  get_data: function(){
+    getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWells.bbox + ',epsg:4326')
+  },
+  callback: function(){console.log('new empty callback function')} 
+};
+
+//gwWells OBJECT callback function run when JSON is returned by wfs call
+var get_gwWells = function (response){
+  console.log('get_gwWells callback function');
+  gwWells.data = response;
+  gwWells.callback();
+  get_obsWells();
+ };
+
+//Observation Wells
+var obsWells = {};
+
+//obsWells filter function
+var get_obsWells = function(){
+  console.log('get_obsWells callback function');
+  obsWells = filterGeoJsonByAttribute(gwWells.data,"MINISTRY_OBSERVATION_WELL_STAT", "Active");
+  }
+
 //points of well diversions (PWD) licences globals
 var pwdLicencesJson = {};
 var pwdLicencesURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.WLS_PWD_LICENCES_SVW/ows";
@@ -100,12 +175,16 @@ var getJsonPwdLicences = function (response){
   pwdLicencesJson = response;
 };
 
+getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
+getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback);
+
 //$( document ).ready(function() {});
 //$( document ).ready(getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback));
 getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
 
 //fetch WFS (json) from openmaps geoserver
-function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
+function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback, wfsBbox=
+'-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326') {
   var defaultParameters = {
     service: 'WFS',
     version: '2.0',
@@ -114,8 +193,9 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback) {
     outputFormat: 'text/javascript', //or application/json (but won't work w/ ajax dataType=jsonp )
     format_options: 'callback:' + wfsCallback,
     SrsName: 'EPSG:4326',
-    //exclude 'GEOMETRY' from list below if spatial not required
-    propertyName: wfsProperties
+    propertyName: wfsProperties,
+    //bbox: '-120.65062584,50.6512122,-120.53745904,50.72483285,epsg:4326'
+    bbox: wfsBbox
   };
 
   var parameters = L.Util.extend(defaultParameters);
