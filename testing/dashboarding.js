@@ -136,17 +136,16 @@ function filterEvents(filterValue){
     console.log(filterValue);
     var firstChar = filterValue.charAt(0);
     //trigger any filter actions here! --map and --graphing
-    //detect region filter
     if ('0123456789'.indexOf(firstChar) !== -1) {
       //detect aquifer filter
+      console.log('aquifer filter:' + filterValue);
       zoomToFeatureByID(filterValue);
       setDashboardFilter(filterValue);
     }
-    else{
-      //REGION
-      console.log('regional filter:' + filterValue)
+    //detect region filter
+    else if (filterValue.indexOf('Region') !== -1) {
+      console.log('regional filter:' + filterValue);
     }
-
 
   }
   else {console.log('no filter value');}
