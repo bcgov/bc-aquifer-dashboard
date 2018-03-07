@@ -450,7 +450,7 @@ function mapIdentify(e,lyr,initAqTag){
       //if multiple aquifers, make popup
       if (l>1) {
         //create unordered list
-        var popUpElementHtml = '<h6>Choose Aquifer</h6><ul id="aqList"><ul>';
+        var popUpElementHtml = '<h4>Choose Aquifer</h4><ul id="aqList"><ul>';
         var popup = L.popup()
         .setLatLng(e.latlng)
         .setContent(popUpElementHtml)
@@ -467,6 +467,7 @@ function mapIdentify(e,lyr,initAqTag){
             map.closePopup();
         };
           $('#aqList').append(item);
+          $('#aqList').css('cursor', 'pointer');
         }
         }
       else{
