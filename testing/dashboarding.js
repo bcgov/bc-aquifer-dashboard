@@ -18,7 +18,7 @@ function setFilterDisplay(filterText){
   var firstChar = filterText.charAt(0);
   if ('0123456789'.indexOf(firstChar) !== -1) {
     // Is a number
-    document.getElementById('filter-text').innerHTML = 'Aquifer TAG: ' + filterText;}
+    document.getElementById('filter-text').innerHTML = 'Aquifer Number: ' + filterText;}
   else {
     //its something else
     document.getElementById('filter-text').innerHTML = filterText;

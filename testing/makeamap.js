@@ -412,6 +412,8 @@ var overlapRedirect = function(response){
   console.log(featureCount);
 };
 function mapIdentify(e,lyr,initAqTag){
+  //use this funtion to identify overlapping aquifers at event e
+  //calls aqSelector(tag) with the user selected (or only returned tag number if no overlaps)
   var bbox = map.getBounds().toBBoxString();
   var size = map.getSize();
   var point = e.containerPoint;
@@ -473,7 +475,6 @@ function mapIdentify(e,lyr,initAqTag){
       }
 
       console.log('executed wms getinfo request');
-      //map.spin(false);
     }
   });
 
@@ -486,76 +487,3 @@ function aqSelector(aqTag){
     setDashboardFilter(aqTag);
 }
 // end of script
-
-//dont think the stuff below here is doing anything right now
-
-// L.TileLayer.BetterWMS = L.TileLayer.WMS.extend({
-//   onAdd: function (map) {
-//     // Triggered when the layer is added to a map.
-//     //   Register a click listener, then do all the upstream WMS things
-//     L.TileLayer.WMS.prototype.onAdd.call(this, map);
-//     map.on('click', this.getFeatureInfo, this);
-//   },
-
-//   onRemove: function (map) {
-//     // Triggered when the layer is removed from a map.
-//     //   Unregister a click listener, then do all the upstream WMS things
-//     L.TileLayer.WMS.prototype.onRemove.call(this, map);
-//     map.off('click', this.getFeatureInfo, this);
-//   },
-
-//   getFeatureInfo: function (e) {
-//     // Make an equest to the server and hope for the best
-//     var url = this.getFeatureInfoUrl(e.latlng);
-//     d3.json(url,function(data){
-//       var totalFeatures = data.features.length;
-//       if (totalFeatures > 1){
-//         console.log('total features: ' + totalFeatures);
-//       }
-//       var tag = data.features[0].properties.AQ_TAG;
-//     });
-//   },
-
-//   getFeatureInfoUrl: function (latlng) {
-//     // Construct a GetFeatureInfo request URL given a point
-//     var point = this._map.latLngToContainerPoint(latlng, this._map.getZoom()),
-//         size = this._map.getSize(),
-
-//         params = {
-//           request: 'GetFeatureInfo',
-//           service: 'WMS',
-//           srs: 'EPSG:4326',
-//           styles: this.wmsParams.styles,
-//           transparent: this.wmsParams.transparent,
-//           version: this.wmsParams.version,
-//           format: this.wmsParams.format,
-//           bbox: this._map.getBounds().toBBoxString(),
-//           height: size.y,
-//           width: size.x,
-//           layers: this.wmsParams.layers,
-//           query_layers: this.wmsParams.layers,
-//           feature_count: this.wmsParams.feature_count,
-//           info_format: 'application/json'
-//         };
-
-//     params[params.version === '1.3.0' ? 'i' : 'x'] = point.x;
-//     params[params.version === '1.3.0' ? 'j' : 'y'] = point.y;
-
-//     return this._url + L.Util.getParamString(params, this._url, true);
-//   },
-
-//   showGetFeatureInfo: function (err, latlng, content) {
-//     if (err) { console.log(err); return; } // do nothing if there's an error
-
-//     // Otherwise show the content in a popup, or something.
-//     //setFilter(content);
-//     // L.popup({ maxWidth: 800})
-//     //   .setLatLng(latlng)
-//     //   .setContent(content)
-//     //   .openOn(this._map);
-//   }
-// });
-
-// L.tileLayer.betterWms = function (URL_AQ, options) {
-//   return new L.TileLayer.BetterWMS(URL_AQ, options);
-// };

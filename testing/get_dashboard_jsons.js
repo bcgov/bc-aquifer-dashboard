@@ -212,3 +212,9 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback, wfsBbox=
     }
   });
 }
+
+//load local aquifer json
+var provincialAquiferJson;
+$.getJSON('assets/aquifer_simple.json', function(result){
+    provincialAquiferJson = result;
+});

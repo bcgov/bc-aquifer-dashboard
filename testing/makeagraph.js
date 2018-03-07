@@ -8,7 +8,8 @@ function provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinc
         //wellsbyAreas(gwWellsJson,precinctsJson);
 }
 function getWellsByAquiferTag(tag){
-  currentAquiferGeoJson = filterGeoJsonByAttribute(aquiferJson,'AQ_TAG',tag);
+  //this function depends on aquiferJson being populated and containing geometry
+  currentAquiferGeoJson = filterGeoJsonByAttribute(provincialAquiferJson,'AQ_TAG',tag);
   //set bounding box for aquifer
   var bbox = turf.bbox(currentAquiferGeoJson);
   gwWells.bbox = bbox[0] + ","+ bbox[1]+ "," + bbox[2] + ","+ bbox[3];
@@ -43,7 +44,7 @@ function makeWellDepthGraph(geoJSONPnts){
   function drawChart() {
         var data = google.visualization.arrayToDataTable(graphArray,false);
         var options = {
-          title: 'Aquifer ' + $('#filter').value +': Well Water Depth',
+          title: $('#filter-text').text() +': Well Water Depth Histogram',
           legend: { position: 'none' },
           vAxis: {title: 'count'},
           width:500,
@@ -209,14 +210,14 @@ function makeBoxChartGraph(inpolyPnts){
     //need to figure out quartile data here
     function drawChart() {
       var data = google.visualization.arrayToDataTable([
-        ['Wells Depth in Aquifer', arrayLow, q25, q75, arrayHigh]
+        ['Wells', arrayLow, q25, q75, arrayHigh]
         // Treat first row as data as well.
       ], true);
 
       var options = {
-        title:'Well Depth In Aquifer',
+        title:'Aquifer Well Depth Boxplot',
         legend:'none',
-        backgroundColor:'#adafb2',
+        backgroundColor:'#dddddd',
         vAxis:{
           title: 'Well Depth Meters '
         }
