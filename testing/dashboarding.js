@@ -136,40 +136,74 @@ function filterEvents(filterValue){
     console.log(filterValue);
     var firstChar = filterValue.charAt(0);
     //trigger any filter actions here! --map and --graphing
-    //detect region filter
+    //detect aquifer filter
     if ('0123456789'.indexOf(firstChar) !== -1) {
-      //detect aquifer filter
+      console.log('aquifer filter:' + filterValue);
       zoomToFeatureByID(filterValue);
       setDashboardFilter(filterValue);
     }
-    else{
-      //REGION
-      console.log('regional filter:' + filterValue)
+    //detect region filter
+    else if (filterValue.indexOf('Natural Resource Region') !== -1) {
+      console.log('regional filter:' + filterValue);
+      //add region-specific function calls here
     }
-
 
   }
   else {console.log('no filter value');}
-
 }
+
+var fList = [];
+
 function makeFilterList(){
-  var fList = [];
+  //var fList = [];
   //convert to array
   var aquiferData = json2array(aquiferJson);
   var regionData = json2array(regionsJson);
 
   //array of region names
-  var rIndex = regionData[0].indexOf('REGION_NAME');
+  //var rIndex = regionData[0].indexOf('REGION_NAME');
   //create an array of fieldname values
   var fIndex = aquiferData[0].indexOf('AQ_TAG');
   //expect field names to be first array
+  /*
   for (i=1;i<regionData.length;i++){
     var val = regionData[i][rIndex];
     fList.push(val);
   }
-
+  */
   for (i=1;i<aquiferData.length;i++){
     var val = aquiferData[i][fIndex];
+    fList.push(val);
+  }
+
+  $('#filterbox').autocomplete({
+                  source: fList,
+                  select: function(event, ui) {
+                      filterEvents(ui.item.value);
+                      $(this).val(ui.item.value);
+                  }
+              })
+
+}
+
+function makeFilterList_Generic(wfsJson){
+  //var fList = [];
+  //convert to array
+  var dataArray = json2array(wfsJson);
+  //expect field names to be first array
+  //Regions
+  if (dataArray[0].indexOf('REGION_NAME') !== -1) {
+    var dataIndex = dataArray[0].indexOf('REGION_NAME');
+  }
+  //Aquifers
+  else if (dataArray[0].indexOf('AQ_TAG') !== -1) {
+    var dataIndex = dataArray[0].indexOf('AQ_TAG');
+  }
+  else {console.log('no field value found in json');}
+
+  //populate fList with region name or aquifer tag
+  for (i=1;i<dataArray.length;i++){
+    var val = dataArray[i][dataIndex];
     fList.push(val);
   }
 

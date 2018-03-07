@@ -27,7 +27,7 @@ var aquiferProperties = ['AQ_TAG', 'AQNAME', 'AQUIFER_MATERIALS', 'PRODUCTIVITY'
 'QUALITY_CONCERNS', 'AQUIFER_DESCRIPTION_RPT_URL', 'AQUIFER_STATISTICS_RPT_URL',
 'AQUIFER_SUBTYPE_CODE', 'QUANTITY_CONCERNS', 'SIZE_KM2', 'TYPE_OF_WATER_USE',
 'PRODUCTIVITY_CODE', 'DEMAND_CODE', 'VULNERABILITY_CODE', 'CLASSIFICATION_CODE',
-'GEOMETRY', 'FEATURE_AREA_SQM'];
+'FEATURE_AREA_SQM'];
 var aquiferCallback = 'getJsonAquifer';
 
 //aquifer callback function run when JSON is returned by wfs call
@@ -35,7 +35,7 @@ var getJsonAquifer = function (response){
   console.log(aquiferCallback + ' callback function');
   aquiferJson = response;
   //populate search box
-  makeFilterList();
+  makeFilterList_Generic(aquiferJson);
   //provincialdataSummaries(aquiferJson);
   //provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinctsJson);
 };
@@ -52,6 +52,8 @@ var regionsCallback = 'getJsonRegions';
 var getJsonRegions = function (response){
   console.log(regionsCallback + ' callback function');
   regionsJson = response;
+  //populate search box
+  makeFilterList_Generic(regionsJson);
 };
 
 //water precincts globals
@@ -175,11 +177,8 @@ var getJsonPwdLicences = function (response){
   pwdLicencesJson = response;
 };
 
-getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
+//call function to fetch WFS from openmaps geoserver
 getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback);
-
-//$( document ).ready(function() {});
-//$( document ).ready(getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback));
 getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
 
 //fetch WFS (json) from openmaps geoserver
