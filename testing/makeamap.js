@@ -375,24 +375,30 @@ function addWellsToMap() {
 function addWellsToMapCluster() {
   if (gwWells.data) {
     //create a cluster group
+    if (lyrWellsInAquiferGroup) {
+      map.removeLayer(lyrWellsInAquiferGroup);
+      lyrWellsInAquiferGroup.clearLayers();
+    }
+
     lyrWellsInAquiferGroup = L.markerClusterGroup();
-    lyrWellsInAquiferGroup.clearLayers();
+
     //lyrWellsInAquifer = L.geoJSON.ajax(gwWells.data, {pointToLayer: returnWellsMarker});
     lyrWellsInAquifer = L.geoJSON(gwWells.data);
     //add all the markers to the layer
-     var arWells = lyrWellsInAquifer.getLayers();
-     for ( var i = 0; i < arWells.length; ++i ){
-       var ftrWell = arWells[i].feature
-       var popup = "<h6>Well Tag: "+ ftrWell.properties.WELL_TAG_NUMBER;
- 
-       //var m = L.marker( [arWells[i].lat, arWells[i].lng]).bindPopup( popup );
-       var m = L.marker([arWells[i].feature.geometry.coordinates[1],arWells[i].feature.geometry.coordinates[0]]).bindPopup( popup );
-       //console.log("adding well marker for: " + popup);
-       lyrWellsInAquiferGroup.addLayer( m );
-       m.addTo(map)
-     }
+    var arWells = lyrWellsInAquifer.getLayers();
+    for ( var i = 0; i < arWells.length; ++i ){
+      var ftrWell = arWells[i].feature
+      var popup = "<h6>Well Tag: "+ ftrWell.properties.WELL_TAG_NUMBER;
+
+      //var m = L.marker( [arWells[i].lat, arWells[i].lng]).bindPopup( popup );
+      var m = L.marker([arWells[i].feature.geometry.coordinates[1],arWells[i].feature.geometry.coordinates[0]]).bindPopup( popup );
+      //console.log("adding well marker for: " + popup);
+      lyrWellsInAquiferGroup.addLayer( m );
+      //m.addTo(map)
+      lyrWellsInAquiferGroup.addTo(map);
+    }
     
-    lyrWellsInAquiferGroup.clearLayers();
+    //lyrWellsInAquiferGroup.clearLayers();
     //lyrWellsInAquiferGroup.addLayer(lyrWellsInAquifer);
     lyrWellsInAquiferGroup.addTo(map);
     console.log("wells added !!!")
@@ -400,11 +406,8 @@ function addWellsToMapCluster() {
     //let the user know the feature was not found somehow.
     console.log("**** Wells Data not found ****");
     };
-
-
-
-
 }; 
+
 var overlapRedirect = function(response){
   //count features in json response
   console.log('get info request callback');
