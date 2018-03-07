@@ -166,3 +166,13 @@ section{
 #filter-text{
   font-weight: bold;
 }
+#aqList{
+  list-style-type: none;
+
+}
+ul {
+  display: inline;
+  margin: 0;
+  padding: 0;
+}
+ul li:hover {background: #666;}

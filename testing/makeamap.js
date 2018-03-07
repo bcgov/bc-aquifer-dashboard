@@ -330,10 +330,7 @@ function returnLayerByAttribute(lyr,att,val) {
 }
 
 function lyrLocalAQOnClicked(e,ID){
-    zoomToFeatureByID(ID);
-    map.removeLayer(lyrLocalAQ);
-    map.addLayer(lyrLocalAQ);
-    setDashboardFilter(ID);
+    mapIdentify(e,lyrLocalAQ,ID);
     //console.log("layer on click in function" + ID)
   };
 
@@ -366,7 +363,7 @@ function addWellsToMap() {
   if (gwWells.data) {
     lyrWellsInAquifer = L.geoJSON.ajax(gwWells.data, {pointToLayer: returnWellsMarker});
     lyrWellsInAquifer.addTo(map);
-    console.log("wells added -simple markers!!!")
+    //console.log("wells added -simple markers!!!")
     } else {
     //let the user know the feature was not found somehow.
     console.log("**** Wells Data not found ****");
@@ -390,7 +387,7 @@ function addWellsToMapCluster() {
  
        //var m = L.marker( [arWells[i].lat, arWells[i].lng]).bindPopup( popup );
        var m = L.marker([arWells[i].feature.geometry.coordinates[1],arWells[i].feature.geometry.coordinates[0]]).bindPopup( popup );
-       console.log("adding well marker for: " + popup);
+       //console.log("adding well marker for: " + popup);
        lyrWellsInAquiferGroup.addLayer( m );
        m.addTo(map)
      }
@@ -407,7 +404,88 @@ function addWellsToMapCluster() {
 
 
 
-}; // end of script
+}; 
+var overlapRedirect = function(response){
+  //count features in json response
+  console.log('get info request callback');
+  featureCount = response.features.length;
+  console.log(featureCount);
+};
+function mapIdentify(e,lyr,initAqTag){
+  var bbox = map.getBounds().toBBoxString();
+  var size = map.getSize();
+  var point = e.containerPoint;
+  var url = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?";
+
+  var params = {
+    request: 'GetFeatureInfo',
+    service: 'WMS',
+    srs: 'EPSG:4326',
+    transparent: 'true',
+    version: '1.1.1',
+    format: 'text/javascript',
+    bbox: map.getBounds().toBBoxString(),
+    height: size.y,
+    width: size.x,
+    layers: 'pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW',
+    query_layers: 'WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW',
+    feature_count: 200,
+    info_format: 'application/json'
+  };
+  params[params.version === '1.3.0' ? 'i' : 'x'] = point.x;
+  params[params.version === '1.3.0' ? 'j' : 'y'] = point.y;
+
+  newURL = url + L.Util.getParamString(params, url, true);
+  console.log(newURL);
+
+  var ajax = $.ajax({
+    url: newURL,
+    dataType: 'json',
+    jsonpCallback: 'overlapRedirect',
+    //jsonp: false,
+    success: function(response) {
+      var l = response.features.length;
+      //if multiple aquifers, make popup
+      if (l>1) {
+        //create unordered list
+        var popUpElementHtml = '<h6>Choose Aquifer</h6><ul id="aqList"><ul>';
+        var popup = L.popup()
+        .setLatLng(e.latlng)
+        .setContent(popUpElementHtml)
+        .openOn(map);
+        for (ii=0; ii<l; ii++) {
+          var aqTag = response.features[ii].properties['AQ_TAG'];
+          var item = document.createElement('li');
+          var itemid = 'li-'+aqTag;
+          item.innerText = aqTag;
+          item.id = itemid;
+          item.class = "aqlist-class";
+          item.onclick= function() {
+            aqSelector(this.innerText);
+            map.closePopup();
+        };
+          $('#aqList').append(item);
+        }
+        }
+      else{
+        //run with the initial aq number
+        aqSelector(initAqTag);
+      }
+
+      console.log('executed wms getinfo request');
+      //map.spin(false);
+    }
+  });
+
+}
+function aqSelector(aqTag){
+  //this is fired when user selects an aquifer from the map
+    zoomToFeatureByID(aqTag);
+    map.removeLayer(lyrLocalAQ);
+    map.addLayer(lyrLocalAQ);
+    setDashboardFilter(aqTag);
+}
+// end of script
 
 //dont think the stuff below here is doing anything right now
 

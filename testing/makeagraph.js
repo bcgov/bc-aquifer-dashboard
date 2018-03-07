@@ -81,8 +81,6 @@ function json2array(jsonObj){
       darray.push(adata);
     }
   });
-  console.log(darray);
-  console.log("finished json to array");
   return darray;
 }
 
