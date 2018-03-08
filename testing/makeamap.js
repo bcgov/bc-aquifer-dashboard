@@ -395,11 +395,7 @@ function addWellsToMapCluster() {
       //console.log("adding well marker for: " + popup);
       lyrWellsInAquiferGroup.addLayer( m );
       //m.addTo(map)
-      lyrWellsInAquiferGroup.addTo(map);
     }
-    
-    //lyrWellsInAquiferGroup.clearLayers();
-    //lyrWellsInAquiferGroup.addLayer(lyrWellsInAquifer);
     lyrWellsInAquiferGroup.addTo(map);
     console.log("wells added !!!")
     } else {

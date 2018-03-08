@@ -25,7 +25,8 @@ function doStuffWithWells(){
   makeAquiferInfoWidget(currentAquiferGeoJson);
   makeWellDepthGraph(polyPnts);
   makeBoxChartGraph(polyPnts);
-  addWellsToMap()
+  //addWellsToMap();
+  addWellsToMapCluster();
 }
 
 function makeWellDepthGraph(geoJSONPnts){
