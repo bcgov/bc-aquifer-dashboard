@@ -26,6 +26,7 @@ function doStuffWithWells(){
   makeWellDepthGraph(polyPnts);
   makeBoxChartGraph(polyPnts);
   addWellsToMap()
+  makeWellsInfoWidget(polyPnts)
 }
 
 function makeWellDepthGraph(geoJSONPnts){

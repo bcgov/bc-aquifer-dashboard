@@ -78,12 +78,12 @@ function setDiv(content, parentElementId, widgetId){
 }
 
 function makeWellsInfoWidget(ingeoJson){
-  var fieldList = {TotalWells:"",TotalObservationWells:"",TotalWellsNoDepth:"", WellsMedianDepth:""};
-  var totalwellfeatures = gwWells.data.totalFeatures
-  fieldList.TotalWells= totalwellfeatures
-  var observationwellfeatures = obswells.data.totalFeatures
-  fieldList.TotalObservationWells= observationwellfeatures
-  //convert selected pointds to array
+  var fieldList = {'Total_Wells':"",'Total_Observation_Wells':"",'Total_Wells_No_Depth':"", 'Wells_Median_Depth':""};
+  function setDefaultVal(value, defaultValue){
+     return (value === undefined) ? defaultValue : value;
+  }
+  fieldList.Total_Wells = setDefaultVal(gwWells.data.features.length,0);
+  fieldList.Total_Observation_Wells = setDefaultVal(obsWells.totalFeatures,0)
   var dataArray = json2array(ingeoJson);
   //Just get data from filed in array and return numbers in arrary list and nulls that were in data . e.g. [2,5,6,2,13,67]
   outArrayvars = flatArray(dataArray,'WATER_DEPTH')
@@ -95,28 +95,37 @@ function makeWellsInfoWidget(ingeoJson){
   var arrayLow = sortedflatArraypnts[0]
   var arrayHigh = sortedflatArraypnts[((sortedflatArraypnts.length) - 1)]
   var arrayMedian = Quartile_50(sortedflatArraypnts);
-  fieldList.WellsMedianDepth= arrayMedian
+  fieldList.Wells_Median_Depth = arrayMedian
   nullcount = outArrayvars[1]
-  fieldList.TotalWellsNoDepth= nullcount
+  fieldList.Total_Wells_No_Depth = nullcount
 
   //var infoTable = document.getElementById('widget-table');
   var table = '<table class="roundedTable" id=info-table-wells><tbody></tbody></table>';
-  var newWidget = setWidget(table,'dashboard','widget-table-wells');
-  var infoTable = document.getElementById('info-table-wells');
-  var row = infoTable.insertRow(0);
-  var cell = row.insertCell(0);
-  cell.innerHTML = 'WELLS INFORMATION';
-  for(var i=0; i<fieldList.length;i++){
-    var field = '<strong>'+ "We" + ":</strong>";
-    var data = arrayHigh;
+  if (document.getElementById('info-table-wells')){
+    var infoTable = document.getElementById('info-table-wells');
+    var r = infoTable.rows.length;
+    //delete existing rows
+    for (var i=1; i<r;i++){
+      //delete last row
+      infoTable.deleteRow(-1);
+    }
+  }
+  else{
+    var newWidget = setWidget(table,'dashboard','widget-table-wells');
+    var infoTable = document.getElementById('info-table-wells');
+    var row = infoTable.insertRow(0);
+    var cell = row.insertCell(0);
+    cell.innerHTML = 'WELLS INFORMATION';
+  }
+  for (var key in fieldList){
+    var field = '<strong>'+ key.replace(/_/g, " ") + ":</strong>";
+    var data = fieldList[key];
     var info = field + "  " + data;
     var row = infoTable.insertRow(-1);
     var cell = row.insertCell(0);
     cell.innerHTML = info;
   }
-  console.log('makeInfoWidget');
 }
-
 
 function setDiv(content, parentElementId, widgetId){
   var parentE = document.getElementById(parentElementId);
