@@ -349,7 +349,8 @@ function styleAquifers(json) {
     }
 }
 
-//set well points style and popup
+//set well points style and popup - Not needed any longer
+/*
 function returnWellsMarker(json, latlng){
   //lyrWellsInAquifer.addLayer(L.marker(latlng));
   //return L.marker(latlng)
@@ -357,8 +358,30 @@ function returnWellsMarker(json, latlng){
   var markerOptions = {radius:200, color:'cyan', fillColor:'cyan', fillOpacity:0.5};
   return L.circle(latlng, markerOptions).bindPopup("<h6>Well Tag: "+ att.WELL_TAG_NUMBER);
 }
+*/
+
+//set well popup
+function wellsInAquiferPopup(e) {
+  var layer = e.target;
+  var well = layer.feature;
+  if (well) {
+    var latlng = [well.geometry.coordinates[1], well.geometry.coordinates[0]];
+
+    /*-----L.popup-----*/
+    var popup = L.popup({
+      offset: [0, -25],
+      closeButton: true
+  });
+
+    popup.setLatLng(latlng);
+    popup.setContent("<h6>Well Tag: "+ well.properties.WELL_TAG_NUMBER);
+    popup.addTo(map);
+
+  }
+}
 
 //add the wells inside an aquifer, called from make a graph doStuffWithWells()
+/*
 function addWellsToMap() {
   if (gwWells.data) {
     lyrWellsInAquifer = L.geoJSON.ajax(gwWells.data, {pointToLayer: returnWellsMarker});
@@ -370,6 +393,7 @@ function addWellsToMap() {
     };
     addWellsToMapCluster();
   };
+  */
 
 //add the wells inside an aquifer, called from make a graph doStuffWithWells()
 function addWellsToMapCluster() {
@@ -383,8 +407,16 @@ function addWellsToMapCluster() {
     lyrWellsInAquiferGroup = L.markerClusterGroup();
 
     //lyrWellsInAquifer = L.geoJSON.ajax(gwWells.data, {pointToLayer: returnWellsMarker});
-    lyrWellsInAquifer = L.geoJSON(gwWells.data);
-    //add all the markers to the layer
+    lyrWellsInAquifer = L.geoJSON(gwWells.data, {
+      onEachFeature: function(feature, layer) {
+        layer.on({
+          click: wellsInAquiferPopup
+        });
+      }
+    });
+
+    //add all the markers to the layer - Not needed any longer
+    /*
     var arWells = lyrWellsInAquifer.getLayers();
     for ( var i = 0; i < arWells.length; ++i ){
       var ftrWell = arWells[i].feature
@@ -393,9 +425,12 @@ function addWellsToMapCluster() {
       //var m = L.marker( [arWells[i].lat, arWells[i].lng]).bindPopup( popup );
       var m = L.marker([arWells[i].feature.geometry.coordinates[1],arWells[i].feature.geometry.coordinates[0]]).bindPopup( popup );
       //console.log("adding well marker for: " + popup);
-      lyrWellsInAquiferGroup.addLayer( m );
+      //lyrWellsInAquiferGroup.addLayer( m );
       //m.addTo(map)
     }
+    */
+
+    lyrWellsInAquiferGroup.addLayer(lyrWellsInAquifer);
     lyrWellsInAquiferGroup.addTo(map);
     console.log("wells added !!!")
     } else {
