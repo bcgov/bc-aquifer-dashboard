@@ -182,8 +182,8 @@ getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback);
 getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
 
 //fetch WFS (json) from openmaps geoserver
-function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback, wfsBbox=
-'-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326') {
+function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback,
+  wfsBbox= '-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326') {
   var defaultParameters = {
     service: 'WFS',
     version: '2.0',
