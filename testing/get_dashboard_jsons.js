@@ -184,6 +184,7 @@ getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
 //fetch WFS (json) from openmaps geoserver
 function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback,
   wfsBbox= '-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326') {
+  //cqlFilter= 'REGION_NAME=South Coast Natural Resource Region') {
   var defaultParameters = {
     service: 'WFS',
     version: '2.0',
@@ -195,6 +196,7 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback,
     propertyName: wfsProperties,
     //bbox: '-120.65062584,50.6512122,-120.53745904,50.72483285,epsg:4326'
     bbox: wfsBbox
+    //cql_filter: cqlFilter
   };
 
   var parameters = L.Util.extend(defaultParameters);
