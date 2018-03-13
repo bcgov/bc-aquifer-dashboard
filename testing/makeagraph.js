@@ -122,6 +122,16 @@ function rollupArray(dataArray,rollupField, valueField){
   return rollup;
 }
 
+function countInArray(array, what) {
+    var count = 0;
+    for (var i = 0; i < array.length; i++) {
+        if (array[i] === what) {
+            count++;
+        }
+    }
+    return count;
+}
+
 function flatArray(dataArray,arrayField){
     //expects first item to be array of columns followed by arrays of equal size for data
     var rollupflat = [];
@@ -138,6 +148,7 @@ function flatArray(dataArray,arrayField){
       }
     }
     console.log('flat array');
+    //returns a list of values and a count of null values
     return [rollupflat,nullcounter];
 }
 

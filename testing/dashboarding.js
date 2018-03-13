@@ -78,26 +78,56 @@ function setDiv(content, parentElementId, widgetId){
 }
 
 function makeWellsInfoWidget(ingeoJson){
-  var fieldList = {'Total_Wells':"",'Total_Observation_Wells':"",'Total_Wells_No_Depth':"", 'Wells_Median_Depth':""};
+  var fieldList = {'Total_Wells':"",'Total_Observation_Wells':"",'Wells_Median_Depth':"",'Wells_Average_Depth':"", 'Total_Wells_No_Well_Depth':"", 'Bedrock_Median_Depth':"",'Total_Wells_No_Bedrock_Depth':"", 'Drilled_Median_Depth':"", 'Drilled_Average_Depth':"",'Total_Wells_No_Drilled_Depth':"",'Total_Wells_Yield_Sum':"",'Total_Wells_No_Yield_Value':""};
   function setDefaultVal(value, defaultValue){
      return (value === undefined) ? defaultValue : value;
-  }
+   }
+  var dataArray = json2array(ingeoJson);
   fieldList.Total_Wells = setDefaultVal(gwWells.data.features.length,0);
   fieldList.Total_Observation_Wells = setDefaultVal(obsWells.totalFeatures,0)
-  var dataArray = json2array(ingeoJson);
+
   //Just get data from filed in array and return numbers in arrary list and nulls that were in data . e.g. [2,5,6,2,13,67]
-  outArrayvars = flatArray(dataArray,'WATER_DEPTH')
-  //sets returns from flatArray
-  flatArraypnts = outArrayvars[0]
+  outArrayvarswaterdepth = flatArray(dataArray,'WATER_DEPTH')
+  flatArraypntswaterdepth = outArrayvarswaterdepth[0]
   //sort flat array sequential
-  sortedflatArraypnts = Array_Sort_Numbers(flatArraypnts)
-  //call arraystats.js and return stats from array list
-  var arrayLow = sortedflatArraypnts[0]
-  var arrayHigh = sortedflatArraypnts[((sortedflatArraypnts.length) - 1)]
-  var arrayMedian = Quartile_50(sortedflatArraypnts);
+  sortedflatArraypntswaterdepth = Array_Sort_Numbers(flatArraypntswaterdepth)
+  var arrayLow = sortedflatArraypntswaterdepth[0]
+  var arrayHigh = sortedflatArraypntswaterdepth[((sortedflatArraypnts.length) - 1)]
+  var arrayMedian = Quartile_50(sortedflatArraypntswaterdepth);
   fieldList.Wells_Median_Depth = arrayMedian
-  nullcount = outArrayvars[1]
-  fieldList.Total_Wells_No_Depth = nullcount
+  nullcount = outArrayvarswaterdepth[1]
+  fieldList.Total_Wells_No_Well_Depth = nullcount
+  fieldList.Wells_Average_Depth = Array_Average(sortedflatArraypntswaterdepth);
+
+  outArrayvarsbedrockrdepth = flatArray(dataArray,'BEDROCK_DEPTH')
+  flatArraypntsbedrockrdepth = outArrayvarsbedrockrdepth[0]
+  //sort flat array sequential
+  sortedflatArraypntsbedrockrdepth = Array_Sort_Numbers(flatArraypntsbedrockrdepth)
+  var arrayMedian = Quartile_50(sortedflatArraypntsbedrockrdepth);
+  fieldList.Bedrock_Median_Depth = arrayMedian
+  nullcount = outArrayvarsbedrockrdepth[1]
+  fieldList.Total_Wells_No_Bedrock_Depth = nullcount
+
+  outArrayvarsdrilleddepth = flatArray(dataArray,'DEPTH_WELL_DRILLED')
+  flatArraypntsdrilleddepth = outArrayvarsdrilleddepth[0]
+  //sort flat array sequential
+  sortedflatArraypntsdrilleddepth = Array_Sort_Numbers(flatArraypntsdrilleddepth)
+  var arrayMedian = Quartile_50(sortedflatArraypntsdrilleddepth);
+  fieldList.Drilled_Median_Depth = arrayMedian
+  nullcount = outArrayvarsbedrockrdepth[1]
+  fieldList.Total_Wells_No_Drilled_Depth = nullcount
+  fieldList.Drilled_Average_Depth = Array_Average(sortedflatArraypntsdrilleddepth);
+
+  outArrayvarsyieldvalue = flatArray(dataArray,'YIELD_VALUE')
+  flatArraypntsyieldvalue = outArrayvarsyieldvalue[0]
+  //sort flat array sequential
+  sortedflatArraypntsyieldvalue = Array_Sort_Numbers(flatArraypntsyieldvalue)
+  var arraySum = Array_Sum(sortedflatArraypntsyieldvalue);
+  fieldList.Total_Wells_Yield_Sum = arraySum
+  arrayCount = countInArray(sortedflatArraypntsyieldvalue,0)
+  fieldList.Total_Wells_No_Yield_Value = arrayCount
+
+  //call arraystats.js and return stats from array list
 
   //var infoTable = document.getElementById('widget-table');
   var table = '<table class="roundedTable" id=info-table-wells><tbody></tbody></table>';
@@ -115,7 +145,7 @@ function makeWellsInfoWidget(ingeoJson){
     var infoTable = document.getElementById('info-table-wells');
     var row = infoTable.insertRow(0);
     var cell = row.insertCell(0);
-    cell.innerHTML = 'WELLS INFORMATION';
+    cell.innerHTML = 'WELLS INFORMATION IN SELECTED AQUIFER ';
   }
   for (var key in fieldList){
     var field = '<strong>'+ key.replace(/_/g, " ") + ":</strong>";
