@@ -47,7 +47,7 @@ var overlays;
 //basic map
 //set map size
 $(document).ready(function(){
-  map = L.map('map').setView([50.6, -120.3], 10);
+  map = L.map('map').setView([50.6, -120.3], 6);
 
   //add base maps
   lyrImageMap = L.tileLayer.provider('Esri.WorldImagery')
@@ -190,12 +190,12 @@ function processAquifers(json, lyr) {
   lyr.on('click', function(e){
     console.log("layer on click " + json.properties.AQUIFER_NUMBER);
     //check for multiple features clicked and allow user to select one
-    
+
     console.log(e.latlng.toString())
-    
-    
+
+
     //jsonFeatures = json
-  
+
     //console.log(lyrLocalAQ.toGeoJSON());
     //console.log(aquiferGEOJSON);
     //var polygons = turf.featureCollection([json]);
@@ -246,7 +246,7 @@ function processAquifers(json, lyr) {
          transparent: 'true',
          feature_count: 200
      }).addTo(map);
-    
+
      //featcount = wmsAQLayer.getLayers().length();
      //console.log(featcount);
      d3.json(URL_WMS,function(data){
@@ -265,7 +265,7 @@ function processAquifers(json, lyr) {
   function createPolygonFromBounds(latLngBounds) {
     var center = latLngBounds.getCenter()
       latlngs = [];
-  
+
     latlngs.push(latLngBounds.getSouthWest());//bottom left
     latlngs.push({ lat: latLngBounds.getSouth(), lng: center.lng });//bottom center
     latlngs.push(latLngBounds.getSouthEast());//bottom right
@@ -274,7 +274,7 @@ function processAquifers(json, lyr) {
     latlngs.push({ lat: latLngBounds.getNorth(), lng: map.getCenter().lng });//top center
     latlngs.push(latLngBounds.getNorthWest());//top left
     latlngs.push({ lat: map.getCenter().lat, lng: latLngBounds.getWest() });//center left
-  
+
     return new L.polygon(latlngs);
   }
 
@@ -437,7 +437,7 @@ function addWellsToMapCluster() {
     //let the user know the feature was not found somehow.
     console.log("**** Wells Data not found ****");
     };
-}; 
+};
 
 var overlapRedirect = function(response){
   //count features in json response

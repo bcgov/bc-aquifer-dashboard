@@ -36,7 +36,7 @@ var getJsonAquifer = function (response){
   aquiferJson = response;
   //populate search box
   makeFilterList_Generic(aquiferJson);
-  //provincialdataSummaries(aquiferJson);
+  provincialdataSummaries(aquiferJson);
   //provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinctsJson);
 };
 
@@ -137,7 +137,7 @@ var gwWells = {
   get_data: function(){
     getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWells.bbox + ',epsg:4326')
   },
-  callback: function(){console.log('new empty callback function')} 
+  callback: function(){console.log('new empty callback function')}
 };
 
 //gwWells OBJECT callback function run when JSON is returned by wfs call
@@ -182,12 +182,12 @@ getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback);
 getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
 
 //fetch WFS (json) from openmaps geoserver
-function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback, 
+function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback,
   wfsBbox= '-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326') {
-  //cql Filter text attributes must use single quotes (%27), not double quotes (%22), 
+  //cql Filter text attributes must use single quotes (%27), not double quotes (%22),
   //ie: cql_filter="FEATURE_CODE='FM90000010'""
-  //cqlFilter="REGION_NAME='Skeena Natural Resource Region'") { 
-  //cqlFilter="AQ_TAG='1136'") { 
+  //cqlFilter="REGION_NAME='Skeena Natural Resource Region'") {
+  //cqlFilter="AQ_TAG='1136'") {
   var defaultParameters = {
     service: 'WFS',
     version: '2.0',

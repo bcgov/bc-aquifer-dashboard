@@ -22,6 +22,7 @@ function doStuffWithWells(){
   //replace bbox wells with wells within aquifer
   gwWells.data = polyPnts;
   //load aquifer and wells on map
+  setWidget('','dashboard','prov-vulnerable-pie');
   makeAquiferInfoWidget(currentAquiferGeoJson);
   makeWellDepthGraph(polyPnts);
   makeBoxChartGraph(polyPnts);
@@ -149,7 +150,7 @@ function aquiferProvVulnerability(aquiferProvDataarray){
     var tagIndex = aquiferProvDataarray[0].indexOf("VULNERABILITY");
     aquiferProvVulnerableArray.push(["VULNERABILITY","SIZE_KM2"]);
     for (i=1;i<aquiferProvDataarray.length; i++){
-      aquiferProvVulnerableArray.push(['Vulnerable:' + aquiferProvDataarray[i][tagIndex],aquiferProvDataarray[i][valueIndex]]);
+      aquiferProvVulnerableArray.push([aquiferProvDataarray[i][tagIndex],aquiferProvDataarray[i][valueIndex]]);
     }
     sumVulnerabilitydata = rollupArray(aquiferProvVulnerableArray, "VULNERABILITY", "SIZE_KM2");
     google.charts.load('current', {'packages':['corechart']});
@@ -161,7 +162,7 @@ function aquiferProvVulnerability(aquiferProvDataarray){
             width:400,
             height:300,
             colors: ['#ff0000', '#008000', '#ffa500'],
-            backgroundColor:'#adafb2'
+            backgroundColor:'#dddddd'
           };
           setWidget('','dashboard','prov-vulnerable-pie');
           var chart = new google.visualization.PieChart(document.getElementById('prov-vulnerable-pie'));
