@@ -212,7 +212,7 @@ function processAquifers(json, lyr) {
     //console.log("mapFC");
     //console.log(mapFC);
     //inViewPolygons= clipFeaturecollection(allpolygons, mapFC);
-    //onsole.log("inview");
+    //onsole.log(F"inview");
     //console.log(inViewPolygons);
     //var points = turf.featureCollection([pt1]);
     //fldName = 'AQ_TAG';
@@ -376,6 +376,7 @@ function wellsInAquiferPopup(e) {
     popup.setLatLng(latlng);
     popup.setContent("<h6>Well Tag: "+ well.properties.WELL_TAG_NUMBER);
     popup.addTo(map);
+    //makeSingleWellInfoWidget(well.properties.WELL_TAG_NUMBER)
 
   }
 }

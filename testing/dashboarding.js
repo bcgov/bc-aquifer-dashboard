@@ -31,11 +31,16 @@ function setDashboardFilter(tag){
   getWellsByAquiferTag(tag);//getWellsByAquiferByTag(tag);
 }
 
+function openWebLink(inLink) {
+    window.open(inLink);
+}
+
 function makeAquiferInfoWidget(geoJson){
   //list of fields to add to info table
   var fieldList = ['AQNAME','AQ_TAG','AQUIFER_CLASSIFICATION','DEMAND','VULNERABILITY', 'AQUIFER_MATERIALS'];
   var tag = geoJson.features[0].properties.AQ_TAG;
   //var infoTable = document.getElementById('widget-table');
+  var featureProperties = geoJson.features[0].properties;
   var table = '<table class="roundedTable" id=info-table><tbody></tbody></table>';
   if (document.getElementById('info-table')){
     var infoTable = document.getElementById('info-table');
@@ -57,6 +62,11 @@ function makeAquiferInfoWidget(geoJson){
   var featureProperties = geoJson.features[0].properties;
   var field;
   var data;
+  weblink = featureProperties["AQUIFER_DESCRIPTION_RPT_URL"]
+  webbutton = '<button onclick = "openWebLink(weblink)">'+"Web Link to aquifer report in new window"+'</button>';
+  var row = infoTable.insertRow(-1);
+  var cell = row.insertCell(0);
+  cell.innerHTML = webbutton;
   for(var i=0; i<fieldList.length;i++){
     field = '<strong>'+ fieldList[i].replace("_", " ") + ":</strong>";
     data = featureProperties[fieldList[i]];
