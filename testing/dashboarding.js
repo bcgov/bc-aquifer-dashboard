@@ -57,18 +57,16 @@ function makeAquiferInfoWidget(geoJson){
     var row = infoTable.insertRow(0);
     var cell = row.insertCell(0);
     cell.innerHTML = 'AQUIFER INFORMATION';
-    weblink = featureProperties["AQUIFER_DESCRIPTION_RPT_URL"]
-    console.log(weblink);
-    //field = '<button onclick="myFunction()">'+"Web Link to aquifer report"+'</button>';
-    field = '<button onclick = "openWebLink(weblink)">'+"Web Link to aquifer report in New Window"+'</button>';
-    var row = infoTable.insertRow(-1);
-    var cell = row.insertCell(0);
-    cell.innerHTML = field;
   }
 
   var featureProperties = geoJson.features[0].properties;
   var field;
   var data;
+  weblink = featureProperties["AQUIFER_DESCRIPTION_RPT_URL"]
+  webbutton = '<button onclick = "openWebLink(weblink)">'+"Web Link to aquifer report in new window"+'</button>';
+  var row = infoTable.insertRow(-1);
+  var cell = row.insertCell(0);
+  cell.innerHTML = webbutton;
   for(var i=0; i<fieldList.length;i++){
     field = '<strong>'+ fieldList[i].replace("_", " ") + ":</strong>";
     data = featureProperties[fieldList[i]];

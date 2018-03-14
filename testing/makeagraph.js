@@ -229,7 +229,7 @@ function makeBoxChartGraph(inpolyPnts){
       ], true);
 
       var options = {
-        title:'Aquifer Well Depth Boxplot',
+        title:'Aquifer Well Depth Boxplot (25 and 75 Quartile)',
         legend:'none',
         backgroundColor:'#dddddd',
         vAxis:{
