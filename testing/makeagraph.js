@@ -22,7 +22,11 @@ function doStuffWithWells(){
   //replace bbox wells with wells within aquifer
   gwWells.data = polyPnts;
   //load aquifer and wells on map
-  setWidget('','dashboard','prov-vulnerable-pie');
+  var element = document.getElementById('prov-vulnerable-pie');
+  if (element){
+    element.parentNode.removeChild(element);
+  }
+
   makeAquiferInfoWidget(currentAquiferGeoJson);
   makeWellDepthGraph(polyPnts);
   makeBoxChartGraph(polyPnts);
@@ -172,7 +176,7 @@ function aquiferProvVulnerability(aquiferProvDataarray){
             title: 'Aquifer Provincial Vulnerability: Area Km2',
             width:400,
             height:300,
-            colors: ['#ff0000', '#008000', '#ffa500'],
+            colors: ['#008000','#ff0000','#ffa500'],
             backgroundColor:'#dddddd'
           };
           setWidget('','dashboard','prov-vulnerable-pie');

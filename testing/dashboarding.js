@@ -145,9 +145,12 @@ function makeWellsInfoWidget(ingeoJson){
     var infoTable = document.getElementById('info-table-wells');
     var row = infoTable.insertRow(0);
     var cell = row.insertCell(0);
-    cell.innerHTML = 'WELLS INFORMATION IN SELECTED AQUIFER ';
+    cell.innerHTML = 'Groundwater Well Rollup ';
   }
   for (var key in fieldList){
+    if (Object.keys(fieldList).indexOf(key)>8){
+      $('#widget-table-wells').css('height',"600px");
+    }
     var field = '<strong>'+ key.replace(/_/g, " ") + ":</strong>";
     var data = fieldList[key];
     var info = field + "  " + data;
