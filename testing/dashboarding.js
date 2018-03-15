@@ -155,7 +155,7 @@ function makeWellsInfoWidget(ingeoJson){
     var infoTable = document.getElementById('info-table-wells');
     var row = infoTable.insertRow(0);
     var cell = row.insertCell(0);
-    cell.innerHTML = 'Groundwater Well Rollup ';
+    cell.innerHTML = 'Well Statistics in selected aquifer';
   }
   for (var key in fieldList){
     if (Object.keys(fieldList).indexOf(key)>8){
@@ -267,4 +267,46 @@ function makeFilterList_Generic(wfsJson){
                   }
               })
 
+}
+
+
+function makeSingleInfoWidget(wellLyr){
+  var fieldList = {'WELL_TAG_NO':"",'YIELD_VALUE':"",'DEPTH_WELL_DRILLED':"",'WELL_USE_CODE':""};
+  function setDefaultVal(value, defaultValue){
+     return (value === undefined) ? defaultValue : value;
+   }
+  fieldList.WELL_TAG_NO = wellLyr.WELL_TAG_NO
+  fieldList.YIELD_VALUE = setDefaultVal(wellLyr.YIELD_VALUE,0)
+  fieldList.DEPTH_WELL_DRILLED = setDefaultVal(wellLyr.DEPTH_WELL_DRILLED,0)
+  fieldList.WELL_USE_CODE = wellLyr.WELL_USE_CODE
+
+  //var infoTable = document.getElementById('widget-table');
+  var table = '<table class="roundedTable" id=info-table-well><tbody></tbody></table>';
+  if (document.getElementById('info-table-well')){
+    var infoTable = document.getElementById('info-table-well');
+    var r = infoTable.rows.length;
+    //delete existing rows
+    for (var i=1; i<r;i++){
+      //delete last row
+      infoTable.deleteRow(-1);
+    }
+  }
+  else{
+    var newWidget = setWidget(table,'dashboard','widget-table-well');
+    var infoTable = document.getElementById('info-table-well');
+    var row = infoTable.insertRow(0);
+    var cell = row.insertCell(0);
+    cell.innerHTML = 'Selected Well Information';
+  }
+  for (var key in fieldList){
+    if (Object.keys(fieldList).indexOf(key)>8){
+      $('#widget-table-well').css('height',"600px");
+    }
+    var field = '<strong>'+ key.replace(/_/g, " ") + ":</strong>";
+    var data = fieldList[key];
+    var info = field + "  " + data;
+    var row = infoTable.insertRow(-1);
+    var cell = row.insertCell(0);
+    cell.innerHTML = info;
+  }
 }
