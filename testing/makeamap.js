@@ -320,11 +320,11 @@ function wellsInAquiferPopup(e) {
       offset: [0, -25],
       closeButton: true
   });
-
     popup.setLatLng(latlng);
     popup.setContent("<h6>Well Tag: "+ well.properties.WELL_TAG_NUMBER);
     popup.addTo(map);
-    //makeSingleWellInfoWidget(well.properties.WELL_TAG_NUMBER)
+    makeSingleInfoWidget(well.properties);
+
 
   }
 }
