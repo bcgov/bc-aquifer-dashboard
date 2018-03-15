@@ -47,13 +47,13 @@ var overlays;
 //basic map
 //set map size
 $(document).ready(function(){
-  map = L.map('map').setView([50.6, -120.3], 10);
+  map = L.map('map').setView([50.6, -120.3], 6);
 
   //add base maps
   lyrImageMap = L.tileLayer.provider('Esri.WorldImagery')
   lyrTopoMap = L.tileLayer.provider('OpenTopoMap');
   lyrStreetsMap = L.tileLayer.provider('OpenStreetMap');
-  map.addLayer(lyrTopoMap); //start with default base map
+  
 
 
   var URL_BCBASE = "http://maps.gov.bc.ca/arcserver/services/Province/web_mercator_cache/MapServer/WMSServer"
@@ -134,12 +134,11 @@ $(document).ready(function(){
     "Districts": lyrLocalDist,
     "NRS Regions": lyrLocalRegions
   };
+
+  map.addLayer(wmsBCBASELayer); //start with default base map
+
   mapControl = new L.control.layers(baseLayers,overlays);
   mapControl.addTo(map);
-
-  //turn off some layers at start
-  //map.removeLayer(lyrLocalDist);
-  //map.removeLayer(lyrLocalPrec);
 
   //add scale bar and cursor controls to map
   ctlScale = L.control.scale({position:'bottomleft', metric:true, maxWidth:150}).addTo(map);
@@ -190,73 +189,7 @@ function processAquifers(json, lyr) {
   lyr.on('click', function(e){
     console.log("layer on click " + json.properties.AQUIFER_NUMBER);
     //check for multiple features clicked and allow user to select one
-    
     console.log(e.latlng.toString())
-    
-    
-    //jsonFeatures = json
-  
-    //console.log(lyrLocalAQ.toGeoJSON());
-    //console.log(aquiferGEOJSON);
-    //var polygons = turf.featureCollection([json]);
-    //var allpolygons = turf.featureCollection([lyrLocalAQ.toGeoJSON()]);
-    //var allPolygons = aquiferJson;
-    //get a geojson feature of the current map bounds
-    //mapExtentPolygon = createPolygonFromBounds(map.getBounds()).toGeoJSON()
-    //console.log("map extent polygon");
-    //console.log(mapExtentPolygon);
-    //create a json feature collection from the map extent to use in turf
-    //f = turf.geometry(mapExtentPolygon)
-    //fc = turf.feature(mapExtentPolygon)
-    //mapFC = turf.featureCollection([fc]);
-    //console.log("mapFC");
-    //console.log(mapFC);
-    //inViewPolygons= clipFeaturecollection(allpolygons, mapFC);
-    //onsole.log("inview");
-    //console.log(inViewPolygons);
-    //var points = turf.featureCollection([pt1]);
-    //fldName = 'AQ_TAG';
-    //var tagged = turf.tag(points, allPolygons, 'AQ_TAG','AQ_TAGS');
-    //console.log("tagged")
-    //console.log(tagged);
-
-    //call a new WMS get feature info request
-    /* console.log('make polygons')
-    bbox = e.latlng.lng,e.latlng.lat
-    params = {
-      service: 'wms',
-      request: 'getFeatureInfo',
-      bbox: bbox,
-      format:'application/json',
-      version:'1.1.1',
-      layers: 'pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW',
-      transparent: 'true',
-      feature_count: 200
-     }
-    //URL_WMS = L.Util.getParamString(params, URL_AQ )
-    URL_WMS = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows?&service=wms&request=getFeatureInfo&bbox=-120.32432556152345,50.61985,format=json&version=1.1.1&layers=pub%3AWHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW&transparent=true&feature_count=200"
-
-    wmsAQLayer = L.tileLayer.wms(URL_AQ,{
-         service: 'wms',
-         request: 'getFeatureInfo',
-         bbox: bbox,
-         format:'application/json',
-         version:'1.1.1',
-         layers: 'pub:WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW',
-         transparent: 'true',
-         feature_count: 200
-     }).addTo(map);
-    
-     //featcount = wmsAQLayer.getLayers().length();
-     //console.log(featcount);
-     d3.json(URL_WMS,function(data){
-      var totalFeatures = data.features.length;
-      if (totalFeatures > 1){
-        console.log('total features: ' + totalFeatures);
-      }
-      var tag = data.features[0].properties.AQ_TAG;
-      }); */
-
     lyrLocalAQOnClicked(e,json.properties.AQUIFER_NUMBER);
     });
   };
@@ -265,7 +198,7 @@ function processAquifers(json, lyr) {
   function createPolygonFromBounds(latLngBounds) {
     var center = latLngBounds.getCenter()
       latlngs = [];
-  
+
     latlngs.push(latLngBounds.getSouthWest());//bottom left
     latlngs.push({ lat: latLngBounds.getSouth(), lng: center.lng });//bottom center
     latlngs.push(latLngBounds.getSouthEast());//bottom right
@@ -274,7 +207,7 @@ function processAquifers(json, lyr) {
     latlngs.push({ lat: latLngBounds.getNorth(), lng: map.getCenter().lng });//top center
     latlngs.push(latLngBounds.getNorthWest());//top left
     latlngs.push({ lat: map.getCenter().lat, lng: latLngBounds.getWest() });//center left
-  
+
     return new L.polygon(latlngs);
   }
 
@@ -315,6 +248,23 @@ function zoomToFeatureByID(aqtag){
   }
 };
 
+//function to zoom to feature when search box event fires or button event
+function highlightFeatureByID(aqtag){
+  var val = aqtag;
+  var lyr = returnLayerByAttribute(lyrLocalAQ,'AQUIFER_NUMBER',val);
+  if (lyr) {
+      if (lyrSearch) {
+          lyrSearch.remove();
+      }
+      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:7, opacity:0.5}}).addTo(map);
+      //map.fitBounds(lyr.getBounds().pad(0.1));
+  } else {
+      //let the user know the feature was not found somehow.
+      console.log("**** Project ID not found ****");
+  }
+};
+
+
 //function to get a specific layer/feature from a group layer
 //with a specific attribute/value combination
 function returnLayerByAttribute(lyr,att,val) {
@@ -331,7 +281,6 @@ function returnLayerByAttribute(lyr,att,val) {
 
 function lyrLocalAQOnClicked(e,ID){
     mapIdentify(e,lyrLocalAQ,ID);
-    //console.log("layer on click in function" + ID)
   };
 
 function styleAquifers(json) {
@@ -350,7 +299,7 @@ function styleAquifers(json) {
 }
 
 //set well points style and popup - Not needed any longer
-/*
+
 function returnWellsMarker(json, latlng){
   //lyrWellsInAquifer.addLayer(L.marker(latlng));
   //return L.marker(latlng)
@@ -358,7 +307,6 @@ function returnWellsMarker(json, latlng){
   var markerOptions = {radius:200, color:'cyan', fillColor:'cyan', fillOpacity:0.5};
   return L.circle(latlng, markerOptions).bindPopup("<h6>Well Tag: "+ att.WELL_TAG_NUMBER);
 }
-*/
 
 //set well popup
 function wellsInAquiferPopup(e) {
@@ -376,6 +324,7 @@ function wellsInAquiferPopup(e) {
     popup.setLatLng(latlng);
     popup.setContent("<h6>Well Tag: "+ well.properties.WELL_TAG_NUMBER);
     popup.addTo(map);
+    //makeSingleWellInfoWidget(well.properties.WELL_TAG_NUMBER)
 
   }
 }
@@ -411,8 +360,15 @@ function addWellsToMapCluster() {
       onEachFeature: function(feature, layer) {
         layer.on({
           click: wellsInAquiferPopup
-        });
+        })
       }
+      /*pointToLayer: function(feature){
+        var markerOptions = {radius:200, color:'cyan', fillColor:'cyan', fillOpacity:0.5};
+        //var marker = L.circleMarker(feature.geometry.coordinates, markerOptions);
+        var marker = L.circleMarker(feature.geometry.coordinates, feature.properties);
+        console.log("creating marker");
+        return marker;
+      }*/
     });
 
     //add all the markers to the layer - Not needed any longer
@@ -437,7 +393,7 @@ function addWellsToMapCluster() {
     //let the user know the feature was not found somehow.
     console.log("**** Wells Data not found ****");
     };
-}; 
+};
 
 var overlapRedirect = function(response){
   //count features in json response
@@ -496,6 +452,9 @@ function mapIdentify(e,lyr,initAqTag){
           item.innerText = aqTag;
           item.id = itemid;
           item.class = "aqlist-class";
+          item.onmouseenter= function(){
+            highlightFeatureByID(this.innerText)
+          }
           item.onclick= function() {
             aqSelector(this.innerText);
             map.closePopup();

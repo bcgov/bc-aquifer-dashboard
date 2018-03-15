@@ -36,3 +36,9 @@ function Array_Sort_Numbers(inputarray){
 function Array_Sum(t){
    return t.reduce(function(a, b) { return a + b; }, 0);
 }
+
+function Array_Average(t){
+   var SumofArray = Array_Sum(t)
+   var AverageArray = Math.round(SumofArray / t.length)
+   return AverageArray
+}

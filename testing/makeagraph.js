@@ -22,6 +22,11 @@ function doStuffWithWells(){
   //replace bbox wells with wells within aquifer
   gwWells.data = polyPnts;
   //load aquifer and wells on map
+  var element = document.getElementById('prov-vulnerable-pie');
+  if (element){
+    element.parentNode.removeChild(element);
+  }
+
   makeAquiferInfoWidget(currentAquiferGeoJson);
   makeWellDepthGraph(polyPnts);
   makeBoxChartGraph(polyPnts);
@@ -122,6 +127,16 @@ function rollupArray(dataArray,rollupField, valueField){
   return rollup;
 }
 
+function countInArray(array, what) {
+    var count = 0;
+    for (var i = 0; i < array.length; i++) {
+        if (array[i] === what) {
+            count++;
+        }
+    }
+    return count;
+}
+
 function flatArray(dataArray,arrayField){
     //expects first item to be array of columns followed by arrays of equal size for data
     var rollupflat = [];
@@ -138,6 +153,7 @@ function flatArray(dataArray,arrayField){
       }
     }
     console.log('flat array');
+    //returns a list of values and a count of null values
     return [rollupflat,nullcounter];
 }
 
@@ -149,7 +165,7 @@ function aquiferProvVulnerability(aquiferProvDataarray){
     var tagIndex = aquiferProvDataarray[0].indexOf("VULNERABILITY");
     aquiferProvVulnerableArray.push(["VULNERABILITY","SIZE_KM2"]);
     for (i=1;i<aquiferProvDataarray.length; i++){
-      aquiferProvVulnerableArray.push(['Vulnerable:' + aquiferProvDataarray[i][tagIndex],aquiferProvDataarray[i][valueIndex]]);
+      aquiferProvVulnerableArray.push([aquiferProvDataarray[i][tagIndex],aquiferProvDataarray[i][valueIndex]]);
     }
     sumVulnerabilitydata = rollupArray(aquiferProvVulnerableArray, "VULNERABILITY", "SIZE_KM2");
     google.charts.load('current', {'packages':['corechart']});
@@ -160,8 +176,8 @@ function aquiferProvVulnerability(aquiferProvDataarray){
             title: 'Aquifer Provincial Vulnerability: Area Km2',
             width:400,
             height:300,
-            colors: ['#ff0000', '#008000', '#ffa500'],
-            backgroundColor:'#adafb2'
+            colors: ['#008000','#ff0000','#ffa500'],
+            backgroundColor:'#dddddd'
           };
           setWidget('','dashboard','prov-vulnerable-pie');
           var chart = new google.visualization.PieChart(document.getElementById('prov-vulnerable-pie'));
@@ -217,7 +233,7 @@ function makeBoxChartGraph(inpolyPnts){
       ], true);
 
       var options = {
-        title:'Aquifer Well Depth Boxplot',
+        title:'Aquifer Well Depth Boxplot (25 and 75 Quartile)',
         legend:'none',
         backgroundColor:'#dddddd',
         vAxis:{
