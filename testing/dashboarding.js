@@ -271,7 +271,7 @@ function makeFilterList_Generic(wfsJson){
 
 
 function makeSingleInfoWidget(wellLyr){
-  var fieldList = {'WELL_TAG_NO':"",'YIELD_VALUE':"",'DEPTH_WELL_DRILLED':"",'WELL_USE_CODE':""};
+  var fieldList = {'WELL_TAG_NO':"",'YIELD_VALUE':"",'DEPTH_WELL_DRILLED':"",'WELL_USE_CODE':"",'WELL_LICENCE_GENERAL_STATUS':""};
   function setDefaultVal(value, defaultValue){
      return (value === undefined) ? defaultValue : value;
    }
@@ -279,6 +279,7 @@ function makeSingleInfoWidget(wellLyr){
   fieldList.YIELD_VALUE = setDefaultVal(wellLyr.YIELD_VALUE,0)
   fieldList.DEPTH_WELL_DRILLED = setDefaultVal(wellLyr.DEPTH_WELL_DRILLED,0)
   fieldList.WELL_USE_CODE = wellLyr.WELL_USE_CODE
+  fieldList.WELL_LICENCE_GENERAL_STATUS = wellLyr.WELL_LICENCE_GENERAL_STATUS
 
   //var infoTable = document.getElementById('widget-table');
   var table = '<table class="roundedTable" id=info-table-well><tbody></tbody></table>';
