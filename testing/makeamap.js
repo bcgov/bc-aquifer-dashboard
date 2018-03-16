@@ -321,7 +321,7 @@ function wellsInAquiferPopup(e) {
       closeButton: true
   });
     popup.setLatLng(latlng);
-    popup.setContent("<h6>Well Tag: "+ well.properties.WELL_TAG_NUMBER);
+    popup.setContent("<h6>Well Tag: "+ well.properties.WELL_TAG_NUMBER + "</b><h6>Yield Value: "+ well.properties.YIELD_VALUE + "</b><h6>Depth Well Drilled: "+ well.properties.DEPTH_WELL_DRILLED + "</b><h6>Well use code: "+ well.properties.WELL_USE_CODE + "</b><h6>Bedrock Depth: "+ well.properties.BEDROCK_DEPTH+ "</b><h6>Well licence status: "+ well.properties.WELL_LICENCE_GENERAL_STATUS);
     popup.addTo(map);
     makeSingleInfoWidget(well.properties);
 
