@@ -35,7 +35,7 @@ var getJsonAquifer = function (response){
   console.log(aquiferCallback + ' callback function');
   aquiferJson = response;
   //populate search box
-  makeFilterList_Generic(aquiferJson);
+  makeFilterList(aquiferJson);
   provincialdataSummaries(aquiferJson);
   //provincialdataSummaries(aquiferJson,gwWellsJson,pwdLicencesJson,precinctsJson);
 };
@@ -53,7 +53,7 @@ var getJsonRegions = function (response){
   console.log(regionsCallback + ' callback function');
   regionsJson = response;
   //populate search box
-  makeFilterList_Generic(regionsJson);
+  makeFilterList(regionsJson);
 };
 
 //water precincts globals

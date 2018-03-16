@@ -206,39 +206,7 @@ function filterEvents(filterValue){
 
 var fList = [];
 
-function makeFilterList(){
-  //var fList = [];
-  //convert to array
-  var aquiferData = json2array(aquiferJson);
-  var regionData = json2array(regionsJson);
-
-  //array of region names
-  //var rIndex = regionData[0].indexOf('REGION_NAME');
-  //create an array of fieldname values
-  var fIndex = aquiferData[0].indexOf('AQ_TAG');
-  //expect field names to be first array
-  /*
-  for (i=1;i<regionData.length;i++){
-    var val = regionData[i][rIndex];
-    fList.push(val);
-  }
-  */
-  for (i=1;i<aquiferData.length;i++){
-    var val = aquiferData[i][fIndex];
-    fList.push(val);
-  }
-
-  $('#filterbox').autocomplete({
-                  source: fList,
-                  select: function(event, ui) {
-                      filterEvents(ui.item.value);
-                      $(this).val(ui.item.value);
-                  }
-              })
-
-}
-
-function makeFilterList_Generic(wfsJson){
+function makeFilterList(wfsJson){
   //var fList = [];
   //convert to array
   var dataArray = json2array(wfsJson);
