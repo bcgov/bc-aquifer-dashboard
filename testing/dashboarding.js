@@ -63,7 +63,7 @@ function makeAquiferInfoWidget(geoJson){
   var field;
   var data;
   weblink = featureProperties["AQUIFER_DESCRIPTION_RPT_URL"]
-  webbutton = '<button onclick = "openWebLink(weblink)">'+"Web Link to aquifer report in new window"+'</button>';
+  webbutton = '<button onclick = "openWebLink(weblink)">'+"Download Aquifer Report"+'</button>';
   var row = infoTable.insertRow(-1);
   var cell = row.insertCell(0);
   cell.innerHTML = webbutton;
@@ -88,7 +88,11 @@ function setDiv(content, parentElementId, widgetId){
 }
 
 function makeWellsInfoWidget(ingeoJson){
-  var fieldList = {'Total_Wells':"",'Total_Observation_Wells':"",'Wells_Median_Depth':"",'Wells_Average_Depth':"", 'Total_Wells_No_Well_Depth':"", 'Bedrock_Median_Depth':"",'Total_Wells_No_Bedrock_Depth':"", 'Drilled_Median_Depth':"", 'Drilled_Average_Depth':"",'Total_Wells_No_Drilled_Depth':"",'Total_Wells_Yield_Sum':"",'Total_Wells_No_Yield_Value':""};
+  var fieldList = {
+    'Total_Wells':"",'Total_Observation_Wells':"",'Wells_Median_Depth_m':"",'Wells_Average_Depth':"",
+    'Total_Wells_No_Well_Depth':"", 'Bedrock_Median_Depth':"",'Total_Wells_No_Bedrock_Depth':"",
+    'Drilled_Median_Depth':"", 'Drilled_Average_Depth':"",'Total_Wells_No_Drilled_Depth':"",
+    'Total_Wells_Yield_Sum':"",'Total_Wells_No_Yield_Value':""};
   function setDefaultVal(value, defaultValue){
      return (value === undefined) ? defaultValue : value;
    }
@@ -96,7 +100,7 @@ function makeWellsInfoWidget(ingeoJson){
   fieldList.Total_Wells = setDefaultVal(gwWells.data.features.length,0);
   fieldList.Total_Observation_Wells = setDefaultVal(obsWells.totalFeatures,0)
 
-  //Just get data from filed in array and return numbers in arrary list and nulls that were in data . e.g. [2,5,6,2,13,67]
+  //Just get data from field in array and return numbers in arrary list and nulls that were in data . e.g. [2,5,6,2,13,67]
   outArrayvarswaterdepth = flatArray(dataArray,'WATER_DEPTH')
   flatArraypntswaterdepth = outArrayvarswaterdepth[0]
   //sort flat array sequential
@@ -104,7 +108,7 @@ function makeWellsInfoWidget(ingeoJson){
   var arrayLow = sortedflatArraypntswaterdepth[0]
   var arrayHigh = sortedflatArraypntswaterdepth[((sortedflatArraypnts.length) - 1)]
   var arrayMedian = Quartile_50(sortedflatArraypntswaterdepth);
-  fieldList.Wells_Median_Depth = arrayMedian
+  fieldList.Wells_Median_Depth_m = arrayMedian
   nullcount = outArrayvarswaterdepth[1]
   fieldList.Total_Wells_No_Well_Depth = nullcount
   fieldList.Wells_Average_Depth = Array_Average(sortedflatArraypntswaterdepth);
@@ -155,7 +159,7 @@ function makeWellsInfoWidget(ingeoJson){
     var infoTable = document.getElementById('info-table-wells');
     var row = infoTable.insertRow(0);
     var cell = row.insertCell(0);
-    cell.innerHTML = 'Well Statistics in selected aquifer';
+    cell.innerHTML = 'GROUNDWATER WELL INFORMATION';
   }
   for (var key in fieldList){
     if (Object.keys(fieldList).indexOf(key)>8){
