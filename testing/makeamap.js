@@ -298,15 +298,8 @@ function styleAquifers(json) {
     }
 }
 
-//set well points style and popup - Not needed any longer
 
-function returnWellsMarker(json, latlng){
-  //lyrWellsInAquifer.addLayer(L.marker(latlng));
-  //return L.marker(latlng)
-  var att = json.properties;
-  var markerOptions = {radius:200, color:'cyan', fillColor:'cyan', fillOpacity:0.5};
-  return L.circle(latlng, markerOptions).bindPopup("<h6>Well Tag: "+ att.WELL_TAG_NUMBER);
-}
+
 
 //set well popup
 function wellsInAquiferPopup(e) {
@@ -333,20 +326,29 @@ function wellsInAquiferPopup(e) {
   }
 }
 
-//add the wells inside an aquifer, called from make a graph doStuffWithWells()
-/*
-function addWellsToMap() {
-  if (gwWells.data) {
-    lyrWellsInAquifer = L.geoJSON.ajax(gwWells.data, {pointToLayer: returnWellsMarker});
-    lyrWellsInAquifer.addTo(map);
-    //console.log("wells added -simple markers!!!")
-    } else {
-    //let the user know the feature was not found somehow.
-    console.log("**** Wells Data not found ****");
-    };
-    addWellsToMapCluster();
-  };
-  */
+
+function styleWellsMarker(feature, latlng){
+  //set well points style based on type
+  //yellow for observation wells, blue color for all others
+  //MINISTRY_OBSERVATION_WELL_STAT = 'Active'  RED
+  //WELL_LICENCE_GENERAL_STATUS
+  var clr = 'blue';
+        var att = feature.properties;
+        switch (att.WELL_LICENCE_GENERAL_STATUS) {
+          case 'LICENSED':
+            clr = 'orange';
+            break;
+          case 'UNLICENSED':
+            clr = 'green';
+            break;
+        }
+        if (att.MINISTRY_OBSERVATION_WELL_STAT == 'Active'){clr = 'red'};
+        
+        var markerOptions = {radius:6, color:clr, fillColor:clr, fillOpacity:0.5};
+        var marker = L.circleMarker(latlng, markerOptions);
+        console.log("creating custom well marker :" + clr.toString() + "  " + feature.properties.WELL_TAG_NUMBER);
+        return marker;
+}
 
 //add the wells inside an aquifer, called from make a graph doStuffWithWells()
 function addWellsToMapCluster() {
@@ -357,38 +359,34 @@ function addWellsToMapCluster() {
       lyrWellsInAquiferGroup.clearLayers();
     }
 
-    lyrWellsInAquiferGroup = L.markerClusterGroup();
+    lyrWellsInAquiferGroup = L.markerClusterGroup({ disableClusteringAtZoom: 14 });
 
-    //lyrWellsInAquifer = L.geoJSON.ajax(gwWells.data, {pointToLayer: returnWellsMarker});
-    lyrWellsInAquifer = L.geoJSON(gwWells.data, {
+    lyrWellsInAquifer = L.geoJSON(gwWells.data,{
       onEachFeature: function(feature, layer) {
         layer.on({
           click: wellsInAquiferPopup
         })
-      }
-      /*pointToLayer: function(feature){
-        var markerOptions = {radius:200, color:'cyan', fillColor:'cyan', fillOpacity:0.5};
-        //var marker = L.circleMarker(feature.geometry.coordinates, markerOptions);
-        var marker = L.circleMarker(feature.geometry.coordinates, feature.properties);
-        console.log("creating marker");
+      },
+      //call function to set well point style options
+       pointToLayer: function (feature, latlng){
+        var clr = 'blue';
+        var att = feature.properties;
+        switch (att.WELL_LICENCE_GENERAL_STATUS) {
+          case 'LICENSED':
+            clr = 'orange';
+            break;
+          case 'UNLICENSED':
+            clr = 'green';
+            break;
+        }
+        if (att.MINISTRY_OBSERVATION_WELL_STAT == 'Active'){clr = 'red'};
+        
+        var markerOptions = {radius:4, color:clr, fillColor:clr, fillOpacity:0.8};
+        var marker = L.circleMarker(latlng, markerOptions);
+        console.log("creating custom well marker :" + clr.toString() + "  " + feature.properties.WELL_TAG_NUMBER);
         return marker;
-      }*/
+        }
     });
-
-    //add all the markers to the layer - Not needed any longer
-    /*
-    var arWells = lyrWellsInAquifer.getLayers();
-    for ( var i = 0; i < arWells.length; ++i ){
-      var ftrWell = arWells[i].feature
-      var popup = "<h6>Well Tag: "+ ftrWell.properties.WELL_TAG_NUMBER;
-
-      //var m = L.marker( [arWells[i].lat, arWells[i].lng]).bindPopup( popup );
-      var m = L.marker([arWells[i].feature.geometry.coordinates[1],arWells[i].feature.geometry.coordinates[0]]).bindPopup( popup );
-      //console.log("adding well marker for: " + popup);
-      //lyrWellsInAquiferGroup.addLayer( m );
-      //m.addTo(map)
-    }
-    */
 
     lyrWellsInAquiferGroup.addLayer(lyrWellsInAquifer);
     lyrWellsInAquiferGroup.addTo(map);
