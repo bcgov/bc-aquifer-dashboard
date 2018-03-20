@@ -245,11 +245,11 @@ function makeFilterList(wfsJson){
 
 
 function makeSingleInfoWidget(wellLyr){
-  var fieldList = {'WELL_TAG_NO':"",'YIELD_VALUE':"",'DEPTH_WELL_DRILLED':"",'WELL_USE_CODE':"",'WELL_LICENCE_GENERAL_STATUS':""};
+  var fieldList = {'WELL_TAG':"",'YIELD_VALUE':"",'DEPTH_WELL_DRILLED':"",'WELL_USE_CODE':"",'WELL_LICENCE_GENERAL_STATUS':""};
   function setDefaultVal(value, defaultValue){
      return (value === undefined) ? defaultValue : value;
    }
-  fieldList.WELL_TAG_NO = wellLyr.WELL_TAG_NO
+  fieldList.WELL_TAG = wellLyr.WELL_TAG_NUMBER
   fieldList.YIELD_VALUE = setDefaultVal(wellLyr.YIELD_VALUE,0)
   fieldList.DEPTH_WELL_DRILLED = setDefaultVal(wellLyr.DEPTH_WELL_DRILLED,0)
   fieldList.WELL_USE_CODE = wellLyr.WELL_USE_CODE
@@ -273,7 +273,7 @@ function makeSingleInfoWidget(wellLyr){
     var cell = row.insertCell(0);
     cell.innerHTML = 'SELECTED WELL INFORMATION';
     weblinkwell = wellLyr.WELL_DETAIL_URL
-    webbutton = '<button onclick = "openWebLink(weblinkwell)">'+"SELECTED WELL WEBLINK"+'</button>';
+    webbutton = '<button onclick = "openWebLink(weblinkwell)">'+"Link to Groundwater Well Information"+'</button>';
     var row = infoTable.insertRow(-1);
     var cell = row.insertCell(0);
     cell.innerHTML = webbutton;

@@ -356,7 +356,7 @@ function wellsInAquiferPopup(e) {
 
     /*-----L.popup-----*/
     var popup = L.popup({
-      offset: [0, -25],
+      offset: [0, 0],
       closeButton: true
   });
     popup.setLatLng(latlng);
