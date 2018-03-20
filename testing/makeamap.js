@@ -314,8 +314,9 @@ function clipAquifersToRegion(FCclipper, FCclippee){
 //with a specific attribute/value combination
 function returnLayerByAttribute(lyr,att,val) {
   var arLayers = lyr.getLayers();
-  for (i=0;i<arLayers.length-1;i++) {
+  for (i=0;i<arLayers.length;i++) {
       var ftrVal = arLayers[i].feature.properties[att];
+      console.log('ftrVal ' + ftrVal);
       if (ftrVal==val) {
           return arLayers[i];
           console.log("tags searched:" + ftrVal.toString())
