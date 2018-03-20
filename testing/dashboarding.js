@@ -7,7 +7,7 @@ function setWidget(content, parentElementId, widgetId){
   else {
     var parentE = document.getElementById(parentElementId);
     var widgetDiv = document.createElement('div');
-    widgetDiv.className += 'widget';
+    widgetDiv.className += 'grid-item widget';
     widgetDiv.id = widgetId;
     widgetDiv.innerHTML = content;
     parentE.appendChild(widgetDiv);

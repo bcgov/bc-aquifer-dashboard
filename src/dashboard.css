@@ -89,16 +89,33 @@ section{
   border: #dddddd;
   z-index: 0;
 }
-.widget{
+.grid {
+  background: #EEE;
+  max-width: 1800px;
+}
+/* clearfix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.grid-item{
   display: block;
   border-radius: 0.5em;
-  width: auto;
+  width: 360px;
   height: 400px;
   background: #dddddd;
   float: left;
   margin: 3px;
   padding: 2em;
 }
+.grid-item--width2 { width: 450px; }
+.grid-item--width3 { width: 480px; }
+.grid-item--width4 { width: 600px; }
+
+.grid-item--height2 { height: 450px; }
+.grid-item--height3 { height: 500px; }
+.grid-item--height4 { height: 600px; }
 #map{
   display: block;
   position: relative;
