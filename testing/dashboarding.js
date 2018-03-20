@@ -271,7 +271,12 @@ function makeSingleInfoWidget(wellLyr){
     var infoTable = document.getElementById('info-table-well');
     var row = infoTable.insertRow(0);
     var cell = row.insertCell(0);
-    cell.innerHTML = 'Selected Well Information';
+    cell.innerHTML = 'SELECTED WELL INFORMATION';
+    weblinkwell = wellLyr.WELL_DETAIL_URL
+    webbutton = '<button onclick = "openWebLink(weblinkwell)">'+"SELECTED WELL WEBLINK"+'</button>';
+    var row = infoTable.insertRow(-1);
+    var cell = row.insertCell(0);
+    cell.innerHTML = webbutton;
   }
   for (var key in fieldList){
     if (Object.keys(fieldList).indexOf(key)>8){
@@ -284,4 +289,8 @@ function makeSingleInfoWidget(wellLyr){
     var cell = row.insertCell(0);
     cell.innerHTML = info;
   }
+}
+
+function addObservationwellGraph(){
+
 }

@@ -26,6 +26,10 @@ function doStuffWithWells(){
   if (element){
     element.parentNode.removeChild(element);
   }
+  var element2 = document.getElementById('widget-table-well');
+  if (element2){
+    element2.parentNode.removeChild(element2);
+  }
 
   makeAquiferInfoWidget(currentAquiferGeoJson);
   makeWellDepthGraph(polyPnts);

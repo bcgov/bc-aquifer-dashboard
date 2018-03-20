@@ -368,7 +368,7 @@ function wellsInAquiferPopup(e) {
       "</b><h6>Bedrock Depth (m): "+ well.properties.BEDROCK_DEPTH + 
       "</b><h6>Well Licence Status: "+ well.properties.WELL_LICENCE_GENERAL_STATUS);
     popup.addTo(map);
-    //makeSingleInfoWidget(well.properties);
+    makeSingleInfoWidget(well.properties);
   }
 }
 
