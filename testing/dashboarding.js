@@ -201,6 +201,8 @@ function filterEvents(filterValue){
     //detect region filter
     else if (filterValue.indexOf('Natural Resource Region') !== -1) {
       console.log('regional filter:' + filterValue);
+      zoomToRegionDistrict(filterValue);
+      setFilterDisplay(filterValue);
       //add region-specific function calls here
     }
 

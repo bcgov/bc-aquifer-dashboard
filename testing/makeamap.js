@@ -213,8 +213,8 @@ function processAquifers(json, lyr) {
 
 function clipFeaturecollection(fc1,fc2){
   //  Load the two fcs
-  f1 = fc1.features[0]
-  f2 = fc2.features
+  f1 = fc1.features //f1 should be the clip shape contained in a feature collection with one feature
+  f2 = fc2.features // the features to be clipped in a feature collection
   //Once the features are loaded, iterate over them.
   conflictlist = [];
   for (var i = 0; i < f1.length; i++) {
@@ -224,6 +224,7 @@ function clipFeaturecollection(fc1,fc2){
       console.log("Processing", i, j);
       var conflict = turf.intersect(parcel1, parcel2);
       if (conflict != null) {
+        conflict.properties = parcel2.properties;
         conflictlist.push(conflict);
       }
     }
@@ -249,6 +250,41 @@ function zoomToFeatureByID(aqtag){
 };
 
 //function to zoom to feature when search box event fires or button event
+// DISTRICT_NAME for districts
+//ORG_UNIT_NAME for regions
+function zoomToRegionDistrict(tag){
+  var val = tag;
+  if (val.indexOf("Region")){ //Search for Region
+    var lyr = returnLayerByAttribute(lyrLocalRegions,'ORG_UNIT_NAME',val);
+    if (lyr) {
+      lyrLocalRegions.addTo(map);      
+      }
+  }
+  else{ //Search for District
+    var lyr = returnLayerByAttribute(lyrLocalDist,'DISTRICT_NAME',val);
+    if (lyr) {
+      lyrLocalDist.addTo(map);
+      map.removeLayer(lyrLocalAQ);
+      map.addLayer(lyrLocalAQ);
+      }
+  }
+  if (lyr) {
+      if (lyrSearch) {
+          lyrSearch.remove();
+      }
+      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, opacity:0.5}}).addTo(map);
+      map.fitBounds(lyr.getBounds().pad(0.1));
+      map.removeLayer(lyrLocalAQ);
+      map.addLayer(lyrLocalAQ);
+      // call clip function -  is very slow, need to fine tune the inputs based on a bbox of the region
+      //clipAquifersToRegion(turf.featureCollection([lyr.toGeoJSON()]), lyrLocalAQ.toGeoJSON());
+  } else {
+      //let the user know the feature was not found somehow.
+      console.log("**** Project ID not found ****");
+  }
+};
+
+//function to zoom to feature when search box event fires or button event
 function highlightFeatureByID(aqtag){
   var val = aqtag;
   var lyr = returnLayerByAttribute(lyrLocalAQ,'AQUIFER_NUMBER',val);
@@ -264,6 +300,15 @@ function highlightFeatureByID(aqtag){
   }
 };
 
+
+function clipAquifersToRegion(FCclipper, FCclippee){
+  FC_AqsInRegion = clipFeaturecollection(FCclipper,FCclippee);
+  console.log (" Aqs in Region Count: " + FC_AqsInRegion);
+  console.log (" Aqs in Region Count: " + FC_AqsInRegion.feature_count.toString());
+
+  //lyrSearch = L.geoJSON(FC_AqsInRegion, {style:{color:'blue', weight:7, opacity:0.5}}).addTo(map);
+
+}
 
 //function to get a specific layer/feature from a group layer
 //with a specific attribute/value combination
@@ -285,15 +330,16 @@ function lyrLocalAQOnClicked(e,ID){
 
 function styleAquifers(json) {
     var att = json.properties;
+    var lw = 2;
     switch (att.VULNERABILITY) {
         case 'High':
-            return {color:'red'};
+            return {color:'red', weight:lw};
             break;
         case 'Moderate':
-            return {color: '#FFC300' };
+            return {color: '#FFC300', weight:lw };
             break;
         case 'Low':
-            return {color:'green'};
+            return {color:'green', weight:lw};
             break;
     }
 }
