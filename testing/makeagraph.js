@@ -70,6 +70,7 @@ function makeWellDepthGraph(geoJSONPnts){
           var chart = new google.visualization.Histogram(document.getElementById('well-depth-graph'));
         }
         chart.draw(data, options);
+        document.getElementById("well-depth-graph").classList.add('grid-item--width4');
       }
 }
 
@@ -186,6 +187,7 @@ function aquiferProvVulnerability(aquiferProvDataarray){
           setWidget('','dashboard','prov-vulnerable-pie');
           var chart = new google.visualization.PieChart(document.getElementById('prov-vulnerable-pie'));
           chart.draw(data, options);
+          document.getElementById("prov-vulnerable-pie").classList.add('grid-item--width2');
         }
           console.log('done prov vulnerability');
   }
@@ -247,6 +249,7 @@ function makeBoxChartGraph(inpolyPnts){
       setWidget('','dashboard','well-box-graph');
       var chart = new google.visualization.CandlestickChart(document.getElementById('well-box-graph'));
       chart.draw(data, options);
+      document.getElementById("well-box-graph").classList.add('grid-item--width2');
     }
 }
 function filterGeoJsonByAttribute(aGeoJson,att,val) {
