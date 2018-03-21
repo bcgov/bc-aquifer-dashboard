@@ -48,10 +48,7 @@ var overlays;
 //set map size
 $(document).ready(function(){
 
-  $("#searchclear").click(function(){
-    $("#searchinput").val('')
-    $("#searchinput").focus()
-  });
+  
 
   map = L.map('map').setView([50.6, -120.3], 6);
 
@@ -160,6 +157,12 @@ $(document).ready(function(){
   //uses font-awsome css icon
   $(".legend-container").append($("#legend"));
   $(".legend-toggle").append($("<i class='legend-toggle-icon fa fa-server ' style='color:#000'></i>"));
+
+  $("#searchclear").click(function(){
+    $("#searchinput").val('')
+    $("#searchinput").focus()
+    if (lyrSearch) {lyrSearch.remove();}
+  });
 
   }); // end document ready function
 
