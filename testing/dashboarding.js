@@ -37,7 +37,7 @@ function openWebLink(inLink) {
 
 function makeAquiferInfoWidget(geoJson){
   //list of fields to add to info table
-  var fieldList = ['AQNAME','AQ_TAG','AQUIFER_CLASSIFICATION','DEMAND','VULNERABILITY', 'AQUIFER_MATERIALS'];
+  var fieldList = ['AQNAME','AQ_TAG', 'AQUIFER_SUBTYPE_CODE','AQUIFER_CLASSIFICATION','DEMAND','VULNERABILITY', 'AQUIFER_MATERIALS'];
   var tag = geoJson.features[0].properties.AQ_TAG;
   //var infoTable = document.getElementById('widget-table');
   var featureProperties = geoJson.features[0].properties;
@@ -75,6 +75,19 @@ function makeAquiferInfoWidget(geoJson){
     var cell = row.insertCell(0);
     cell.innerHTML = info;
   }
+  //add links to lookup codes
+  var row = infoTable.insertRow(-1);
+  var cell = row.insertCell(0);
+  weblink = "<a href='https://www2.gov.bc.ca/gov/content/environment/air-land-water/water/groundwater-wells/aquifers/aquifer-subtype-code-description' target='_blank' style='font-size:.8em'>Lookup Subtype Codes</a>"
+  cell.innerHTML = weblink;
+  row = infoTable.insertRow(-1);
+  cell = row.insertCell(0);
+  weblink = "<a href='https://www2.gov.bc.ca/assets/gov/environment/air-land-water/water/pgown/aquifer-classes.png' target='_blank' style='font-size:0.8em'>Lookup Classification Codes</a>"
+  cell.innerHTML = weblink;
+  
+
+
+
   console.log('makeInfoWidget');
 }
 function setDiv(content, parentElementId, widgetId){
@@ -162,7 +175,13 @@ function makeWellsInfoWidget(ingeoJson){
     cell.innerHTML = 'GROUNDWATER WELL INFORMATION';
   }
   for (var key in fieldList){
+<<<<<<< HEAD
     
+=======
+    if (Object.keys(fieldList).indexOf(key)>8){
+      $('#widget-table-wells').css('height',"450px");
+    }
+>>>>>>> 973fce02f01e3ded1a59258f53f4c079c8ae3466
     var field = '<strong>'+ key.replace(/_/g, " ") + ":</strong>";
     var data = fieldList[key];
     var info = field + "  " + data;
