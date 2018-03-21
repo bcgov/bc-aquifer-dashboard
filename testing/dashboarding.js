@@ -162,9 +162,7 @@ function makeWellsInfoWidget(ingeoJson){
     cell.innerHTML = 'GROUNDWATER WELL INFORMATION';
   }
   for (var key in fieldList){
-    if (Object.keys(fieldList).indexOf(key)>8){
-      $('#widget-table-wells').css('height',"600px");
-    }
+    
     var field = '<strong>'+ key.replace(/_/g, " ") + ":</strong>";
     var data = fieldList[key];
     var info = field + "  " + data;
@@ -172,6 +170,7 @@ function makeWellsInfoWidget(ingeoJson){
     var cell = row.insertCell(0);
     cell.innerHTML = info;
   }
+  document.getElementById("widget-table-wells").classList.add("grid-item--height4");
 }
 
 function setDiv(content, parentElementId, widgetId){

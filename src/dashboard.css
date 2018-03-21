@@ -102,20 +102,20 @@ section{
 .grid-item{
   display: block;
   border-radius: 0.5em;
-  width: 360px;
-  height: 400px;
+  width: 325px;
+  height: 360px;
   background: #dddddd;
   float: left;
   margin: 3px;
-  padding: 2em;
+  padding: 1em;
 }
-.grid-item--width2 { width: 450px; }
+.grid-item--width2 { width: 420px; }
 .grid-item--width3 { width: 480px; }
-.grid-item--width4 { width: 600px; }
-
+.grid-item--width4 { width: 550px; }
+.grid-item--height1 { height: 330px; }
 .grid-item--height2 { height: 450px; }
 .grid-item--height3 { height: 500px; }
-.grid-item--height4 { height: 600px; }
+.grid-item--height4 { height: 560px; }
 #map{
   display: block;
   position: relative;
