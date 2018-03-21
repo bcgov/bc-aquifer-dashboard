@@ -47,6 +47,12 @@ var overlays;
 //basic map
 //set map size
 $(document).ready(function(){
+
+  $("#searchclear").click(function(){
+    $("#searchinput").val('')
+    $("#searchinput").focus()
+  });
+
   map = L.map('map').setView([50.6, -120.3], 6);
 
   //add base maps
@@ -221,7 +227,7 @@ function clipFeaturecollection(fc1,fc2){
     var parcel1 = f1[i];
     for (var j = 0; j < f2.length; j++) {
       var parcel2 = f2[j];
-      console.log("Processing", i, j);
+      //console.log("Processing", i, j);
       var conflict = turf.intersect(parcel1, parcel2);
       if (conflict != null) {
         conflict.properties = parcel2.properties;
@@ -241,8 +247,8 @@ function zoomToFeatureByID(aqtag){
       if (lyrSearch) {
           lyrSearch.remove();
       }
-      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, opacity:0.5}}).addTo(map);
-      map.fitBounds(lyr.getBounds().pad(0.1));
+      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, fillOpacity:0, opacity:0.6}}).addTo(map);
+      map.fitBounds(lyr.getBounds().pad(0.05));
   } else {
       //let the user know the feature was not found somehow.
       console.log("**** Project ID not found ****");
@@ -272,8 +278,8 @@ function zoomToRegionDistrict(tag){
       if (lyrSearch) {
           lyrSearch.remove();
       }
-      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, opacity:0.5}}).addTo(map);
-      map.fitBounds(lyr.getBounds().pad(0.1));
+      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, fillOpacity:0, opacity:0.6}}).addTo(map);
+      map.fitBounds(lyr.getBounds().pad(0.05));
       map.removeLayer(lyrLocalAQ);
       map.addLayer(lyrLocalAQ);
       // call clip function -  is very slow, need to fine tune the inputs based on a bbox of the region
@@ -285,6 +291,7 @@ function zoomToRegionDistrict(tag){
 };
 
 //function to zoom to feature when search box event fires or button event
+//works for aquifers only
 function highlightFeatureByID(aqtag){
   var val = aqtag;
   var lyr = returnLayerByAttribute(lyrLocalAQ,'AQUIFER_NUMBER',val);
@@ -292,7 +299,7 @@ function highlightFeatureByID(aqtag){
       if (lyrSearch) {
           lyrSearch.remove();
       }
-      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:7, opacity:0.5}}).addTo(map);
+      lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:7, fillOpacity:0, opacity:0.6}}).addTo(map);
       //map.fitBounds(lyr.getBounds().pad(0.1));
   } else {
       //let the user know the feature was not found somehow.
@@ -300,6 +307,24 @@ function highlightFeatureByID(aqtag){
   }
 };
 
+//function to zoom to feature when search box event fires or button event
+function highlightWellByID(welltag){
+  var val = welltag;
+  var lyr = returnLayerByAttribute(lyrWellsInAquifer,'WELL_TAG_NO',val);
+  console.log ("highlight well:" + welltag);
+  if (lyr) {
+      if (lyrSearch) {
+          lyrSearch.remove();
+      var markerOptions = {radius:7, color:'yellow', fillColor:'yellow', fillOpacity:0.8};
+      lyrSearch =  L.circleMarker(lyr.getLatLng(), markerOptions).addTo(map);
+      lyrWellsInAquifer.remove();
+      lyrWellsInAquifer.addTo(map);
+      }
+  } else {
+      //let the user know the feature was not found somehow.
+      console.log("**** Project ID not found ****");
+  }
+};
 
 function clipAquifersToRegion(FCclipper, FCclippee){
   FC_AqsInRegion = clipFeaturecollection(FCclipper,FCclippee);
@@ -314,11 +339,11 @@ function clipAquifersToRegion(FCclipper, FCclippee){
 //with a specific attribute/value combination
 function returnLayerByAttribute(lyr,att,val) {
   var arLayers = lyr.getLayers();
-  for (i=0;i<arLayers.length-1;i++) {
+  for (i=0;i<arLayers.length;i++) {
       var ftrVal = arLayers[i].feature.properties[att];
       if (ftrVal==val) {
           return arLayers[i];
-          console.log("tags searched:" + ftrVal.toString())
+          //console.log("tags searched:" + ftrVal.toString())
       }
   }
   return false;
@@ -369,6 +394,8 @@ function wellsInAquiferPopup(e) {
       "</b><h6>Well Licence Status: "+ well.properties.WELL_LICENCE_GENERAL_STATUS);
     popup.addTo(map);
     makeSingleInfoWidget(well.properties);
+    //highlight a single well
+    highlightWellByID(well.properties.WELL_TAG_NUMBER);
   }
 }
 
@@ -382,17 +409,17 @@ function styleWellsMarker(feature, latlng){
         var att = feature.properties;
         switch (att.WELL_LICENCE_GENERAL_STATUS) {
           case 'LICENSED':
-            clr = 'orange';
+            clr = 'rgb(25, 78, 158)';
             break;
           case 'UNLICENSED':
-            clr = 'green';
+            clr = 'rgb(104, 153, 185)';
             break;
         }
-        if (att.MINISTRY_OBSERVATION_WELL_STAT == 'Active'){clr = 'red'};
+        if (att.MINISTRY_OBSERVATION_WELL_STAT == 'Active'){clr = 'rgb(189, 41, 41)'};
         
         var markerOptions = {radius:6, color:clr, fillColor:clr, fillOpacity:0.5};
         var marker = L.circleMarker(latlng, markerOptions);
-        console.log("creating custom well marker :" + clr.toString() + "  " + feature.properties.WELL_TAG_NUMBER);
+        //console.log("creating custom well marker :" + clr.toString() + "  " + feature.properties.WELL_TAG_NUMBER);
         return marker;
 }
 
@@ -419,17 +446,17 @@ function addWellsToMapCluster() {
         var att = feature.properties;
         switch (att.WELL_LICENCE_GENERAL_STATUS) {
           case 'LICENSED':
-            clr = 'orange';
+            clr = 'rgb(25, 78, 158)';
             break;
           case 'UNLICENSED':
-            clr = 'green';
+            clr = 'rgb(104, 153, 185)';
             break;
         }
-        if (att.MINISTRY_OBSERVATION_WELL_STAT == 'Active'){clr = 'red'};
+        if (att.MINISTRY_OBSERVATION_WELL_STAT == 'Active'){clr = 'rgb(189, 41, 41)'};
         
         var markerOptions = {radius:4, color:clr, fillColor:clr, fillOpacity:0.8};
         var marker = L.circleMarker(latlng, markerOptions);
-        console.log("creating custom well marker :" + clr.toString() + "  " + feature.properties.WELL_TAG_NUMBER);
+        //console.log("creating custom well marker :" + clr.toString() + "  " + feature.properties.WELL_TAG_NUMBER);
         return marker;
         }
     });

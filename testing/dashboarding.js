@@ -233,6 +233,16 @@ function makeFilterList(wfsJson){
     fList.push(val);
   }
 
+  //test new searchbox
+  $('#searchinput').autocomplete({
+    source: fList,
+    select: function(event, ui) {
+        filterEvents(ui.item.value);
+        $(this).val(ui.item.value);
+    }
+  })
+
+
   $('#filterbox').autocomplete({
                   source: fList,
                   select: function(event, ui) {

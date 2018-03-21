@@ -193,3 +193,19 @@ ul {
   padding: 0;
 }
 ul li:hover {background: #dddddd;}
+
+/* testing a fancier search box*/
+#searchinput {
+  width: 300px;
+}
+#searchclear {
+  position: absolute;
+  right: 5px;
+  top: 0;
+  bottom: 0;
+  height: 20px;
+  margin: auto;
+  font-size: 20px;
+  cursor: pointer;
+  color: rgb(53, 48, 48);
+}

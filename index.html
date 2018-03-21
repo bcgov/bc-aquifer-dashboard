@@ -65,9 +65,17 @@
         <a class='title'>BC Aquifer Dashboard</a>
         <a class='dashboard-type' id='filter-text'>Provincial Overview</a>
         <div class="search-container">
-          <form onSubmit="return false">
+			<form onSubmit="return false">
+				<i class="material-icons">search</i>
+				<div class="btn-group">
+						<input id="searchinput" type="search" class="form-control" placeholder='Search..'>
+						<span id="searchclear" class="glyphicon glyphicon-remove-circle"></span>
+					  </div>
+          
+			<!-- replaced search box with #searchinput
 			<i class="material-icons">search</i>
-            <input id='filterbox' type="text" placeholder='Search..'>
+			<input id='filterbox' type="text" placeholder='Search..'>
+			-->
           </form>
         </div>
     </div>
@@ -87,6 +95,15 @@
 					<text x="50" y="105" style="font-family:sans-serif; font-size:16px;">Aquifer Vulnerability: Moderate</text>
 					<rect x="10" y="120" width="30" height="20" style="stroke:red; stroke-width:3;fill: white; fill-opacity:0.0;"/>
 					<text x="50" y="135" style="font-family:sans-serif; font-size:16px;">Aquifer Vulnerability: High</text>
+					<text x="50" y="162" style="font-family:sans-serif; font-size:16px;">Groundwater Well Type</text>
+					<circle cx="25" cy="175" r="5" style="stroke:rgb(25, 78, 158);stroke-width:1;fill:rgb(25, 78, 158)"/>
+					<text x="35" y="180" style="font-family:sans-serif; font-size:12px;">Licenced</text>
+					<circle cx="95" cy="175" r="5" style = "stroke:rgb(104, 153, 185);stroke-width:1;fill:rgb(104, 153, 185)"/>
+					<text x="105" y="180" style="font-family:sans-serif; font-size:12px;">Unlicenced</text>
+					<circle cx="175" cy="175" r="5" style = "stroke:rgb(189, 41, 41);stroke-width:1;fill:rgb(189, 41, 41)"/>
+					<text x="185" y="180" style="font-family:sans-serif; font-size:12px;">Observation</text>
+
+
 				</svg>
 		</div>
 </body>
