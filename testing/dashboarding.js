@@ -175,13 +175,7 @@ function makeWellsInfoWidget(ingeoJson){
     cell.innerHTML = 'GROUNDWATER WELL INFORMATION';
   }
   for (var key in fieldList){
-<<<<<<< HEAD
     
-=======
-    if (Object.keys(fieldList).indexOf(key)>8){
-      $('#widget-table-wells').css('height',"450px");
-    }
->>>>>>> 973fce02f01e3ded1a59258f53f4c079c8ae3466
     var field = '<strong>'+ key.replace(/_/g, " ") + ":</strong>";
     var data = fieldList[key];
     var info = field + "  " + data;
