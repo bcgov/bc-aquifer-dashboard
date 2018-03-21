@@ -57,7 +57,8 @@ function makeWellDepthGraph(geoJSONPnts){
         var options = {
           title: $('#filter-text').text() +': Well Water Depth Histogram',
           legend: { position: 'none' },
-          vAxis: {title: 'count'},
+          vAxis: {title: 'Count'},
+          hAxis: {title: 'Depth (m)'},
           width:500,
           height:300,
           backgroundColor:'#dddddd'
@@ -243,7 +244,7 @@ function makeBoxChartGraph(inpolyPnts){
         legend:'none',
         backgroundColor:'#dddddd',
         vAxis:{
-          title: 'Well Depth Meters '
+          title: 'Well Depth (m) '
         }
       };
       setWidget('','dashboard','well-box-graph');

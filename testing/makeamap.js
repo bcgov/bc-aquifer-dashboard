@@ -341,6 +341,7 @@ function returnLayerByAttribute(lyr,att,val) {
   var arLayers = lyr.getLayers();
   for (i=0;i<arLayers.length;i++) {
       var ftrVal = arLayers[i].feature.properties[att];
+      console.log('ftrVal ' + ftrVal);
       if (ftrVal==val) {
           return arLayers[i];
           //console.log("tags searched:" + ftrVal.toString())
@@ -381,7 +382,7 @@ function wellsInAquiferPopup(e) {
 
     /*-----L.popup-----*/
     var popup = L.popup({
-      offset: [0, -25],
+      offset: [0, 0],
       closeButton: true
   });
     popup.setLatLng(latlng);
