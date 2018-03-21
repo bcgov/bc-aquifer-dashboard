@@ -183,7 +183,7 @@ function makeWellsInfoWidget(ingeoJson){
     var cell = row.insertCell(0);
     cell.innerHTML = info;
   }
-  document.getElementById("widget-table-wells").classList.add("grid-item--height4");
+  document.getElementById("widget-table-wells").classList.add("grid-item--height2");
 }
 
 function setDiv(content, parentElementId, widgetId){
