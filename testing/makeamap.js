@@ -192,7 +192,7 @@ function processRegions(json,lyr) {
 //function Aquifer foreachfeature
 function processAquifers(json, lyr) {
   var att = json.properties;
-  lyr.bindTooltip("<h5>Aquifer Tag: "+ att.AQUIFER_NUMBER+"<br>Type: "+att.TYPE_OF_WATER_USE + "<br>Size: "+att.SIZE_KM2 + " km2</h5>");
+  lyr.bindTooltip("<h6>Aquifer Tag: "+ att.AQUIFER_NUMBER+ "<br>Subtype: " + att.AQUIFER_SUBTYPE_CODE + "<br>Size: "+att.SIZE_KM2 + " km2</h6>");
   //could create list of AQ IDs here
   //arAquiferIDs.push(att.AQUIFER_NUMBER.toString());
   lyr.on('click', function(e){
@@ -344,10 +344,8 @@ function returnLayerByAttribute(lyr,att,val) {
   var arLayers = lyr.getLayers();
   for (i=0;i<arLayers.length;i++) {
       var ftrVal = arLayers[i].feature.properties[att];
-      console.log('ftrVal ' + ftrVal);
       if (ftrVal==val) {
           return arLayers[i];
-          //console.log("tags searched:" + ftrVal.toString())
       }
   }
   return false;
