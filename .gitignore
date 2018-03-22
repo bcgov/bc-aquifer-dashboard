@@ -56,10 +56,9 @@ typings/
 
 # dotenv environment variables file
 .env
-<<<<<<< HEAD
+# visual studio code configs
+.vscode
 
-=======
->>>>>>> master
 testing/makeagraph.js
 testing/makeagraph.js
 src/dashboard.css
