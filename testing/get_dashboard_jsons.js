@@ -200,9 +200,9 @@ getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback, regi
 getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback, aquiferCQLfilter);
 //getWFSjson(districtsURL, districtsTypeName, districtsProperties, districtsCallback, districtsCQLfilter);
 //getWFSjson(precinctsURL, precinctsTypeName, precinctsProperties, precinctsCallback, precinctsCQLfilter);
-getWFSjson(pwdLicencesURL, pwdLicencesTypeName,pwdLicencesProperties, pwdLicencesCallback, pwdLicencesCQLfilter, 
-  pwdLicencesBbox='-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326',
-  pwdLicencesGeometryField='SHAPE');
+//getWFSjson(pwdLicencesURL, pwdLicencesTypeName,pwdLicencesProperties, pwdLicencesCallback, pwdLicencesCQLfilter, 
+  //pwdLicencesBbox='-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326',
+  //pwdLicencesGeometryField='SHAPE');
 
 //fetch WFS (json) from openmaps geoserver
 function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback, wfsCQLfilter,
@@ -245,6 +245,31 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback, wfsCQLfilte
       //map.spin(false);
     }
   });
+}
+
+//Convert WGS to BC Albers for cql_filter
+function reProjectWGStoBCalbers(wfsBbox) {
+  var coordsWgsString = wfsBbox.split(',');
+  //console.log(coordsWgsString);
+  var coordsWgs = [];
+  for (i=0;i<coordsWgsString.length-1;i++) {
+    var coord = coordsWgsString[i];
+    coordsWgs.push(parseFloat(coord));
+  }
+  console.log(coordsWgs);
+  //Project from WGS to BC Albers
+  //if only 1 projection is given then it is assumed that it is being projected from WGS84 
+  var coordsBCalb1 = proj4(crsBCalb, coordsWgs.slice(0,2));
+ //console.log('coordsBCalb1 ' + coordsBCalb1);
+  var coordsBCalb2 = proj4(crsBCalb, coordsWgs.slice(2,4));
+  //console.log('coordsBCalb2 ' + coordsBCalb2);
+  var coordsBCalb = [];
+  coordsBCalb.push.apply(coordsBCalb, coordsBCalb1);
+  coordsBCalb.push.apply(coordsBCalb, coordsBCalb2);
+  //console.log('coordsBCalb ' + coordsBCalb);
+  var bboxBCalb = coordsBCalb.toString();
+  //console.log(bboxBCalb);
+  return bboxBCalb;
 }
 
 //load local aquifer json
