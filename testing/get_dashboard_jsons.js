@@ -185,7 +185,7 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback,
   //cqlFilter="AQ_TAG='1136'") {
   //Get WGS Coordinates from parameters
   var crsBCalb = "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs";
-  var coordsWgsString = wfsBbox.split(', ');
+  var coordsWgsString = wfsBbox.split(',');
   console.log(coordsWgsString);
   var coordsWgs = [];
   for (i=0;i<coordsWgsString.length-1;i++) {
