@@ -91,7 +91,7 @@ section{
 }
 .grid {
   background: #EEE;
-  max-width: 1800px;
+  max-width: 1600px;
 }
 /* clearfix */
 .grid:after {
@@ -121,7 +121,7 @@ section{
   display: block;
   position: relative;
   border-radius: 0.5em;
-  width: 600px;
+  width:50%;
   height: 400px;
   background: #dddddd;
   font-size: 18px;
