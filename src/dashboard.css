@@ -116,6 +116,7 @@ section{
 .grid-item--height2 { height: 410px; }
 .grid-item--height3 { height: 500px; }
 .grid-item--height4 { height: 560px; }
+.grid-item--height5 { height: 260px; }
 #map{
   display: block;
   position: relative;

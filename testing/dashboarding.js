@@ -304,9 +304,6 @@ function makeSingleInfoWidget(wellLyr){
     cell.innerHTML = webbutton;
   }
   for (var key in fieldList){
-    if (Object.keys(fieldList).indexOf(key)>8){
-      $('#widget-table-well').css('height',"600px");
-    }
     var field = '<strong>'+ key.replace(/_/g, " ") + ":</strong>";
     var data = fieldList[key];
     var info = field + "  " + data;
@@ -314,6 +311,7 @@ function makeSingleInfoWidget(wellLyr){
     var cell = row.insertCell(0);
     cell.innerHTML = info;
   }
+  document.getElementById("widget-table-well").classList.add("grid-item--height5");
 }
 
 function addObservationwellGraph(){
