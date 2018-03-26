@@ -148,7 +148,7 @@ var gwWells = {
   //example: -120.54016124, 50.68184294, -120.34252514, 50.73057956, epsg:4326
   bbox: "", 
   get_data: function(){
-    getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWellsCQLfilter, gwWells.bbox + ',epsg:4326')
+    getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWellsCQLfilter, gwWells.bbox + ",'epsg:4326'")
   },
   callback: function(){console.log('new empty callback function')}
 };
@@ -195,25 +195,25 @@ var getJsonPwdLicences = function (response){
 
 //call function to fetch WFS from openmaps geoserver
 getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback, regionsCQLfilter, 
-  regionsBbox='-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326',
+  regionsBbox="-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, 'epsg:4326'",
   regionsGeometryField='SHAPE');
 getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback, aquiferCQLfilter);
 //getWFSjson(districtsURL, districtsTypeName, districtsProperties, districtsCallback, districtsCQLfilter);
 //getWFSjson(precinctsURL, precinctsTypeName, precinctsProperties, precinctsCallback, precinctsCQLfilter);
 //getWFSjson(pwdLicencesURL, pwdLicencesTypeName,pwdLicencesProperties, pwdLicencesCallback, pwdLicencesCQLfilter, 
-  //pwdLicencesBbox='-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326',
+  //pwdLicencesBbox="-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, 'epsg:4326'",
   //pwdLicencesGeometryField='SHAPE');
 
 //fetch WFS (json) from openmaps geoserver
 function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback, wfsCQLfilter,
-  wfsBbox= '-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326',
+  wfsBbox= "-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, 'epsg:4326'",
   wfsGeometryProperty='GEOMETRY') {
   //wfsBbox= '35043.6538, 440006.8768, 1885895.3117, 1735643.8497' //BC Albers
   //cql Filter text attributes must use single quotes (%27), not double quotes (%22),
   //eg: cql_filter="FEATURE_CODE='FM90000010'""
   //Get WGS Coordinates from parameters
-  var bboxBCalb = reProjectWGStoBCalbers(wfsBbox);
-  console.log(bboxBCalb);
+  //var bboxBCalb = reProjectWGStoBCalbers(wfsBbox);
+  //console.log(bboxBCalb);
   
   var defaultParameters = {
     service: 'WFS',
@@ -224,11 +224,10 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback, wfsCQLfilte
     format_options: 'callback:' + wfsCallback,
     SrsName: 'EPSG:4326',
     propertyName: wfsProperties,
-    //bbox: '-120.65062584,50.6512122,-120.53745904,50.72483285,epsg:4326'
+    //bbox: '-120.65062584,50.6512122,-120.53745904,50.72483285,epsg:4326' //testing
     //bbox: wfsBbox
     //cql_filter: "bbox(GEOMETRY," + bboxBCalb + ") AND " + cqlFilter
-    cql_filter: "bbox(" + wfsGeometryProperty + "," + bboxBCalb + ") AND " + wfsCQLfilter
-    //cql_filter: wfsCQLfilter
+    cql_filter: "bbox(" + wfsGeometryProperty + "," + wfsBbox + ") AND " + wfsCQLfilter
   };
 
   var parameters = L.Util.extend(defaultParameters);
