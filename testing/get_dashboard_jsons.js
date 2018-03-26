@@ -17,6 +17,9 @@ $.urlParam = function(name) {
   return results[1] || 0;
 };
 
+//BC Albers Projection parameters for Proj4
+var crsBCalb = "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs";
+
 //aquifer globals
 var aquiferJson = {};
 var aquiferURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_WATER_MANAGEMENT.GW_AQUIFERS_CLASSIFICATION_SVW/ows";
@@ -28,6 +31,9 @@ var aquiferProperties = ['AQ_TAG', 'AQNAME', 'AQUIFER_MATERIALS', 'PRODUCTIVITY'
 'AQUIFER_SUBTYPE_CODE', 'QUANTITY_CONCERNS', 'SIZE_KM2', 'TYPE_OF_WATER_USE',
 'PRODUCTIVITY_CODE', 'DEMAND_CODE', 'VULNERABILITY_CODE', 'CLASSIFICATION_CODE',
 'FEATURE_AREA_SQM'];
+//cql Filter text attributes must use single quotes (%27), not double quotes (%22),
+//eg: cql_filter="FEATURE_CODE='FM90000010'""
+var aquiferCQLfilter = "AQ_TAG<>'null'";
 var aquiferCallback = 'getJsonAquifer';
 
 //aquifer callback function run when JSON is returned by wfs call
@@ -46,6 +52,9 @@ var regionsURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_ADMIN_BOUNDARIES.ADM_N
 var regionsTypeName = 'WHSE_ADMIN_BOUNDARIES.ADM_NR_REGIONS_SPG';
 var regionsProperties = ['REGION_NAME', 'ORG_UNIT', 'ORG_UNIT_NAME',
 'FEATURE_CODE', 'FEATURE_NAME', 'SHAPE', 'FEATURE_AREA_SQM'];
+//cql Filter text attributes must use single quotes (%27), not double quotes (%22),
+//eg: cql_filter="FEATURE_CODE='FM90000010'""
+var regionsCQLfilter = "ORG_UNIT_NAME<>'null'";
 var regionsCallback = 'getJsonRegions';
 
 //NRS regions callback function run when JSON is returned by wfs call
@@ -62,6 +71,9 @@ var precinctsURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_ADMIN_BOUNDARIES.LWA
 var precinctsTypeName = 'WHSE_ADMIN_BOUNDARIES.LWADM_WATMGMT_PREC_AREA_SVW';
 var precinctsProperties = ['WATMGMT_PRECINCT_AREA_ID', 'FEATURE_CODE',
 'PRECINCT_NAME', 'PRECINCT_ID', 'DISTRICT_NAME', 'FEATURE_AREA_SQM', 'GEOMETRY'];
+//cql Filter text attributes must use single quotes (%27), not double quotes (%22),
+//eg: cql_filter="FEATURE_CODE='FM90000010'""
+var precinctsCQLfilter = "PRECINCT_NAME<>'null'";
 var precinctsCallback = 'getJsonPrecincts';
 
 //water precincts callback function run when JSON is returned by wfs call
@@ -76,6 +88,9 @@ var districtsURL = "https://openmaps.gov.bc.ca/geo/pub/WHSE_ADMIN_BOUNDARIES.LWA
 var districtsTypeName = 'WHSE_ADMIN_BOUNDARIES.LWADM_WATMGMT_DIST_AREA_SVW';
 var districtsProperties = ['WATMGMT_DISTRICT_AREA_ID', 'FEATURE_CODE',
 'DISTRICT_ID', 'DISTRICT_NAME', 'FEATURE_AREA_SQM', 'GEOMETRY'];
+//cql Filter text attributes must use single quotes (%27), not double quotes (%22),
+//eg: cql_filter="FEATURE_CODE='FM90000010'""
+var districtsCQLfilter = "DISTRICT_NAME<>'null'";
 var districtsCallback = 'getJsonDistricts';
 
 //water districts callback function run when JSON is returned by wfs call
@@ -120,6 +135,9 @@ var gwWellsProperties = ['WELL_TAG_NO', 'SOURCE_ACCURACY', 'GEOMETRY', 'FCODE',
   'WHERE_PLATE_ATTACHED', 'WHO_CREATED', 'WHO_UPDATED', 'YIELD_UNIT_CODE',
   'YIELD_UNIT_DESCRIPTION', 'YIELD_VALUE', 'WELL_LICENCE_GENERAL_STATUS',
   'WELL_DETAIL_URL', 'SE_ANNO_CAD_DATA'];
+//cql Filter text attributes must use single quotes (%27), not double quotes (%22),
+//eg: cql_filter="FEATURE_CODE='FM90000010'""
+var gwWellsCQLfilter = "WELL_TAG_NO<>'null'";
 var gwWellsCallback = 'getJsonGwWells';
 
 
@@ -127,9 +145,10 @@ var gwWellsCallback = 'getJsonGwWells';
 var gwWells = {
   data: {},
   //bbox: lwr left (x max, y min), upper right (x min, y max), epsg
-  bbox: "", //example: -120.54016124, 50.68184294, -120.34252514, 50.73057956, epsg:4326
+  //example: -120.54016124, 50.68184294, -120.34252514, 50.73057956, epsg:4326
+  bbox: "", 
   get_data: function(){
-    getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWells.bbox + ',epsg:4326')
+    getWFSjson(gwWellsURL, gwWellsTypeName, gwWellsProperties, "get_gwWells", gwWellsCQLfilter, gwWells.bbox + ',epsg:4326')
   },
   callback: function(){console.log('new empty callback function')}
 };
@@ -163,6 +182,9 @@ var pwdLicencesProperties = ['PWD_LICENCE_ID', 'PWD_NUMBER', 'PWD_STATUS',
 'PERMIT_OVER_CROWN_LAND_NUMBER', 'PRIMARY_LICENSEE_NAME', 'ADDRESS_LINE_1',
 'ADDRESS_LINE_2', 'ADDRESS_LINE_3', 'ADDRESS_LINE_4', 'COUNTRY', 'POSTAL_CODE',
 'LATITUDE', 'LONGITUDE', 'DISTRICT_PRECINCT_NAME', 'SHAPE'];
+//cql Filter text attributes must use single quotes (%27), not double quotes (%22),
+//eg: cql_filter="FEATURE_CODE='FM90000010'""
+var pwdLicencesCQLfilter = "LICENCE_NUMBER<>'null'"
 var pwdLicencesCallback = 'getJsonPwdLicences';
 
 //points of well diversions (PWD) licences callback function run when JSON is returned by wfs call
@@ -172,39 +194,27 @@ var getJsonPwdLicences = function (response){
 };
 
 //call function to fetch WFS from openmaps geoserver
-getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback);
-getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
+getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback, regionsCQLfilter, 
+  regionsBbox='-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326',
+  regionsGeometryField='SHAPE');
+getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback, aquiferCQLfilter);
+//getWFSjson(districtsURL, districtsTypeName, districtsProperties, districtsCallback, districtsCQLfilter);
+//getWFSjson(precinctsURL, precinctsTypeName, precinctsProperties, precinctsCallback, precinctsCQLfilter);
+getWFSjson(pwdLicencesURL, pwdLicencesTypeName,pwdLicencesProperties, pwdLicencesCallback, pwdLicencesCQLfilter, 
+  pwdLicencesBbox='-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326',
+  pwdLicencesGeometryField='SHAPE');
 
 //fetch WFS (json) from openmaps geoserver
-function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback,
-  wfsBbox= '-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326') {
-  //wfsBbox= '35043.6538, 440006.8768, 1885895.3117, 1735643.8497'
+function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback, wfsCQLfilter,
+  wfsBbox= '-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326',
+  wfsGeometryProperty='GEOMETRY') {
+  //wfsBbox= '35043.6538, 440006.8768, 1885895.3117, 1735643.8497' //BC Albers
   //cql Filter text attributes must use single quotes (%27), not double quotes (%22),
-  //ie: cql_filter="FEATURE_CODE='FM90000010'""
-  //cqlFilter="REGION_NAME='Skeena Natural Resource Region'")
-  //cqlFilter="AQ_TAG='1136'") {
+  //eg: cql_filter="FEATURE_CODE='FM90000010'""
   //Get WGS Coordinates from parameters
-  var crsBCalb = "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs";
-  var coordsWgsString = wfsBbox.split(',');
-  console.log(coordsWgsString);
-  var coordsWgs = [];
-  for (i=0;i<coordsWgsString.length-1;i++) {
-    var coord = coordsWgsString[i];
-    coordsWgs.push(parseFloat(coord));
-    console.log(coordsWgs);
-  }
-  //Project from WGS to BC Albers
-  //if only 1 projection is given then it is assumed that it is being projected from WGS84 
-  var coordsBCalb1 = proj4(crsBCalb, coordsWgs.slice(0,2));
-  console.log('coordsBCalb1 ' + coordsBCalb1);
-  var coordsBCalb2 = proj4(crsBCalb, coordsWgs.slice(2,4));
-  console.log('coordsBCalb2 ' + coordsBCalb2);
-  var coordsBCalb = [];
-  coordsBCalb.push.apply(coordsBCalb, coordsBCalb1);
-  coordsBCalb.push.apply(coordsBCalb, coordsBCalb2);
-  console.log('coordsBCalb ' + coordsBCalb);
-  var bboxBCalb = coordsBCalb.toString();
+  var bboxBCalb = reProjectWGStoBCalbers(wfsBbox);
   console.log(bboxBCalb);
+  
   var defaultParameters = {
     service: 'WFS',
     version: '2.0',
@@ -215,9 +225,10 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback,
     SrsName: 'EPSG:4326',
     propertyName: wfsProperties,
     //bbox: '-120.65062584,50.6512122,-120.53745904,50.72483285,epsg:4326'
-    bbox: wfsBbox
+    //bbox: wfsBbox
     //cql_filter: "bbox(GEOMETRY," + bboxBCalb + ") AND " + cqlFilter
-    //cql_filter: cqlFilter
+    cql_filter: "bbox(" + wfsGeometryProperty + "," + bboxBCalb + ") AND " + wfsCQLfilter
+    //cql_filter: wfsCQLfilter
   };
 
   var parameters = L.Util.extend(defaultParameters);
