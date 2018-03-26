@@ -290,6 +290,12 @@ function makeSingleInfoWidget(wellLyr){
       //delete last row
       infoTable.deleteRow(-1);
     }
+    var infoTable = document.getElementById('info-table-well');
+    weblinkwell = wellLyr.WELL_DETAIL_URL
+    webbutton = '<button onclick = "openWebLink(weblinkwell)">'+"Link to Groundwater Well Information"+'</button>';
+    var row = infoTable.insertRow(-1);
+    var cell = row.insertCell(0);
+    cell.innerHTML = webbutton;
   }
   else{
     var newWidget = setWidget(table,'dashboard','widget-table-well');
