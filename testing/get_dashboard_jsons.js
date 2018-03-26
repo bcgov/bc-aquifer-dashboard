@@ -172,17 +172,18 @@ var getJsonPwdLicences = function (response){
 };
 
 //call function to fetch WFS from openmaps geoserver
-//getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback);
+getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback);
 getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback);
 
 //fetch WFS (json) from openmaps geoserver
 function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback,
-  wfsBbox= '-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326',
+  wfsBbox= '-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, epsg:4326') {
   //wfsBbox= '35043.6538, 440006.8768, 1885895.3117, 1735643.8497'
   //cql Filter text attributes must use single quotes (%27), not double quotes (%22),
   //ie: cql_filter="FEATURE_CODE='FM90000010'""
   //cqlFilter="REGION_NAME='Skeena Natural Resource Region'")
-  cqlFilter="AQ_TAG='1136'") {
+  //cqlFilter="AQ_TAG='1136'") {
+  //Get WGS Coordinates from parameters
   var crsBCalb = "+proj=aea +lat_1=50 +lat_2=58.5 +lat_0=45 +lon_0=-126 +x_0=1000000 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs";
   var coordsWgsString = wfsBbox.split(', ');
   console.log(coordsWgsString);
@@ -197,6 +198,7 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback,
   var coordsBCalb1 = proj4(crsBCalb, coordsWgs.slice(0,2));
   console.log('coordsBCalb1 ' + coordsBCalb1);
   var coordsBCalb2 = proj4(crsBCalb, coordsWgs.slice(2,4));
+  console.log('coordsBCalb2 ' + coordsBCalb2);
   var coordsBCalb = [];
   coordsBCalb.push.apply(coordsBCalb, coordsBCalb1);
   coordsBCalb.push.apply(coordsBCalb, coordsBCalb2);
@@ -213,8 +215,8 @@ function getWFSjson(wfsURL, wfsTypeName, wfsProperties, wfsCallback,
     SrsName: 'EPSG:4326',
     propertyName: wfsProperties,
     //bbox: '-120.65062584,50.6512122,-120.53745904,50.72483285,epsg:4326'
-    //bbox: wfsBbox
-    cql_filter: "bbox(GEOMETRY," + bboxBCalb + ") AND " + cqlFilter
+    bbox: wfsBbox
+    //cql_filter: "bbox(GEOMETRY," + bboxBCalb + ") AND " + cqlFilter
     //cql_filter: cqlFilter
   };
 
