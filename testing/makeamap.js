@@ -230,7 +230,7 @@ function clipFeaturecollection(fc1,fc2){
     var parcel1 = f1[i];
     for (var j = 0; j < f2.length; j++) {
       var parcel2 = f2[j];
-      //console.log("Processing", i, j);
+      console.log("Processing", i, j);
       var conflict = turf.intersect(parcel1, parcel2);
       if (conflict != null) {
         conflict.properties = parcel2.properties;
@@ -332,7 +332,7 @@ function highlightWellByID(welltag){
 function clipAquifersToRegion(FCclipper, FCclippee){
   FC_AqsInRegion = clipFeaturecollection(FCclipper,FCclippee);
   console.log (" Aqs in Region Count: " + FC_AqsInRegion);
-  console.log (" Aqs in Region Count: " + FC_AqsInRegion.feature_count.toString());
+  console.log (" Aqs in Region Count: " + FC_AqsInRegion.features.length.toString());
 
   //lyrSearch = L.geoJSON(FC_AqsInRegion, {style:{color:'blue', weight:7, opacity:0.5}}).addTo(map);
 
