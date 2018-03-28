@@ -31,7 +31,7 @@ body {
 .topnav a.dashboard-type {
   color: rgb(25, 78, 149);
   font-weight: bolder;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .topnav .search-container {
