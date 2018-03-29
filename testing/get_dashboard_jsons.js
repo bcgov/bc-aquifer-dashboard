@@ -36,6 +36,10 @@ var aquiferProperties = ['AQ_TAG', 'AQNAME', 'AQUIFER_MATERIALS', 'PRODUCTIVITY'
 var aquiferCQLfilter = "AQ_TAG<>'null'";
 var aquiferCallback = 'getJsonAquifer';
 
+//Clipped Aquifer Variables:
+var aquiferClippedProperties = aquiferProperties;
+aquiferClippedProperties.push('GEOMETRY');
+
 //aquifer callback function run when JSON is returned by wfs call
 var getJsonAquifer = function (response){
   console.log(aquiferCallback + ' callback function');

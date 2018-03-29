@@ -285,12 +285,29 @@ function zoomToRegionDistrict(tag){
       map.fitBounds(lyr.getBounds().pad(0.05));
       map.removeLayer(lyrLocalAQ);
       map.addLayer(lyrLocalAQ);
-      // call clip function -  is very slow, need to fine tune the inputs based on a bbox of the region
+
+      //whittle down Aquifers to just those in bbox of Searched Region/District
+      var lyrSearchBbox = lyrSearch.getBounds().toBBoxString() + ",'epsg:4326'"; 
+      //getWFSjson(aquiferURL, aquiferTypeName, aquiferClippedProperties, aquiferClippedCallback, aquiferCQLfilter, lyrSearchBbox);
+      //call clip function -  is very slow, need to fine tune the inputs based on a bbox of the region
       //clipAquifersToRegion(turf.featureCollection([lyr.toGeoJSON()]), lyrLocalAQ.toGeoJSON());
   } else {
       //let the user know the feature was not found somehow.
       console.log("**** Project ID not found ****");
   }
+};
+
+//Clipped Aquifer Variables:
+var aquiferJsonClipped= {};
+var aquiferClippedCallback = 'getJsonAquiferClipped';
+
+//aquifer callback function run when JSON is returned by wfs call
+var getJsonAquiferClipped = function (response){
+  console.log(aquiferClippedCallback + ' callback function');
+  aquiferJsonClipped = response;
+   //call clip function -  still slow, now based on a bbox of the region/district
+  clipAquifersToRegion(lyrSearch.toGeoJSON(), aquiferJsonClipped);
+  console.log('clipped Aquifers');// + [0].feature.properties.ORG_UNIT_NAME);
 };
 
 //function to zoom to feature when search box event fires or button event
