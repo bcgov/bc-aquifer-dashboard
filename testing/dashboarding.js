@@ -63,7 +63,7 @@ function makeAquiferInfoWidget(geoJson){
   var field;
   var data;
   weblink = featureProperties["AQUIFER_DESCRIPTION_RPT_URL"]
-  webbutton = '<button onclick = "openWebLink(weblink)">'+"Download Aquifer Report"+'</button>';
+  webbutton = '<button onclick = "openWebLink(weblink)">'+"Link to Aquifer Report"+'</button>';
   //insert url link to aquifer report if it exists
   if (weblink){
     var row = infoTable.insertRow(-1);
@@ -81,12 +81,12 @@ function makeAquiferInfoWidget(geoJson){
   //add links to lookup codes
   var row = infoTable.insertRow(-1);
   var cell = row.insertCell(0);
-  weblink = "<a href='https://www2.gov.bc.ca/gov/content/environment/air-land-water/water/groundwater-wells/aquifers/aquifer-subtype-code-description' target='_blank' style='font-size:.8em'>Lookup Subtype Codes</a>"
-  cell.innerHTML = weblink;
+  weblinkcode1 = "<a href='https://www2.gov.bc.ca/gov/content/environment/air-land-water/water/groundwater-wells/aquifers/aquifer-subtype-code-description' target='_blank' style='font-size:.8em'>Lookup Subtype Codes</a>"
+  cell.innerHTML = weblinkcode1;
   row = infoTable.insertRow(-1);
   cell = row.insertCell(0);
-  weblink = "<a href='https://www2.gov.bc.ca/assets/gov/environment/air-land-water/water/pgown/aquifer-classes.png' target='_blank' style='font-size:0.8em'>Lookup Classification Codes</a>"
-  cell.innerHTML = weblink;
+  weblinkcode2 = "<a href='https://www2.gov.bc.ca/assets/gov/environment/air-land-water/water/pgown/aquifer-classes.png' target='_blank' style='font-size:0.8em'>Lookup Classification Codes</a>"
+  cell.innerHTML = weblinkcode2;
   
 
 
@@ -105,9 +105,9 @@ function setDiv(content, parentElementId, widgetId){
 
 function makeWellsInfoWidget(ingeoJson){
   var fieldList = {
-    'Total_Wells':"",'Total_Observation_Wells':"",'Wells_Median_Depth_m':"",'Wells_Average_Depth':"",
-    'Total_Wells_No_Well_Depth':"", 'Bedrock_Median_Depth':"",'Total_Wells_No_Bedrock_Depth':"",
-    'Drilled_Median_Depth':"", 'Drilled_Average_Depth':"",'Total_Wells_No_Drilled_Depth':"",
+    'Total_Wells':"",'Total_Observation_Wells':"",'Wells_Median_Depth_m':"",'Wells_Average_Depth_m':"",
+    'Total_Wells_No_Well_Depth':"", 'Bedrock_Median_Depth_m':"",'Total_Wells_No_Bedrock_Depth':"",
+    'Drilled_Median_Depth_m':"", 'Drilled_Average_Depth_m':"",'Total_Wells_No_Drilled_Depth':"",
     'Total_Wells_Yield_Sum':"",'Total_Wells_No_Yield_Value':""};
   function setDefaultVal(value, defaultValue){
      return (value === undefined) ? defaultValue : value;
@@ -127,14 +127,14 @@ function makeWellsInfoWidget(ingeoJson){
   fieldList.Wells_Median_Depth_m = arrayMedian
   nullcount = outArrayvarswaterdepth[1]
   fieldList.Total_Wells_No_Well_Depth = nullcount
-  fieldList.Wells_Average_Depth = Array_Average(sortedflatArraypntswaterdepth);
+  fieldList.Wells_Average_Depth_m = Array_Average(sortedflatArraypntswaterdepth);
 
   outArrayvarsbedrockrdepth = flatArray(dataArray,'BEDROCK_DEPTH')
   flatArraypntsbedrockrdepth = outArrayvarsbedrockrdepth[0]
   //sort flat array sequential
   sortedflatArraypntsbedrockrdepth = Array_Sort_Numbers(flatArraypntsbedrockrdepth)
   var arrayMedian = Quartile_50(sortedflatArraypntsbedrockrdepth);
-  fieldList.Bedrock_Median_Depth = arrayMedian
+  fieldList.Bedrock_Median_Depth_m = arrayMedian
   nullcount = outArrayvarsbedrockrdepth[1]
   fieldList.Total_Wells_No_Bedrock_Depth = nullcount
 
@@ -143,10 +143,10 @@ function makeWellsInfoWidget(ingeoJson){
   //sort flat array sequential
   sortedflatArraypntsdrilleddepth = Array_Sort_Numbers(flatArraypntsdrilleddepth)
   var arrayMedian = Quartile_50(sortedflatArraypntsdrilleddepth);
-  fieldList.Drilled_Median_Depth = arrayMedian
+  fieldList.Drilled_Median_Depth_m = arrayMedian
   nullcount = outArrayvarsbedrockrdepth[1]
   fieldList.Total_Wells_No_Drilled_Depth = nullcount
-  fieldList.Drilled_Average_Depth = Array_Average(sortedflatArraypntsdrilleddepth);
+  fieldList.Drilled_Average_Depth_m = Array_Average(sortedflatArraypntsdrilleddepth);
 
   outArrayvarsyieldvalue = flatArray(dataArray,'YIELD_VALUE')
   flatArraypntsyieldvalue = outArrayvarsyieldvalue[0]
