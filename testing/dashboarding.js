@@ -1,4 +1,5 @@
 function setWidget(content, parentElementId, widgetId){
+
   //if widget exists return it
   if (document.getElementById(widgetId)){
     var widgetDiv = document.getElementById(widgetId);
@@ -10,7 +11,23 @@ function setWidget(content, parentElementId, widgetId){
     widgetDiv.className += 'grid-item widget';
     widgetDiv.id = widgetId;
     widgetDiv.innerHTML = content;
-    parentE.appendChild(widgetDiv);
+    var dashDiv = document.getElementById(parentElementId);
+    //list the dashDivs
+    var dashList = [];
+    var mapIndex;
+    $(parentE).children('div').each(function () {
+      dashList.push(this);
+      if (this.id == 'map'){
+        mapIndex = dashList.length - 1;
+      }
+    });
+    //put tables at the top
+    if (widgetId.indexOf('table')>-1 && dashList.length > 1){
+      dashDiv.insertBefore(widgetDiv, dashList[mapIndex + 1]);
+    }
+    else{
+      parentE.appendChild(widgetDiv);
+    }
   }
   return widgetDiv
 }
@@ -321,5 +338,5 @@ function makeSingleInfoWidget(wellLyr){
 }
 
 function addObservationwellGraph(){
-
+  console.log('obsveratuib wekk graog')
 }

@@ -182,7 +182,7 @@ function aquiferProvVulnerability(aquiferProvDataarray){
             title: 'Aquifer Provincial Vulnerability: Area Km2',
             width:400,
             height:300,
-            colors: ['#008000','#ff0000','#ffa500'],
+            colors: ['#ffa500','#ff0000','#008000'],
             backgroundColor:'#dddddd'
           };
           setWidget('','dashboard','prov-vulnerable-pie');
