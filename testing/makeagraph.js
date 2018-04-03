@@ -270,3 +270,23 @@ function filterGeoJsonByAttribute(aGeoJson,att,val) {
   geojson.totalFeatures = newf.length;
   return geojson;
 }
+
+var regionalAquiferRollup = {
+  //this object controls the regional rollup
+  //
+  geoJson: {},
+  create: function(regionName){
+    //create rollup
+    geoJson = function(){
+      var data = {};
+      var regionGeoJSON = filterGeoJsonByAttribute(lyrLocalRegions.toGeoJSON(),"REGION_NAME",regionName);
+      var regionGeom = turf.simplify(regionGeoJSON).features[0].geometry;
+      window.regionalAquifer_callback = function(response){
+        console.log(response.results.totalFeatures);
+      };
+      getWFSjson(window.aquiferURL, window.aquiferTypeName, window.aquiferProperties, 'regionalAquifer_callback', window.aquiferCQLfilter);
+      return data
+    };
+  }
+
+}

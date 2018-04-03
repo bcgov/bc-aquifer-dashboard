@@ -125,7 +125,7 @@ function makeWellsInfoWidget(ingeoJson){
     'Total_Wells':"",'Total_Observation_Wells':"",'Wells_Median_Depth_m':"",'Wells_Average_Depth_m':"",
     'Total_Wells_No_Well_Depth':"", 'Bedrock_Median_Depth_m':"",'Total_Wells_No_Bedrock_Depth':"",
     'Drilled_Median_Depth_m':"", 'Drilled_Average_Depth_m':"",'Total_Wells_No_Drilled_Depth':"",
-    'Total_Wells_Yield_Sum':"",'Total_Wells_No_Yield_Value':""};
+    'Total_Wells_No_Yield_Value':""};
   function setDefaultVal(value, defaultValue){
      return (value === undefined) ? defaultValue : value;
    }
@@ -170,7 +170,6 @@ function makeWellsInfoWidget(ingeoJson){
   //sort flat array sequential
   sortedflatArraypntsyieldvalue = Array_Sort_Numbers(flatArraypntsyieldvalue)
   var arraySum = Array_Sum(sortedflatArraypntsyieldvalue);
-  fieldList.Total_Wells_Yield_Sum = arraySum
   arrayCount = countInArray(sortedflatArraypntsyieldvalue,0)
   fieldList.Total_Wells_No_Yield_Value = arrayCount
 
@@ -337,6 +336,3 @@ function makeSingleInfoWidget(wellLyr){
   document.getElementById("widget-table-well").classList.add("grid-item--height5");
 }
 
-function addObservationwellGraph(){
-  console.log('obsveratuib wekk graog')
-}
