@@ -13,11 +13,11 @@ var resourceIDs = {
 };
 
 //load CSV function
-function loadCsv(resourceItem, callback) {
+function loadCsv(resourceItem, callback, queryFilter) {
     //load csv by resouce_id from data catalogue-datastore api
     var data = {
         resource_id: resourceItem, // the resource id from databc datastore
-        limit: 100000, // get max n results
+        limit: 1000, // get max n results
         q: queryFilter//query
         };
     return request = $.ajax({
@@ -43,4 +43,5 @@ var csvCallback = function (response){
 };
 
 //load CSV from databc datastore via resource_id
-loadCsv(resourceIDs['GW_Well_Attributes_csv'], csvCallback);
+//loadCsv(resourceIDs['GW_Well_Attributes_csv'], csvCallback);
+//loadCsv(resourceIDs['GWL_monthly_csv'], csvCallback, 175);
