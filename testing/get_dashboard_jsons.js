@@ -161,8 +161,9 @@ var gwWells = {
 var get_gwWells = function (response){
   console.log('get_gwWells callback function');
   gwWells.data = response;
-  gwWells.callback();
   get_obsWells();
+  gwWells.callback();
+  //get_obsWells();
  };
 
 //Observation Wells

@@ -191,7 +191,7 @@ function makeWellsInfoWidget(ingeoJson){
     var infoTable = document.getElementById('info-table-wells');
     var row = infoTable.insertRow(0);
     var cell = row.insertCell(0);
-    cell.innerHTML = 'GROUNDWATER WELL INFORMATION';
+    cell.innerHTML = 'AQUIFER WELL INFORMATION';
   }
   for (var key in fieldList){
     
@@ -336,3 +336,20 @@ function makeSingleInfoWidget(wellLyr){
   document.getElementById("widget-table-well").classList.add("grid-item--height5");
 }
 
+
+function makeObsWellGraph(){
+  //find totalfeatures if 0 then dont do anything if > 0 then
+  if (obsWells.totalFeatures > 0){
+    obsWellNumber = obsWells.features[0].properties.OBSERVATION_WELL_NUMBER;
+    console.log(obsWells.totalFeatures)
+    console.log(obsWellNumber)
+    //call the CSV
+    //loadCsv(resourceIDs['GWL_monthly_csv'], csvCallback, obsWellNumber);
+    //loadCsv(resourceIDs['GWL_monthly_csv'], csvCallback, obsWellNumber);
+    //console.log(csvData);
+  }
+  else{
+    console.log('No observation wells')
+  }
+
+};

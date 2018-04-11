@@ -37,6 +37,7 @@ function doStuffWithWells(){
   makeWellsInfoWidget(polyPnts)
   //addWellsToMap();
   addWellsToMapCluster();
+  makeObsWellGraph();
 }
 
 function makeWellDepthGraph(geoJSONPnts){
@@ -182,7 +183,7 @@ function aquiferProvVulnerability(aquiferProvDataarray){
             title: 'Aquifer Provincial Vulnerability: Area Km2',
             width:400,
             height:300,
-            colors: ['#ffa500','#ff0000','#008000'],
+            colors: ['#008000','#ff0000','#ffa500'],
             backgroundColor:'#dddddd'
           };
           setWidget('','dashboard','prov-vulnerable-pie');

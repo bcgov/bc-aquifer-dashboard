@@ -147,6 +147,12 @@ $(document).ready(function(){
   ctlScale = L.control.scale({position:'bottomleft', metric:true, maxWidth:150}).addTo(map);
   ctlMouseposition = L.control.mousePosition().addTo(map);
 
+  //keep the aquifers layer on top
+  map.on('overlayadd', onOverlayAdd);
+    function onOverlayAdd(e){
+      console.log("send aquifers to front")
+      lyrLocalAQ.bringToFront();
+    }
 
   //add legend
   ctlLegend = new L.Control.Legend({
@@ -273,8 +279,9 @@ function zoomToRegionDistrict(tag){
     var lyr = returnLayerByAttribute(lyrLocalDist,'DISTRICT_NAME',val);
     if (lyr) {
       lyrLocalDist.addTo(map);
-      map.removeLayer(lyrLocalAQ);
-      map.addLayer(lyrLocalAQ);
+      lyrLocalAQ.bringToFront();
+      //map.removeLayer(lyrLocalAQ);
+      //map.addLayer(lyrLocalAQ);
       }
   }
   if (lyr) {
@@ -283,8 +290,9 @@ function zoomToRegionDistrict(tag){
       }
       lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, fillOpacity:0, opacity:0.6}}).addTo(map);
       map.fitBounds(lyr.getBounds().pad(0.05));
-      map.removeLayer(lyrLocalAQ);
-      map.addLayer(lyrLocalAQ);
+      lyrLocalAQ.bringToFront();
+      //map.removeLayer(lyrLocalAQ);
+      //map.addLayer(lyrLocalAQ);
 
       //whittle down Aquifers to just those in bbox of Searched Region/District
       var lyrSearchBbox = lyrSearch.getBounds().toBBoxString() + ",'epsg:4326'"; 
@@ -319,6 +327,8 @@ function highlightFeatureByID(aqtag){
       if (lyrSearch) {
           lyrSearch.remove();
       }
+      map.addLayer(lyrLocalAQ);
+      lyrLocalAQ.bringToFront();
       lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:7, fillOpacity:0, opacity:0.6}}).addTo(map);
       //map.fitBounds(lyr.getBounds().pad(0.1));
   } else {
