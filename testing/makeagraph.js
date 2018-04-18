@@ -30,6 +30,10 @@ function doStuffWithWells(){
   if (element2){
     element2.parentNode.removeChild(element2);
   }
+  var element3 = document.getElementById('chart_linesobswell');
+  if (element3){
+    element3.parentNode.removeChild(element3);
+  }
 
   makeAquiferInfoWidget(currentAquiferGeoJson);
   makeWellDepthGraph(polyPnts);
@@ -37,7 +41,19 @@ function doStuffWithWells(){
   makeWellsInfoWidget(polyPnts)
   //addWellsToMap();
   addWellsToMapCluster();
-  makeObsWellGraph();
+  if (obsWells.totalFeatures > 0){
+      console.log(obsWells.totalFeatures)
+      obsWellNumber = obsWells.features[0].properties.OBSERVATION_WELL_NUMBER;
+      console.log(obsWellNumber)
+      loadCsv(resourceIDs['GWL_monthly_csv'], obswellCallback, obsWellNumber);
+      function obswellCallback (response){
+        csvData = response.result.records;
+        console.log(csvData);
+        if (csvData.length > 12){
+            makeObsWellGraph();
+        }
+      };
+   }
 }
 
 function makeWellDepthGraph(geoJSONPnts){
@@ -183,7 +199,7 @@ function aquiferProvVulnerability(aquiferProvDataarray){
             title: 'Aquifer Provincial Vulnerability: Area Km2',
             width:400,
             height:300,
-            colors: ['#008000','#ff0000','#ffa500'],
+            colors: ['#008000','#ffa500','#ff0000'],
             backgroundColor:'#dddddd'
           };
           setWidget('','dashboard','prov-vulnerable-pie');

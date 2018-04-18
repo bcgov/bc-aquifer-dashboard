@@ -339,17 +339,80 @@ function makeSingleInfoWidget(wellLyr){
 
 function makeObsWellGraph(){
   //find totalfeatures if 0 then dont do anything if > 0 then
+  //loadCsv(resourceIDs['GWL_monthly_csv'], csvCallback, 172);
+    //load observation well data
+
   if (obsWells.totalFeatures > 0){
-    obsWellNumber = obsWells.features[0].properties.OBSERVATION_WELL_NUMBER;
-    console.log(obsWells.totalFeatures)
-    console.log(obsWellNumber)
-    //call the CSV
-    //loadCsv(resourceIDs['GWL_monthly_csv'], csvCallback, obsWellNumber);
-    //loadCsv(resourceIDs['GWL_monthly_csv'], csvCallback, obsWellNumber);
-    //console.log(csvData);
+    console.log(csvData);
+    console.log(csvData.length);
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChartLines)
+    //drawChartLines()
+    function drawChartLines() {
+        var observationwellDataArray = [];
+        var last12DataString = ""
+        var tagIndex = "Well_Num"
+        var valueIndex1 = "Year"
+        var valueIndex2 = "Month"
+        var valueIndex3 = "med_GWL"
+        observationwellDataArray.push(["Month","med_GWL"]);
+        console.log('The Number of rows in returned observation wells  csvdata')
+        Last12Records = csvData.length - 12
+        console.log(csvData.length)
+        for (i=Last12Records;i<csvData.length; i++){
+          observationwellDataArray.push([csvData[i][valueIndex1]+" "+csvData[i][valueIndex2],Number(csvData[i][valueIndex3])]);
+        }
+        var data = new google.visualization.arrayToDataTable(observationwellDataArray);
+        var options_lines = {
+            title: 'Observation Well in Selected Aquifer 1 year Water levels Well# :' + obsWellNumber,
+            curveType:'function',
+            interval: {
+            'i1': { 'style':'area', 'curveType':'function', 'fillOpacity':0.3 }},
+            legend: 'none',
+            backgroundColor:'#dddddd',
+            vAxis:{
+               title: 'Median Water Depth Meters'
+            },
+              hAxis:{
+               title: 'Year and Month Recorded'
+            }
+        };
+        setWidget('','dashboard','chart_linesobswell');
+        var chart_lines = new google.visualization.LineChart(document.getElementById('chart_linesobswell'));
+        document.getElementById("chart_linesobswell").classList.add('grid-item--width2');
+        document.getElementById("chart_linesobswell").classList.add('grid-item--height1');
+        chart_lines.draw(data, options_lines);
+    }
+    
   }
   else{
     console.log('No observation wells')
-  }
+  };
 
 };
+
+function wait(ms){
+   var start = new Date().getTime();
+   var end = start;
+   while(end < start + ms) {
+     end = new Date().getTime();
+  }
+}
+
+//sorts array
+function getSortMethod(){
+    var _args = Array.prototype.slice.call(arguments);
+    return function(a, b){
+        for(var x in _args){
+            var ax = a[_args[x].substring(1)];
+            var bx = b[_args[x].substring(1)];
+            var cx;
+
+            ax = typeof ax == "string" ? ax.toLowerCase() : ax / 1;
+            bx = typeof bx == "string" ? bx.toLowerCase() : bx / 1;
+
+            if(_args[x].substring(0,1) == "-"){cx = ax; ax = bx; bx = cx;}
+            if(ax != bx){return ax < bx ? -1 : 1;}
+        }
+    }
+}

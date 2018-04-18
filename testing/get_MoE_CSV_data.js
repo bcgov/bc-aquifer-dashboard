@@ -3,7 +3,7 @@ var moeObsWellDataURL = 'http://www.env.gov.bc.ca/wsd/data_searches/obswell/map/
 var moeCsvData = {};
 
 //DataBc datastore resource_id items:
-var resourceIDs = {
+var resourceIDMOEs = {
     ///'GWL_monthly_csv': 'c8c3c750-bf4d-4213-be58-42c6f42510e8', //circa 2014
     //'GW_Well_Attributes_csv': 'a8933793-eadb-4a9c-992c-da4f6ac8ca51', //circa 2014
     //not in databc's datastore:
@@ -14,7 +14,7 @@ var resourceIDs = {
 function getObsWellCsv(resourceItem, callback) {
     var defaultParameters = {
         //url: moeObsWellDataURL,
-        resource_id: resourceItem
+        resourceIDMOEs: resourceItem
     }
 
     //var parameters = L.Util.extend(defaultParameters);

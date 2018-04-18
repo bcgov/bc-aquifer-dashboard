@@ -17,7 +17,7 @@ function loadCsv(resourceItem, callback, queryFilter) {
     //load csv by resouce_id from data catalogue-datastore api
     var data = {
         resource_id: resourceItem, // the resource id from databc datastore
-        limit: 1000, // get max n results
+        limit: 10000, // get max n results
         q: queryFilter//query
         };
     return request = $.ajax({
@@ -37,11 +37,9 @@ function loadCsv(resourceItem, callback, queryFilter) {
 //CSV callback function run when JSON is returned by loadCsv
 //https://github.com/maxogden/art-of-node#callbacks
 var csvCallback = function (response){
-    console.log('CSV callback function');
     csvData = response.result.records;
     console.log(csvData);
 };
 
 //load CSV from databc datastore via resource_id
-//loadCsv(resourceIDs['GW_Well_Attributes_csv'], csvCallback);
-//loadCsv(resourceIDs['GWL_monthly_csv'], csvCallback, 175);
+//Example: loadCsv(resourceIDs['GWL_monthly_csv'], csvCallback, 172);
