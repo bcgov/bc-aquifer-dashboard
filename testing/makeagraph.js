@@ -48,7 +48,7 @@ function doStuffWithWells(){
       loadCsv(resourceIDs['GWL_monthly_csv'], obswellCallback, obsWellNumber);
       function obswellCallback (response){
         csvData = response.result.records;
-        console.log(csvData);
+        console.log("obswellCallback successful");
         if (csvData.length > 12){
             makeObsWellGraph();
         }
@@ -301,7 +301,8 @@ var regionalAquiferRollup = {
       window.regionalAquifer_callback = function(response){
         console.log(response.results.totalFeatures);
       };
-      getWFSjson(window.aquiferURL, window.aquiferTypeName, window.aquiferProperties, 'regionalAquifer_callback', window.aquiferCQLfilter);
+      getWFSjson(window.aquiferURL, window.aquiferTypeName, window.aquiferClippedProperties, 
+        window.aquiferClippedCallback, window.aquiferCQLfilter);
       return data
     };
   }

@@ -343,6 +343,7 @@ function makeObsWellGraph(){
     //load observation well data
 
   if (obsWells.totalFeatures > 0){
+    var aqTag = currentAquiferGeoJson.features[0].properties.AQ_TAG;
     console.log(csvData);
     console.log(csvData.length);
     google.charts.load('current', {'packages':['corechart']});
@@ -356,15 +357,15 @@ function makeObsWellGraph(){
         var valueIndex2 = "Month"
         var valueIndex3 = "med_GWL"
         observationwellDataArray.push(["Month","med_GWL"]);
-        console.log('The Number of rows in returned observation wells  csvdata')
+        console.log('The Number of rows in returned observation wells csvdata')
         Last12Records = csvData.length - 12
         console.log(csvData.length)
         for (i=Last12Records;i<csvData.length; i++){
-          observationwellDataArray.push([csvData[i][valueIndex1]+" "+csvData[i][valueIndex2],Number(csvData[i][valueIndex3])]);
+          observationwellDataArray.push([csvData[i][valueIndex1]+"/"+csvData[i][valueIndex2],Number(csvData[i][valueIndex3])]);
         }
         var data = new google.visualization.arrayToDataTable(observationwellDataArray);
         var options_lines = {
-            title: 'Observation Well in Selected Aquifer 1 year Water levels Well# :' + obsWellNumber,
+            title: '1 Year Water Levels for Observation Well #' + obsWellNumber + ' in Aquifer ' + aqTag,
             curveType:'function',
             interval: {
             'i1': { 'style':'area', 'curveType':'function', 'fillOpacity':0.3 }},
@@ -373,8 +374,8 @@ function makeObsWellGraph(){
             vAxis:{
                title: 'Median Water Depth Meters'
             },
-              hAxis:{
-               title: 'Year and Month Recorded'
+            hAxis:{
+               title: 'Year/Month'
             }
         };
         setWidget('','dashboard','chart_linesobswell');
