@@ -292,17 +292,20 @@ var regionalAquiferRollup = {
   //this object controls the regional rollup
   //
   geoJson: {},
+  bbox: "",
   create: function(regionName){
     //create rollup
     geoJson = function(){
       var data = {};
       var regionGeoJSON = filterGeoJsonByAttribute(lyrLocalRegions.toGeoJSON(),"REGION_NAME",regionName);
       var regionGeom = turf.simplify(regionGeoJSON).features[0].geometry;
+      var rawBbox = turf.bbox(regionGeom);
+      regionalAquiferRollup.bbox = rawBbox[0] + ","+ rawBbox[1]+ "," + rawBbox[2] + ","+ rawBbox[3];
       window.regionalAquifer_callback = function(response){
         console.log(response.results.totalFeatures);
       };
       getWFSjson(window.aquiferURL, window.aquiferTypeName, window.aquiferClippedProperties, 
-        window.aquiferClippedCallback, window.aquiferCQLfilter);
+        aquiferClippedCallback, window.aquiferCQLfilter, regionalAquiferRollup.bbox + ",'epsg:4326'");
       return data
     };
   }

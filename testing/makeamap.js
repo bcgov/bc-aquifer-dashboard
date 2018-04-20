@@ -314,7 +314,7 @@ var getJsonAquiferClipped = function (response){
   console.log(aquiferClippedCallback + ' callback function');
   aquiferJsonClipped = response;
    //call clip function -  still slow, now based on a bbox of the region/district
-  clipAquifersToRegion(lyrSearch.toGeoJSON(), aquiferJsonClipped);
+  //clipAquifersToRegion(lyrSearch.toGeoJSON(), aquiferJsonClipped);
   console.log('clipped Aquifers');// + [0].feature.properties.ORG_UNIT_NAME);
 };
 

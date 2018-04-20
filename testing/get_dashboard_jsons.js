@@ -202,7 +202,7 @@ var getJsonPwdLicences = function (response){
 getWFSjson(regionsURL, regionsTypeName, regionsProperties, regionsCallback, regionsCQLfilter, 
   regionsBbox="-139.1782824917356, 47.60393449638617, -110.35337939457779, 60.593907018763396, 'epsg:4326'",
   regionsGeometryField='SHAPE');
-getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback, aquiferCQLfilter);
+//getWFSjson(aquiferURL, aquiferTypeName, aquiferProperties, aquiferCallback, aquiferCQLfilter);
 //getWFSjson(districtsURL, districtsTypeName, districtsProperties, districtsCallback, districtsCQLfilter);
 //getWFSjson(precinctsURL, precinctsTypeName, precinctsProperties, precinctsCallback, precinctsCQLfilter);
 //getWFSjson(pwdLicencesURL, pwdLicencesTypeName,pwdLicencesProperties, pwdLicencesCallback, pwdLicencesCQLfilter, 
