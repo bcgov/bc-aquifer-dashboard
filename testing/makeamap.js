@@ -528,8 +528,8 @@ function mapIdentify(e,lyr,initAqTag){
     feature_count: 200,
     info_format: 'application/json'
   };
-  params[params.version === '1.3.0' ? 'i' : 'x'] = point.x;
-  params[params.version === '1.3.0' ? 'j' : 'y'] = point.y;
+  params[params.version === '1.3.0' ? 'i' : 'x'] = Math.round(point.x);
+  params[params.version === '1.3.0' ? 'j' : 'y'] = Math.round(point.y);
 
   newURL = url + L.Util.getParamString(params, url, true);
   console.log(newURL);
