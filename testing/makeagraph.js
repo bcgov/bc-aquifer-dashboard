@@ -21,6 +21,12 @@ function doStuffWithWells(){
   var polyPnts = turf.pointsWithinPolygon(gwWells.data,currentAquiferGeoJson);
   //replace bbox wells with wells within aquifer
   gwWells.data = polyPnts;
+
+  //also clip obsWells to aquifer shape
+  var obsPolyPnts = turf.pointsWithinPolygon(obsWells,currentAquiferGeoJson);
+  obsWells = obsPolyPnts;
+  obsWells.totalFeatures = obsWells.features.length;
+
   //load aquifer and wells on map
   var element = document.getElementById('prov-vulnerable-pie');
   if (element){

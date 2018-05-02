@@ -131,7 +131,8 @@ function makeWellsInfoWidget(ingeoJson){
    }
   var dataArray = json2array(ingeoJson);
   fieldList.Total_Wells = setDefaultVal(gwWells.data.features.length,0);
-  fieldList.Total_Observation_Wells = setDefaultVal(obsWells.totalFeatures,0)
+  //fieldList.Total_Observation_Wells = setDefaultVal(obsWells.totalFeatures,0)
+  fieldList.Total_Observation_Wells = setDefaultVal(obsWells.features.length)
 
   //Just get data from field in array and return numbers in arrary list and nulls that were in data . e.g. [2,5,6,2,13,67]
   outArrayvarswaterdepth = flatArray(dataArray,'WATER_DEPTH')

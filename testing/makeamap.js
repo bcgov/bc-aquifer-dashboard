@@ -465,11 +465,12 @@ function addWellsToMapCluster() {
     if (lyrObsWellsInAquifer){
       map.removeLayer(lyrObsWellsInAquifer);
     }
-    
+
     lyrWellsInAquiferGroup = L.markerClusterGroup({ disableClusteringAtZoom: 14 });
 
     //filter out OBS wells and do not add them to clustering, they should be their own layer
     lyrObsWellsInAquifer = L.geoJSON(gwWells.data,{
+    //lyrObsWellsInAquifer = L.geoJSON(obsWells,{  
       onEachFeature: function(feature, layer) {
         layer.on({
           click: wellsInAquiferPopup
