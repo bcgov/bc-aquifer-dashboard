@@ -28,6 +28,7 @@ var lyrLocalDist;
 var lyrLocalRegions;
 var lyrWellsInAquifer;
 var lyrWellsInAquiferGroup;
+var lyrObsWellsInAquifer;
 
 var lyrStreetsMap;
 var lyrImageMap;
@@ -280,9 +281,7 @@ function zoomToRegionDistrict(tag){
     if (lyr) {
       lyrLocalDist.addTo(map);
       lyrLocalAQ.bringToFront();
-      //map.removeLayer(lyrLocalAQ);
-      //map.addLayer(lyrLocalAQ);
-      }
+        }
   }
   if (lyr) {
       if (lyrSearch) {
@@ -291,9 +290,7 @@ function zoomToRegionDistrict(tag){
       lyrSearch = L.geoJSON(lyr.toGeoJSON(), {style:{color:'blue', weight:10, fillOpacity:0, opacity:0.6}}).addTo(map);
       map.fitBounds(lyr.getBounds().pad(0.05));
       lyrLocalAQ.bringToFront();
-      //map.removeLayer(lyrLocalAQ);
-      //map.addLayer(lyrLocalAQ);
-
+  
       //whittle down Aquifers to just those in bbox of Searched Region/District
       var lyrSearchBbox = lyrSearch.getBounds().toBBoxString() + ",'epsg:4326'"; 
       //getWFSjson(aquiferURL, aquiferTypeName, aquiferClippedProperties, aquiferClippedCallback, aquiferCQLfilter, lyrSearchBbox);
@@ -341,6 +338,10 @@ function highlightFeatureByID(aqtag){
 function highlightWellByID(welltag){
   var val = welltag;
   var lyr = returnLayerByAttribute(lyrWellsInAquifer,'WELL_TAG_NO',val);
+  if (lyr == false){ //check for OBS well if not found in other wells
+    lyr = returnLayerByAttribute(lyrObsWellsInAquifer,'WELL_TAG_NO',val);
+  };
+  
   console.log ("highlight well:" + welltag);
   if (lyr) {
       if (lyrSearch) {
@@ -463,6 +464,27 @@ function addWellsToMapCluster() {
 
     lyrWellsInAquiferGroup = L.markerClusterGroup({ disableClusteringAtZoom: 14 });
 
+    //filter out OBS wells and do not add them to clustering, they should be their own layer
+    lyrObsWellsInAquifer = L.geoJSON(gwWells.data,{
+      onEachFeature: function(feature, layer) {
+        layer.on({
+          click: wellsInAquiferPopup
+        })
+      },
+      //call function to set well point style options
+       pointToLayer: function (feature, latlng){
+        var att = feature.properties;
+        var clr;
+        if (att.MINISTRY_OBSERVATION_WELL_STAT == 'Active'){
+          clr = 'rgb(189, 41, 41)'
+          var markerOptions = {radius:6, color:clr, fillColor:clr, fillOpacity:0.8};
+          var marker = L.circleMarker(latlng, markerOptions);
+          //console.log("creating custom OBS well marker :" + clr.toString() + "  " + feature.properties.WELL_TAG_NUMBER);
+          return marker;
+          };
+        }
+    });
+
     lyrWellsInAquifer = L.geoJSON(gwWells.data,{
       onEachFeature: function(feature, layer) {
         layer.on({
@@ -481,17 +503,20 @@ function addWellsToMapCluster() {
             clr = 'rgb(104, 153, 185)';
             break;
         }
-        if (att.MINISTRY_OBSERVATION_WELL_STAT == 'Active'){clr = 'rgb(189, 41, 41)'};
-        
-        var markerOptions = {radius:4, color:clr, fillColor:clr, fillOpacity:0.8};
-        var marker = L.circleMarker(latlng, markerOptions);
-        //console.log("creating custom well marker :" + clr.toString() + "  " + feature.properties.WELL_TAG_NUMBER);
-        return marker;
+        //if (att.MINISTRY_OBSERVATION_WELL_STAT != 'Active'){clr = 'rgb(189, 41, 41)'};
+        if (att.MINISTRY_OBSERVATION_WELL_STAT != 'Active'){
+          var markerOptions = {radius:4, color:clr, fillColor:clr, fillOpacity:0.8};
+          var marker = L.circleMarker(latlng, markerOptions);
+          //console.log("creating custom well marker :" + clr.toString() + "  " + feature.properties.WELL_TAG_NUMBER);
+          return marker;
+          };
         }
     });
 
     lyrWellsInAquiferGroup.addLayer(lyrWellsInAquifer);
     lyrWellsInAquiferGroup.addTo(map);
+    lyrObsWellsInAquifer.addTo(map);
+
     console.log("wells added !!!")
     } else {
     //let the user know the feature was not found somehow.
