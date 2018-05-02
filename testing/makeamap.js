@@ -348,8 +348,8 @@ function highlightWellByID(welltag){
           lyrSearch.remove();
       var markerOptions = {radius:7, color:'yellow', fillColor:'yellow', fillOpacity:0.8};
       lyrSearch =  L.circleMarker(lyr.getLatLng(), markerOptions).addTo(map);
-      lyrWellsInAquifer.remove();
-      lyrWellsInAquifer.addTo(map);
+      //lyrWellsInAquifer.remove();
+      //lyrWellsInAquifer.addTo(map);
       }
   } else {
       //let the user know the feature was not found somehow.
