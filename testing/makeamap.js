@@ -462,6 +462,10 @@ function addWellsToMapCluster() {
       lyrWellsInAquiferGroup.clearLayers();
     }
 
+    if (lyrObsWellsInAquifer){
+      map.removeLayer(lyrObsWellsInAquifer);
+    }
+    
     lyrWellsInAquiferGroup = L.markerClusterGroup({ disableClusteringAtZoom: 14 });
 
     //filter out OBS wells and do not add them to clustering, they should be their own layer
