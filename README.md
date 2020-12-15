@@ -1,4 +1,6 @@
 # bc-aquifer-dashboard
+[![img](https://img.shields.io/badge/Lifecycle-Retired-d45500)](https://github.com/bcgov/repomountie/blob/master/doc/lifecycle-badges.md)
+
 A dashboard/portal for viewing and querying provincial aquifer data
 
 Key Deliverable
